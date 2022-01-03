@@ -7,7 +7,7 @@
 
 #include "TestGLWidget.h"
 #include <QOpenGLContext>
-#include <QOpenGLFunctions>
+#include <QOpenGLExtraFunctions>
 #include <QOffscreenSurface>
 #include <easyloggingpp/easylogging++.h>
 
@@ -24,17 +24,18 @@ TestGLWidget::TestGLWidget(QWidget* parent) : QOpenGLWidget(parent)
 
 auto TestGLWidget::createFBO() -> bool
 {
+    QOpenGLExtraFunctions *funcs = QOpenGLContext::currentContext()->extraFunctions();
     // Now we also need to setup the fbo's here, otherwise, we cannot access the texture!
-    glGenFramebuffers(1, &this->blitFBO);
-    glBindFramebuffer(GL_FRAMEBUFFER, this->blitFBO);
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, this->tr->finalOutputBuffer, 0);
-    GLenum error = glGetError();
+    funcs->glGenFramebuffers(1, &this->blitFBO);
+    funcs->glBindFramebuffer(GL_FRAMEBUFFER, this->blitFBO);
+    funcs->glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, this->tr->finalOutputBuffer, 0);
+    GLenum error = funcs->glGetError();
     if (error != GL_NO_ERROR) {
         LOG(ERROR) << "failed to setup framebuffer";
         return false;
     }
     
-    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    GLenum status = funcs->glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if(status != GL_FRAMEBUFFER_COMPLETE) {
         LOG(ERROR) << "framebuffer status is incomplete!: " << status;
         return false;
@@ -47,7 +48,8 @@ auto TestGLWidget::createFBO() -> bool
 
 auto TestGLWidget::deleteFBO() -> void
 {
-    glDeleteFramebuffers(1, &this->blitFBO);
+    QOpenGLFunctions *funcs = QOpenGLContext::currentContext()->functions();
+    funcs->glDeleteFramebuffers(1, &this->blitFBO);
 }
 
 auto TestGLWidget::initializeGL() -> void
@@ -95,15 +97,15 @@ auto TestGLWidget::paintGL() -> void
         this->createFBO();
         this->didResize = false;
     }
-    auto f = QOpenGLContext::currentContext()->functions();
-    glBindFramebuffer(GL_FRAMEBUFFER, this->defaultFramebufferObject());
+    auto f = QOpenGLContext::currentContext()->extraFunctions();
+    f->glBindFramebuffer(GL_FRAMEBUFFER, this->defaultFramebufferObject());
     f->glBindFramebuffer(GL_DRAW_FRAMEBUFFER, this->defaultFramebufferObject());
     f->glBindFramebuffer(GL_READ_FRAMEBUFFER, this->blitFBO);
     {
         std::scoped_lock lock(this->tr->blit_output);
-        glBlitFramebuffer(0, 0, this->tr->width, this->tr->height, 0, 0, this->tr->width, this->tr->height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-        glFlush();
-        glFinish();
+        f->glBlitFramebuffer(0, 0, this->tr->width, this->tr->height, 0, 0, this->tr->width, this->tr->height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        f->glFlush();
+        f->glFinish();
     }
     this->update();
 }

@@ -369,7 +369,7 @@ void main() {
 
 )";
 
-TestRenderer::TestRenderer(QOpenGLContext* context, QSurface* surface) : QOpenGLFunctions(context)
+TestRenderer::TestRenderer(QOpenGLContext* context, QSurface* surface) : QOpenGLExtraFunctions(context)
 {
     this->context = context;
     this->surface = surface;

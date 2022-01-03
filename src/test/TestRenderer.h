@@ -2,14 +2,14 @@
 #define __TESTRENDERER_H
 
 #include <QOpenGLContext>
-#include <QOpenGLFunctions>
+#include <QOpenGLExtraFunctions>
 #include <QSurface>
 #include <mutex>
 #include <thread>
 #include <QThread>
 #include <chrono>
 
-class TestRenderer : public QOpenGLFunctions {
+class TestRenderer : public QOpenGLExtraFunctions {
 public:
     TestRenderer(QOpenGLContext* context, QSurface* surface);
     ~TestRenderer();
