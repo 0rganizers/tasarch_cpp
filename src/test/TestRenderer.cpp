@@ -455,7 +455,7 @@ auto TestRenderer::createFBO() -> bool
     glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, this->finalOutputBuffer, 0);
     
     // Set the list of draw buffers.
-    DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};
+    DrawBuffers[0] = {GL_COLOR_ATTACHMENT0};
     glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
     
     status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -662,6 +662,8 @@ auto TestRenderer::render() -> void
     glFlush();
     
     glFinish();
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
     // I think we dont need the lock for these?
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, this->finalOutputFBO);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, this->outputFBO);

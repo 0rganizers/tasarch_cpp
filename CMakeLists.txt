@@ -4,6 +4,8 @@ include(cmake/prelude.cmake)
 
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake
   CACHE STRING "Vcpkg toolchain file")
+set(CMAKE_MAKE_PROGRAM make CACHE STRING "make")
+set(CMAKE_CXX_COMPILER g++ CACHE STRING "g++")
 
 project(
     tasarch
@@ -54,8 +56,8 @@ find_package(Qt6 COMPONENTS Widgets Core5Compat OpenGLWidgets REQUIRED)
 
 # ---- Gather Files ----
 
-file(GLOB CPP_FILES "src/*.cpp" "src/gui/*.cpp" "src/test/*.cpp")
-file(GLOB H_FILES "src/*.h" "src/gui/*.h" "src/test/*.h")
+file(GLOB CPP_FILES "src/*.cpp" "src/gui/*.cpp" "src/test/*.cpp" "src/emu/*.cpp")
+file(GLOB H_FILES "src/*.h" "src/gui/*.h" "src/test/*.h" "src/emu/*.h")
 file(GLOB UI_FILES "src/gui/*.ui")
 
 # ---- Declare executable ----
@@ -75,7 +77,7 @@ source_group(TREE src PREFIX src FILES ${CPP_FILES} ${H_FILES} ${UI_FILES})
 
 target_include_directories(tasarch_exe SYSTEM PUBLIC $<BUILD_INTERFACE:${EXTERNAL_INCLUDE_DIR}>)
 target_include_directories(tasarch_exe PUBLIC $<BUILD_INTERFACE:${SRC_INCLUDE_DIR}>)
-target_link_libraries(tasarch_exe Qt6::Widgets Qt6::OpenGLWidgets)
+target_link_libraries(tasarch_exe dl Qt6::Widgets Qt6::OpenGLWidgets)
 
 message(STATUS "qt: ${Qt6_INCLUDE_DIRS}")
 

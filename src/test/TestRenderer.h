@@ -38,7 +38,7 @@ public:
     std::mutex blit_output;
 private:
     bool stopped = true;
-   
+  
     QThread* render_thread;
     GLuint outputFBO = 0;
     GLuint finalOutputFBO = 0;
