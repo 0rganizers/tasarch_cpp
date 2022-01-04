@@ -8,8 +8,9 @@
 #include <thread>
 #include <QThread>
 #include <chrono>
+#include "log/logging.h"
 
-class TestRenderer : public QOpenGLFunctions {
+class TestRenderer : public QOpenGLFunctions, public tasarch::log::WithLogger {
 public:
     TestRenderer(QOpenGLContext* context, QSurface* surface);
     ~TestRenderer();

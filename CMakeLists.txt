@@ -63,7 +63,7 @@ file(GLOB UI_FILES "src/gui/*.ui")
 
 # ---- Declare executable ----
 
-add_executable(tasarch_exe $<TARGET_OBJECTS:elpp> ${CPP_FILES} ${H_FILES} ${UI_FILES})
+add_executable(tasarch_exe ${CPP_FILES} ${H_FILES} ${UI_FILES})
 add_executable(tasarch::exe ALIAS tasarch_exe)
 
 set_target_properties(

@@ -9,11 +9,10 @@
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
 #include <QOffscreenSurface>
-#include <easyloggingpp/easylogging++.h>
 
 namespace tasarch::gui {
 
-    TestGLWidget::TestGLWidget(QWidget* parent) : QOpenGLWidget(parent)
+    TestGLWidget::TestGLWidget(QWidget* parent) : QOpenGLWidget(parent), log::WithLogger("tasarch.testgl")
     {
         
     }
@@ -26,17 +25,17 @@ namespace tasarch::gui {
         glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, this->tr->finalOutputBuffer, 0);
         GLenum error = glGetError();
         if (error != GL_NO_ERROR) {
-            LOG(ERROR) << "failed to setup framebuffer";
+            logger->error("failed to setup framebuffer {}", error);
             return false;
         }
         
         GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
         if(status != GL_FRAMEBUFFER_COMPLETE) {
-            LOG(ERROR) << "framebuffer status is incomplete!: " << status;
+            logger->error("framebuffer status is incomplete!: {}", status);
             return false;
         }
         
-        LOG(INFO) << "blit fbo: " << this->blitFBO;
+        logger->debug("blit fbo: {}", this->blitFBO);
         
         return true;
     }
@@ -48,7 +47,7 @@ namespace tasarch::gui {
 
     auto TestGLWidget::initializeGL() -> void
     {
-        LOG(INFO) << "initializing context!";
+        logger->debug("initializing context");
         if (this->tr != nullptr) {
             this->tr->stop();
             delete this->tr;
@@ -61,7 +60,7 @@ namespace tasarch::gui {
         subctx->setShareContext(QOpenGLContext::currentContext());
         subctx->setFormat(this->format());
         if (!subctx->create()) {
-            LOG(ERROR) << "failed to create subctx!";
+            logger->error("failed to create subctx!");
             return;
         }
         
@@ -75,14 +74,13 @@ namespace tasarch::gui {
 
     auto TestGLWidget::resizeGL(int w, int h) -> void
     {
-        LOG(INFO) << "resize " << w << ", " << h;
+        logger->trace("resize {}x{}", w, h);
         this->tr->resize(w, h);
         this->didResize = true;
     }
 
     auto TestGLWidget::paintGL() -> void
     {
-    //    LOG(INFO) << "paintGL";
         this->tr->run();
         // This only happens, if we did resize, but the renderer already created the new buffers!
         if (this->didResize && !this->tr->didResize) {

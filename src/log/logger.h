@@ -57,6 +57,12 @@ namespace tasarch::log {
         {}
         
         template<typename... Args>
+        void trace(format_with_location fmt, Args &&...args)
+        {
+            this->log_(fmt.loc, spdlog::level::trace, fmt.value, std::forward<Args>(args)...);
+        }
+        
+        template<typename... Args>
         void debug(format_with_location fmt, Args &&...args)
         {
             this->log_(fmt.loc, spdlog::level::debug, fmt.value, std::forward<Args>(args)...);
