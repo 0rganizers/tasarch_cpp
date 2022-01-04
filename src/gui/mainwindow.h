@@ -4,15 +4,19 @@
 #include <QMainWindow>
 #include "ui_mainwindow.h"
 
-class MainWindow : public QMainWindow, private Ui::MainWindow
-{
-    Q_OBJECT
+namespace tasarch::gui {
+    class MainWindow : public QMainWindow, private Ui::MainWindow
+    {
+        Q_OBJECT
 
-public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    public:
+        explicit MainWindow(QWidget *parent = nullptr);
 
-private slots:
-    void on_actionExit_triggered();
-};
+    private slots:
+        void on_actionExit_triggered();
+    };
+} // namespace tasarch::gui
+
+
 
 #endif /* __MAINWINDOW_H */

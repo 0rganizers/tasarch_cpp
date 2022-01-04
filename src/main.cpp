@@ -14,16 +14,39 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
 
-#include "gui/mainwindow.h"
+#include "gui/MainWindow.h"
 #include <QSurfaceFormat>
 
+#include "log/logging.h"
 
 INITIALIZE_EASYLOGGINGPP
 
+class Testing : public tasarch::log::WithLogger {
+public:
+    Testing() : tasarch::log::WithLogger("testing") {}
+
+    void test() {
+        CINFO("info message here!");
+    }
+};
+
 auto main(int argc, char* argv[]) -> int
 {
+    tasarch::log::setup_logging();
+    
+    auto logger = tasarch::log::get("tasarch");
+    INFO(logger, "info test");
+    logger->info("Info member method: {}", "asdf");
+    logger->error("error member method!");
+    logger->error("error member method param: {}", "asdf");
+    
+    auto testing = new Testing();
+    testing->test();
+    
+    return 0;
+    
     el::Loggers::addFlag(el::LoggingFlag::ColoredTerminalOutput);
-    LOG(INFO) << "Hello World!";
+//    LOG(INFO) << "Hello World!";
     
     // needs to be here, before we actually create the GUI!
     QSurfaceFormat form;
@@ -39,7 +62,7 @@ auto main(int argc, char* argv[]) -> int
     
 
     
-    MainWindow* window = new MainWindow();
+    auto window = new tasarch::gui::MainWindow();
     
     window->show();
  

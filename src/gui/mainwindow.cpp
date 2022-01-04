@@ -1,14 +1,17 @@
-#include "mainwindow.h"
+#include "MainWindow.h"
 
 #include <easyloggingpp/easylogging++.h>
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent)
-{
-    setupUi(this);
-}
+namespace tasarch::gui {
+    MainWindow::MainWindow(QWidget *parent) :
+        QMainWindow(parent)
+    {
+        setupUi(this);
+    }
 
-void MainWindow::on_actionExit_triggered()
-{
-    this->close();
-}
+    void MainWindow::on_actionExit_triggered()
+    {
+        this->close();
+    }
+} // namespace tasarch::gui
+

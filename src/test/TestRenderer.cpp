@@ -35,7 +35,7 @@ vec2 fragCoord = gl_FragCoord.xy;
 // (with some inspiration from other shaders obviously).
 // I thought the end result was decent so I wanted to share
 
-/*const float gravity = 1.0;
+const float gravity = 1.0;
 const float waterTension = 0.01;
 const vec3 skyCol1 = vec3(0.2, 0.4, 0.6);
 const vec3 skyCol2 = vec3(0.4, 0.7, 1.0);
@@ -160,14 +160,14 @@ void main() {
   }
 
   fragColor = vec4(col,1.0);
-}*/
+}
 
 /*
  * "Seascape" by Alexander Alekseev aka TDM - 2014
  * License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
  * Contact: tdmaav@gmail.com
  */
-
+/*
 const int NUM_STEPS = 8;
 //const float PI         = 3.141592;
 const float EPSILON    = 1e-3;
@@ -365,7 +365,7 @@ void main() {
     
     // post
     fragColor = vec4(pow(color,vec3(0.65)), 1.0);
-}
+}*/
 
 )";
 
@@ -455,7 +455,6 @@ auto TestRenderer::createFBO() -> bool
     glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, this->finalOutputBuffer, 0);
     
     // Set the list of draw buffers.
-    DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};
     glDrawBuffers(1, DrawBuffers); // "1" is the size of DrawBuffers
     
     status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -545,8 +544,6 @@ auto TestRenderer::setup() -> void
     LOG(INFO) << "setting up vertices and shader";
     
     
-    
-    int samples = 4;
     float quadVerts[] = {
         -1.0, -1.0,     0.0, 0.0,
         -1.0, 1.0,      0.0, 1.0,
@@ -688,7 +685,7 @@ auto TestRenderer::run() -> void
         double average = 0.0;
         size_t num = 0;
         while (!this->stopped) {
-            TIMED_SCOPE(renderTimer, "render");
+//            TIMED_SCOPE(renderTimer, "render");
 //            clock_t start = clock();
             auto start = std::chrono::high_resolution_clock::now();
             this->render();
@@ -703,7 +700,7 @@ auto TestRenderer::run() -> void
                 average = average / num;
                 num = 0;
                 
-                LOG(INFO) << "Render thread average is: " << (average * 1000) << "ms";
+//                LOG(INFO) << "Render thread average is: " << (average * 1000) << "ms";
             }
 //            QThread::msleep(10);
         }
@@ -726,7 +723,13 @@ auto TestRenderer::stop() -> void
 
 TestRenderer::~TestRenderer()
 {
-    LOG(INFO) << "deleting this renderer";
+    if (!this->stopped) {
+        this->stopped = true;
+        // Dont wait here, maybe we should?
+        this->render_thread->quit();
+        delete this->render_thread;
+    }
+
     this->deleteFBO();
     delete this->context;
     delete this->surface;
