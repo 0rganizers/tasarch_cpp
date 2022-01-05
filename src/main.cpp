@@ -50,6 +50,8 @@ auto main(int argc, char* argv[]) -> int
     
     window->show();
     logw->show();
+    
+    window->add_window(logw);
  
     logw->testAppend();
     logger->info("Info message!");
