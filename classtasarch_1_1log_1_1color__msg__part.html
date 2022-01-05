@@ -52,9 +52,9 @@
       <div class="m-col-l-10 m-push-l-1">
         <h1>
           <span class="m-breadcrumb"><a href="namespacetasarch.html">tasarch</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespacetasarch_1_1log.html">log</a>::<wbr/></span>color_msg_part <span class="m-thin">class</span>
-          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="formatters_8h.html">&lt;formatters.h&gt;</a></div>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="formatters_8h.html">&lt;src/log/formatters.h&gt;</a></div>
         </h1>
-        <div class="m-block m-default">
+        <nav class="m-block m-default">
           <h3>Contents</h3>
           <ul>
             <li>
@@ -67,7 +67,7 @@
               </ul>
             </li>
           </ul>
-        </div>
+        </nav>
 <p>Automatically adds colors to a message. By abusing the padding info, this allows for coloring in two parts. Anything Info or below, has first part dimmed, second part normal. Anything above Info, has all the same color.</p>
         <section id="derived-classes">
           <h2><a href="#derived-classes">Derived classes</a></h2>
@@ -88,11 +88,11 @@
             <dt id="abbad7efa43703d6578bc9e729509c15b">
               <span class="m-doc-wrap-bumper">auto <a href="#abbad7efa43703d6578bc9e729509c15b" class="m-doc-self">format</a>(</span><span class="m-doc-wrap">const spdlog::details::log_msg&amp; msg,
               const std::tm&amp;,
-              spdlog::memory_buf_t&amp; dest) -&gt; void <span class="m-label m-flat m-warning">override</span></span>
+              spdlog::memory_buf_t&amp; dest) -&gt; void -&gt; auto <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd><span></span></dd>
             <dt id="aa92971d0e937a9c667d02db95cd94135">
-              <span class="m-doc-wrap-bumper">auto <a href="#aa92971d0e937a9c667d02db95cd94135" class="m-doc-self">clone</a>(</span><span class="m-doc-wrap">) const -&gt; std::unique_ptr&lt; spdlog::custom_flag_formatter &gt; <span class="m-label m-flat m-warning">override</span></span>
+              <span class="m-doc-wrap-bumper">auto <a href="#aa92971d0e937a9c667d02db95cd94135" class="m-doc-self">clone</a>(</span><span class="m-doc-wrap">) const -&gt; std::unique_ptr&lt; spdlog::custom_flag_formatter &gt; -&gt; auto <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd><span></span></dd>
           </dl>
@@ -112,11 +112,11 @@
           <h2><a href="#pro-methods">Protected functions</a></h2>
           <dl class="m-doc">
             <dt id="a738d079f87fde61400959bae9e1eefdd">
-              <span class="m-doc-wrap-bumper">auto <a href="#a738d079f87fde61400959bae9e1eefdd" class="m-doc-self">level_color</a>(</span><span class="m-doc-wrap">spdlog::level::level_enum level) -&gt; spdlog::string_view_t <span class="m-label m-flat m-warning">virtual</span></span>
+              <span class="m-doc-wrap-bumper">auto <a href="#a738d079f87fde61400959bae9e1eefdd" class="m-doc-self">level_color</a>(</span><span class="m-doc-wrap">spdlog::level::level_enum level) -&gt; spdlog::string_view_t -&gt; auto <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
             <dd><span></span></dd>
             <dt id="aad705380e63ec72d51f8e41a51b6dda4">
-              <span class="m-doc-wrap-bumper">auto <a href="#aad705380e63ec72d51f8e41a51b6dda4" class="m-doc-self">get_msg_part</a>(</span><span class="m-doc-wrap"><a href="classtasarch_1_1log_1_1color__msg__part.html#a0148ff85b35d0063d462ea766d722d50" class="m-doc">msg_<wbr />part</a> part) -&gt; spdlog::string_view_t <span class="m-label m-flat m-warning">virtual</span></span>
+              <span class="m-doc-wrap-bumper">auto <a href="#aad705380e63ec72d51f8e41a51b6dda4" class="m-doc-self">get_msg_part</a>(</span><span class="m-doc-wrap"><a href="classtasarch_1_1log_1_1color__msg__part.html#a0148ff85b35d0063d462ea766d722d50" class="m-doc">msg_<wbr />part</a> part) -&gt; spdlog::string_view_t -&gt; auto <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
             <dd><span></span></dd>
           </dl>
