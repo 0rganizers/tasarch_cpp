@@ -1,7 +1,10 @@
 \page movie tasarch Movie Format
 
 This page outlines the plan for the tasarch Movie Format (TAM from now on).
-Hopefully, by first designing it, we can make something that actually works :)
+Hopefully, by first designing it, we can make something that actually works :).
+
+\note While the title (and TAM) might imply this document only deals with the on disk format, it actually deals with both (in memory representation and handling in the app).
+Discussing the in memory representation and what we need from it, is a lot more important IMO than the actual serialization format.
 
 \tableofcontents
 
@@ -60,6 +63,11 @@ We should save various important metadata in TAM, such as:
 ## Performance Requirements {#perfreq}
 
 In the following, we discuss certain requirements regarding performance (such as size in memory / on disk), that dont really have hard lines, but should still be met.
+
+In general, TAMs should be efficient to deal with, both for the on disk representation and the in memory. In particular, the following operations should be fast:
+
+- Serialization
+- 
 
 ## Soft Requirements {#softreq}
 

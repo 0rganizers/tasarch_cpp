@@ -11,6 +11,8 @@ STYLESHEETS = [
     '@PROJECT_SOURCE_DIR@/docs/css/fixes.css'
 ]
 
+FAVICON = "@PROJECT_SOURCE_DIR@/assets/appicon/favicon-96x96.png"
+
 EXTRA_FILES = [
     "@PROJECT_SOURCE_DIR@/docs/css/fixes.css"
 ]
