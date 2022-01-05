@@ -81,7 +81,7 @@ namespace tasarch::gui {
 
     auto TestGLWidget::paintGL() -> void
     {
-        this->tr->run();
+//        this->tr->run();
         // This only happens, if we did resize, but the renderer already created the new buffers!
         if (this->didResize && !this->tr->didResize) {
             // so recreate our buffers as well!
@@ -99,7 +99,7 @@ namespace tasarch::gui {
             glFlush();
             glFinish();
         }
-        this->update();
+//        this->update();
     }
 
 } // namespace tasarch::gui

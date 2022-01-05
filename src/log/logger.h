@@ -37,6 +37,11 @@ namespace tasarch::log {
 
     class logger : public spdlog::logger {
     public:
+        
+#pragma mark Interesting
+        std::shared_ptr<logger> child(std::string name);
+
+#pragma mark Constructors
         // Empty logger
         explicit logger(std::string name) : spdlog::logger(name)
         {}
@@ -55,6 +60,8 @@ namespace tasarch::log {
         logger(std::string name, spdlog::sinks_init_list sinks)
             : spdlog::logger(name, sinks)
         {}
+        
+#pragma mark Variadic Log Functions
         
         template<typename... Args>
         void trace(format_with_location fmt, Args &&...args)
@@ -92,7 +99,7 @@ namespace tasarch::log {
             this->log_(fmt.loc, spdlog::level::critical, fmt.value, std::forward<Args>(args)...);
         }
         
-        // single message
+#pragma mark Single Message
         // TODO: this one
 //        void log(spdlog::level::level_enum lvl, spdlog::string_view_t msg, const source_location &location = source_location::current())
 //        {

@@ -135,7 +135,7 @@ void main() {
   vec3 sunDir = sunDirection();
   
   vec3 sky = skyColor(rd);
-    
+   /*
   if (dsea > 0.0) {
     vec3 p = ro + dsea*rd;
     float h = seaHeight(p.xz);
@@ -155,7 +155,7 @@ void main() {
     col = mix(col, sky, 1.0 - exp(-0.01*dsea));
   } else {
     col = sky;
-  }
+  }*/
 
   fragColor = vec4(col,1.0);
 }

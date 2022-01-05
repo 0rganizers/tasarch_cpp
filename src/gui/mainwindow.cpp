@@ -1,7 +1,5 @@
 #include "MainWindow.h"
 
-#include <easyloggingpp/easylogging++.h>
-
 namespace tasarch::gui {
     MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent)
