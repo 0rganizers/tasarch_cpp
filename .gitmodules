@@ -1,3 +1,6 @@
 [submodule "vcpkg"]
 	path = vcpkg
 	url = https://github.com/microsoft/vcpkg
+[submodule "docs/m.css"]
+	path = docs/m.css
+	url = git@github.com:0rganizers/m.css.git

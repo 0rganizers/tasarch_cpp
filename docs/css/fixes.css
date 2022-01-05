@@ -2,3 +2,18 @@ body {
     /* IMO default was too small to nicely read. */
     font-size: 1.25rem !important;
 }
+
+/* XL, 1400px, I like my websites wide */
+@media screen and (min-width: 1400px) {
+    .m-container { width: 1200px; }
+
+}
+
+/* like this more, but maybe we want to remove that */
+pre {
+    white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
