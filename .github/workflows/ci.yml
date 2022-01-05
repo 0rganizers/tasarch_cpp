@@ -151,8 +151,8 @@ jobs:
       run: ctest --output-on-failure -C Release -j 2
 
   docs:
-    # Deploy docs only when builds succeed
-    needs: [sanitize, test]
+    # Deploy docs always, at least for now
+    # needs: [sanitize, test]
 
     runs-on: ubuntu-latest
 
