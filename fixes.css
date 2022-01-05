@@ -1,0 +1,4 @@
+body {
+    /* IMO default was too small to nicely read. */
+    font-size: 1.25rem !important;
+}
