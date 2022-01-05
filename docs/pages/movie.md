@@ -75,6 +75,10 @@ In the following, we discuss requirements that could be removed, if there is no 
 
 ### Save States for Scrubbing, etc. {#savestates}
 
+### Breakpoints
+
+IDEA: can be managed by gdb, by exposing / making them able to be set, via watchpoints on special addresses (64bit kernel addresses should work?) or gdb commands
+
 # Proposed Design {#design}
 
 I propose the format is designed as follows (C++ classes, not necessarily how it looks on disk!).
