@@ -9,30 +9,26 @@
 #define TestGLWidget_h
 
 #include <QOpenGLWidget>
-#include "test/TestRenderer.h"
 #include "emu/Core.h"
 #include "emu/Renderer.h"
+#include "log/logging.h"
 
-class TestGLWidget : public QOpenGLWidget {
-public:
-    TestGLWidget(QWidget *parent);
-    ~TestGLWidget();
+namespace tasarch::gui {
+    class TestGLWidget : public QOpenGLWidget, public log::WithLogger, public QOpenGLExtraFunctions {
+    public:
+        TestGLWidget(QWidget *parent);
+    protected:
+        void initializeGL() override;
+        void resizeGL(int w, int h) override;
+        void paintGL() override;
+        
+        Core *core = nullptr;
+        GLuint blitFBO = 0;
+        
+    private:
+        bool createFBO();
+        void deleteFBO();
+    };
+} // namespace tasarch::gui
 
-protected:
-    void initializeGL() override;
-    void resizeGL(int w, int h) override;
-    void paintGL() override;
-    
-    //TestRenderer* tr = nullptr;
-    Core *core = nullptr;
-    int m_width = 0, m_height = 0;
-    GLuint m_texID = 0, blitFBO = 0;
-    bool didResize = false;
-    
-private:
-    bool createFBO();
-    void deleteFBO();
-};
-
-
-#endif /* TestGLWidget_h */
+#endif

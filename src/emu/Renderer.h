@@ -7,7 +7,6 @@
 #include <thread>
 #include <QThread>
 #include <chrono>
-#include <easyloggingpp/easylogging++.h>
 
 class Core;
 
@@ -33,13 +32,15 @@ public:
 
     GLuint m_vaoID, m_vboID;
     GLuint m_shaderID;
-    GLuint m_texID;
+
+    GLuint m_fboID;
+    GLuint m_texID, m_doublebuffer_texID;
 };
 
 class OpenGLRenderer : public Renderer {
 public:
-    GLuint m_fboID, m_doublebuffer_fboID;
-    GLuint m_doublebuffer_texID;
+    GLuint m_doublebuffer_fboID;
+
     OpenGLRenderer(QOpenGLContext* context, QSurface* surface)
         : Renderer(context, surface) {}
     GLuint init(Core *core, int w, int h) override;

@@ -1,29 +1,23 @@
 #include <iostream>
 #include <string>
 
-// #include "lib.hpp"
-
-// Easy logging defines
-#define ELPP_QT_LOGGING 1
-#define ELPP_FEATURE_PERFORMANCE_TRACKING 1
-#include <easyloggingpp/easylogging++.h>
-
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
 
-#include "gui/mainwindow.h"
+#include "gui/MainWindow.h"
 #include <QSurfaceFormat>
 
-
-INITIALIZE_EASYLOGGINGPP
+#include "log/logging.h"
 
 auto main(int argc, char* argv[]) -> int
 {
-    el::Loggers::addFlag(el::LoggingFlag::ColoredTerminalOutput);
-    LOG(INFO) << "Hello World!";
+    tasarch::log::setup_logging();
+    
+    auto logger = tasarch::log::get("tasarch");
+    logger->info("Initializing QT application...");
     
     // needs to be here, before we actually create the GUI!
     QSurfaceFormat form;
@@ -37,9 +31,7 @@ auto main(int argc, char* argv[]) -> int
     
     QApplication app(argc, argv);
     
-
-    
-    MainWindow* window = new MainWindow();
+    auto window = new tasarch::gui::MainWindow();
     
     window->show();
  

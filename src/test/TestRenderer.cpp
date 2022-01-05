@@ -1,6 +1,4 @@
 #include "TestRenderer.h"
-#define ELPP_FEATURE_PERFORMANCE_TRACKING 1
-#include <easyloggingpp/easylogging++.h>
 #include <chrono>
 
 const char *vertexShaderSource =
@@ -35,7 +33,7 @@ vec2 fragCoord = gl_FragCoord.xy;
 // (with some inspiration from other shaders obviously).
 // I thought the end result was decent so I wanted to share
 
-/*const float gravity = 1.0;
+const float gravity = 1.0;
 const float waterTension = 0.01;
 const vec3 skyCol1 = vec3(0.2, 0.4, 0.6);
 const vec3 skyCol2 = vec3(0.4, 0.7, 1.0);
@@ -160,14 +158,14 @@ void main() {
   }
 
   fragColor = vec4(col,1.0);
-}*/
+}
 
 /*
  * "Seascape" by Alexander Alekseev aka TDM - 2014
  * License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
  * Contact: tdmaav@gmail.com
  */
-
+/*
 const int NUM_STEPS = 8;
 //const float PI         = 3.141592;
 const float EPSILON    = 1e-3;
@@ -365,11 +363,11 @@ void main() {
     
     // post
     fragColor = vec4(pow(color,vec3(0.65)), 1.0);
-}
+}*/
 
 )";
 
-TestRenderer::TestRenderer(QOpenGLContext* context, QSurface* surface) : QOpenGLExtraFunctions(context)
+TestRenderer::TestRenderer(QOpenGLContext* context, QSurface* surface) : QOpenGLExtraFunctions(context), tasarch::log::WithLogger("tasarch.testrenderer")
 {
     this->context = context;
     this->surface = surface;
@@ -381,11 +379,11 @@ auto TestRenderer::createFBO() -> bool
     GLenum error = 0;
 #define CHECK_GL(msg)     error = glGetError(); \
     if (error != GL_NO_ERROR) { \
-        LOG(ERROR) << "opengl had error: " << error << " during " << msg; \
+        logger->error("opengl had error: {}, msg: {}", error, msg); \
         return false; \
     }
     
-    LOG(INFO) << "setting up output buffer";
+    logger->debug("setting up output buffer");
     
     glGenFramebuffers(1, &this->outputFBO);
     CHECK_GL("failed to create framebuffer");
@@ -423,13 +421,13 @@ auto TestRenderer::createFBO() -> bool
     
     GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if(status != GL_FRAMEBUFFER_COMPLETE) {
-        LOG(ERROR) << "framebuffer status is incomplete!: " << status;
+        logger->error("framebuffer status is incomplete!: {}", status);
         return false;
     }
     
-    LOG(INFO) << "output fbo: " << this->outputFBO << ", output buffer: " << this->outputRenderBuffer;
+    logger->debug("output fbo: {}, output buffer: {}", this->outputFBO, this->outputRenderBuffer);
     
-    LOG(INFO) << "setting up final output buffer";
+    logger->debug("setting up final output buffer");
     
     glGenFramebuffers(1, &this->finalOutputFBO);
     CHECK_GL("failed to create framebuffer");
@@ -460,11 +458,11 @@ auto TestRenderer::createFBO() -> bool
     
     status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if(status != GL_FRAMEBUFFER_COMPLETE) {
-        LOG(ERROR) << "framebuffer status is incomplete!: " << status;
+        logger->error("framebuffer status is incomplete!: {}", status);
         return false;
     }
     
-    LOG(INFO) << "final output fbo: " << this->finalOutputFBO << ", final output buffer: " << this->finalOutputBuffer;
+    logger->debug("final output fbo: {}, final output buffer: {}", this->finalOutputFBO, this->finalOutputBuffer);
     
     return true;
 }
@@ -505,7 +503,7 @@ auto TestRenderer::checkShader(unsigned int shader, GLenum status) -> bool {
         }
         
         std::string errorlog(errorLog.begin(), errorLog.end());
-        LOG(ERROR) << "shader errord: " << errorlog;
+        logger->error("shader errord:\n", errorlog);
         // Provide the infolog in whatever manor you deem best.
         // Exit with failure.
         glDeleteShader(shader); // Don't leak the shader.
@@ -529,24 +527,20 @@ auto TestRenderer::setup() -> void
     glGetIntegerv(GL_MAJOR_VERSION, &major);
     glGetIntegerv(GL_MINOR_VERSION, &minor);
     
-    LOG(INFO) << "renderer: " << renderer;
-    LOG(INFO) << "vendor: " << vendor;
-    LOG(INFO) << "version: " << version;
-    LOG(INFO) << "glsl version: " << glslVersion;
-    LOG(INFO) << "act_version?: " << major << "." << minor;
-    
-    LOG(INFO) << "setting up test renderer";
+    logger->info(R"(opengl information:
+    renderer: {}
+    vendor: {}
+    glsl version: {}
+    reported version??: {}.{}
+)", renderer, vendor, version, glslVersion, major, minor);
     
     if (!this->createFBO()) {
         this->context->doneCurrent();
         return;
     }
     
-    LOG(INFO) << "setting up vertices and shader";
+    logger->debug("setting up vertices and shader");
     
-    
-    
-    int samples = 4;
     float quadVerts[] = {
         -1.0, -1.0,     0.0, 0.0,
         -1.0, 1.0,      0.0, 1.0,
@@ -576,7 +570,7 @@ auto TestRenderer::setup() -> void
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
     glCompileShader(vertexShader);
     
-    LOG(INFO) << "compiled vertex shader";
+    logger->debug("compiled vertex shader");
     
     if (!this->checkShader(vertexShader, GL_COMPILE_STATUS)) {
         this->context->doneCurrent();
@@ -588,8 +582,7 @@ auto TestRenderer::setup() -> void
     glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
     glCompileShader(fragmentShader);
     // check for shader compile errors
-    
-    LOG(INFO) << "compiled fragment shader";
+    logger->debug("compiled fragment shader");
     
     if (!this->checkShader(fragmentShader, GL_COMPILE_STATUS)) {
         this->context->doneCurrent();
@@ -604,7 +597,7 @@ auto TestRenderer::setup() -> void
     glLinkProgram(this->shader);
     // check for linking errors
     
-    LOG(INFO) << "linked shaders";
+    logger->debug("linked shaders");
     
     if (!this->checkShader(this->shader, GL_LINK_STATUS)) {
         this->context->doneCurrent();
@@ -624,7 +617,6 @@ auto TestRenderer::setup() -> void
 
 auto TestRenderer::resize(int w, int h) -> void
 {
-    LOG(INFO) << "resize todo!";
     this->width = w;
     this->height = h;
     this->didResize = true;
@@ -684,13 +676,13 @@ auto TestRenderer::run() -> void
     }
     this->stopped = false;
     this->render_thread = QThread::create([&](){
-        LOG(INFO) << "render thread started!";
+        logger->info("render thread started");
         this->context->makeCurrent(this->surface);
         this->start_clock = std::chrono::high_resolution_clock::now();
         double average = 0.0;
         size_t num = 0;
         while (!this->stopped) {
-            TIMED_SCOPE(renderTimer, "render");
+//            TIMED_SCOPE(renderTimer, "render");
 //            clock_t start = clock();
             auto start = std::chrono::high_resolution_clock::now();
             this->render();
@@ -704,8 +696,6 @@ auto TestRenderer::run() -> void
             if (num == 10) {
                 average = average / num;
                 num = 0;
-                
-                LOG(INFO) << "Render thread average is: " << (average * 1000) << "ms";
             }
 //            QThread::msleep(10);
         }
@@ -728,7 +718,13 @@ auto TestRenderer::stop() -> void
 
 TestRenderer::~TestRenderer()
 {
-    LOG(INFO) << "deleting this renderer";
+    if (!this->stopped) {
+        this->stopped = true;
+        // Dont wait here, maybe we should?
+        this->render_thread->quit();
+        delete this->render_thread;
+    }
+
     this->deleteFBO();
     delete this->context;
     delete this->surface;

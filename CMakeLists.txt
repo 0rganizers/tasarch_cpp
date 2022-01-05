@@ -33,7 +33,10 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 COMPONENTS Widgets Core5Compat OpenGLWidgets REQUIRED)
+find_package(Qt6 COMPONENTS Widgets Core5Compat OpenGLWidgets Multimedia REQUIRED)
+
+find_package(fmt CONFIG REQUIRED)
+find_package(spdlog CONFIG REQUIRED)
 
 # find_package(PkgConfig REQUIRED)
 
@@ -56,13 +59,13 @@ find_package(Qt6 COMPONENTS Widgets Core5Compat OpenGLWidgets REQUIRED)
 
 # ---- Gather Files ----
 
-file(GLOB CPP_FILES "src/*.cpp" "src/gui/*.cpp" "src/test/*.cpp" "src/emu/*.cpp")
-file(GLOB H_FILES "src/*.h" "src/gui/*.h" "src/test/*.h" "src/emu/*.h")
+file(GLOB CPP_FILES "src/*.cpp" "src/gui/*.cpp" "src/emu/*.cpp" "src/log/*.cpp")
+file(GLOB H_FILES "src/*.h" "src/gui/*.h" "src/emu/*.h" "src/log/*.h")
 file(GLOB UI_FILES "src/gui/*.ui")
 
 # ---- Declare executable ----
 
-add_executable(tasarch_exe MACOSX_BUNDLE src/main.cpp $<TARGET_OBJECTS:elpp> ${CPP_FILES} ${H_FILES} ${UI_FILES})
+add_executable(tasarch_exe ${CPP_FILES} ${H_FILES} ${UI_FILES})
 add_executable(tasarch::exe ALIAS tasarch_exe)
 
 set_target_properties(
@@ -71,15 +74,18 @@ set_target_properties(
     EXPORT_NAME exe
 )
 
-target_compile_features(tasarch_exe PRIVATE cxx_std_17)
+target_compile_features(tasarch_exe PRIVATE cxx_std_20)
+# set_property(TARGET tasarch_exe PROPERTY CXX_STANDARD 20)
 
 source_group(TREE src PREFIX src FILES ${CPP_FILES} ${H_FILES} ${UI_FILES})
 
 target_include_directories(tasarch_exe SYSTEM PUBLIC $<BUILD_INTERFACE:${EXTERNAL_INCLUDE_DIR}>)
 target_include_directories(tasarch_exe PUBLIC $<BUILD_INTERFACE:${SRC_INCLUDE_DIR}>)
-target_link_libraries(tasarch_exe dl Qt6::Widgets Qt6::OpenGLWidgets)
 
-message(STATUS "qt: ${Qt6_INCLUDE_DIRS}")
+target_link_libraries(tasarch_exe Qt6::Widgets Qt6::OpenGLWidgets Qt6::Multimedia)
+target_link_libraries(tasarch_exe dl)
+target_link_libraries(tasarch_exe fmt::fmt)
+target_link_libraries(tasarch_exe spdlog::spdlog spdlog::spdlog_header_only)
 
 # ---- Install rules ----
 

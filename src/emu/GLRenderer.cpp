@@ -7,35 +7,10 @@
 static void render_callback(void *userdata, const void *data, unsigned width,
         unsigned height, size_t pitch) {
     OpenGLRenderer *renderer = (OpenGLRenderer*) userdata;
-    //glfwMakeContextCurrent(renderer->m_window);
-    /*renderer->glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // screen fbo
-
-    glActiveTexture(GL_TEXTURE0);
-
-    renderer->glClearColor(1, 0, 0, 1);
-    renderer->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    int w, h;
-    //glfwGetFramebufferSize(renderer->m_window, &w, &h);
-    renderer->glViewport(0, 0, w, h);
-
-    renderer->glBindTexture(GL_TEXTURE_2D, renderer->m_texID);
-
-    renderer->glUseProgram(renderer->m_shaderID);
-    unsigned int loc = renderer->glGetUniformLocation(renderer->m_shaderID, "screenTexture");
-    renderer->glUniform1i(loc, 0);
-
-    renderer->glBindVertexArray(renderer->m_vaoID);
-    renderer->glDrawArrays(GL_TRIANGLES, 0, 6);
-
-    renderer->glFlush();
-    renderer->glFinish();
-
-    //glfwSwapBuffers(renderer->m_window);*/
 
     GLenum error = renderer->glGetError();
     if (error != GL_NO_ERROR) {
-        LOG(ERROR) << "failed somewhere: " << error;
+        //LOG(ERROR) << "failed somewhere: " << error;
     }
     renderer->glViewport(0, 0, width, height);
     renderer->glBindFramebuffer(GL_DRAW_FRAMEBUFFER, renderer->m_fboID);
@@ -59,7 +34,7 @@ GLuint OpenGLRenderer::init(Core *core, int width, int height) {
     glBindFramebuffer(GL_FRAMEBUFFER, m_fboID);
 
     glGenTextures(1, &m_texID);
-    LOG(INFO) << "Generated texture with ID: " << m_texID;
+    //LOG(INFO) << "Generated texture with ID: " << m_texID;
     glBindTexture(GL_TEXTURE_2D, m_texID);
     glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, width, height);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -94,7 +69,7 @@ GLuint OpenGLRenderer::init(Core *core, int width, int height) {
         exit(1);
     }
     
-    LOG(INFO) << "Framebuffer ID: " << m_fboID;
+    //LOG(INFO) << "Framebuffer ID: " << m_fboID;
     core->set_framebuffer(m_doublebuffer_fboID);
 
     load_shaders("assets/shaders/plain.vert", "assets/shaders/plain.frag");

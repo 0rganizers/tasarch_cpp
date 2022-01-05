@@ -1,6 +1,7 @@
 #pragma once
 
 #include "libretro.h"
+#include "Audio.h"
 #include <vector>
 #include <string>
 #include <map>
@@ -43,8 +44,10 @@ class Core {
         bool m_stopped = true;
         QThread* m_render_thread;
 
+
     public:
-        Renderer *m_renderer = NULL;
+        Renderer *m_renderer = nullptr;
+        AudioOutput *m_audio = nullptr;
 
         Core(const char *core_path);
         ~Core();

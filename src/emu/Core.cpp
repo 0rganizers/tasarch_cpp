@@ -9,22 +9,17 @@
 #include <unistd.h>
 #include <unordered_map>
 #include <QOpenGLContext>
-#include <easyloggingpp/easylogging++.h>
 
 #include "libretro.h"
 #include "Core.h"
 #include "Callback.h"
 #include "Renderer.h"
 
+
 static std::unordered_map<std::string, std::string> core_variables = {};
 static std::unordered_map<std::string, input_desc> input_descriptors = {};
 static retro_hw_context_reset_t context_reset = NULL;
 static retro_hw_context_reset_t context_deinit = NULL;
-
-#define BUFSIZE (4096*16)
-int16_t audio_samples[BUFSIZE];
-int writepos = 0;
-int avail = 0;
 
 static GLuint get_framebuf(void *_core) {
     Core *core = (Core*) _core;
@@ -201,16 +196,15 @@ static bool env_callback(void *core, unsigned int cmd, void *data) {
     return true;
 }
 
-void audio_sample(int16_t left, int16_t right) {}
+void audio_sample(void *_core, int16_t left, int16_t right) {
+    Core *core = (Core*) _core;
+    if(core->m_audio) core->m_audio->enqueue(left, right);
+}
 
-size_t audio_sample_batch(const int16_t *data, size_t frames) { 
-    for(size_t i = 0; i < frames; i++) {
-        audio_samples[writepos++] = *data++;
-        audio_samples[writepos++] = *data++;
-        writepos %= BUFSIZE;
-    }
-    avail += frames;
-    return frames; 
+size_t audio_sample_batch(void *_core, const int16_t *data, size_t frames) { 
+    Core *core = (Core*) _core;
+    if(core->m_audio) core->m_audio->enqueue(data, frames);
+    return frames;
 }
 
 void input_poll(void *data) {
@@ -260,12 +254,12 @@ Core::Core(const char *core_path) {
     // Set single audio sample callback
     void (*set_audio_sample)(void*) = 
         (void (*)(void*)) dlsym(m_core_handle, "retro_set_audio_sample");
-    set_audio_sample((void*) audio_sample);
+    set_audio_sample((void*) create_callback((void*) audio_sample, (void*) this));
 
     // Set batch audio sample callback
     void (*set_batch_audio_sample)(void*) = 
         (void (*)(void*)) dlsym(m_core_handle, "retro_set_audio_sample_batch");
-    set_batch_audio_sample((void*) audio_sample_batch);
+    set_batch_audio_sample((void*) create_callback((void*) audio_sample_batch, (void*) this));
 
     // Set input poll callback
     void (*set_input_poll)(void*) = 
@@ -283,6 +277,11 @@ void Core::terminate() {
     if(m_renderer) {
         delete m_renderer;
         m_renderer = NULL;
+    }
+
+    if(m_audio) {
+        delete m_audio;
+        m_audio = nullptr;
     }
 
     if(m_core_handle) {
@@ -373,6 +372,9 @@ GLuint Core::init_renderer(QOpenGLContext* context, QSurface* surface) {
     }
 
     avinfo info = get_info();
+
+    m_audio = new AudioOutput(info.timing.sample_rate);
+
     return m_renderer->init(this, info.geometry.max_width, info.geometry.max_height);
 }
 
@@ -415,24 +417,19 @@ void Core::run() {
     this->m_stopped = false;
     this->m_render_thread = QThread::create([&]() {
         this->m_renderer->m_context->makeCurrent(this->m_renderer->m_surface);
+        avinfo info = get_info();
         double average = 0.0;
         size_t num = 0;
         while (!this->m_stopped) {
             auto start = std::chrono::high_resolution_clock::now();
-            
             run_frame();
-
             auto end = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double> diff = end - start;
-            double sec_diff = diff.count();
-            average += sec_diff;
-            num++;
-            if (num == 10) {
-                average = average / num;
-                num = 0;
-                
-                LOG(INFO) << "Render thread average is: " << (average * 1000) << "ms";
-            }
+
+            // sleep for the remaining time...
+            //QThread::usleep((1000000 / info.timing.fps) - std::chrono::duration<double>(end-start).count());
+
+            while(end-start < std::chrono::nanoseconds((int)(1000000000.0 / info.timing.fps)))
+                end = std::chrono::high_resolution_clock::now();
         }
 
         // the callback to render might be off by a few frames because it's
