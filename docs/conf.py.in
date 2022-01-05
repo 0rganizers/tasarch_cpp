@@ -1,6 +1,16 @@
 DOXYFILE = 'Doxyfile'
 
 LINKS_NAVBAR1 = [
-    (None, 'pages', [(None, 'about')]),
+    (None, 'pages', [(None, 'about'), (None, 'movie')]),
     (None, 'namespaces', []),
+]
+
+STYLESHEETS = [
+    'https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600',
+    '../css/m-dark+documentation.compiled.css',
+    '@PROJECT_SOURCE_DIR@/docs/css/fixes.css'
+]
+
+EXTRA_FILES = [
+    "@PROJECT_SOURCE_DIR@/docs/css/fixes.css"
 ]

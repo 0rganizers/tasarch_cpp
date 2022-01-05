@@ -9,7 +9,7 @@ project(
     tasarch
     VERSION 0.1.0
     DESCRIPTION "retroarch frontend for TASing"
-    HOMEPAGE_URL "https://retroc.tf"
+    HOMEPAGE_URL "https://org.anize.rs"
     LANGUAGES CXX
 )
 

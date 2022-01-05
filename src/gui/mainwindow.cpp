@@ -4,6 +4,8 @@ namespace tasarch::gui {
     ManagedWindow::ManagedWindow(QWidget* parent, QWidget* window, QString title, size_t idx) :
         parent(parent), window(window), title(title), idx(idx)
     {
+        // TODO: If user closes the window manually, then the state desyncs.
+        // FIX: Create base window class that has an on close signal we can listen on here.
         this->action = new QAction(this->title, this->parent);
         this->action->setCheckable(true);
         QKeySequence seq = QKeySequence::fromString(QString("Ctrl+%1").arg(this->idx));

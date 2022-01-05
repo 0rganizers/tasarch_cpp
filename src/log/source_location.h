@@ -1,6 +1,12 @@
 #ifndef __SOURCE_LOCATION_H
 #define __SOURCE_LOCATION_H
 
+/**
+    @file source_location.h
+    @brief Wrapper around source_location, to make sure it is included / even there in case of clang!
+    We also ensure that the correct header is included, by checking defines. Some compilers still have it in experimental.
+ */
+
 #ifdef __cpp_lib_source_location
 #include <source_location>
 using source_location = std::source_location;
@@ -14,6 +20,12 @@ using source_location = std::experimental::source_location;
 // Why the fuck then did they not add this snippet below????
 // Anyways, wondering if msvc actually has this implemented (they should according to cppreference)
 namespace tasarch::log {
+    /**
+     Theoretically, C++20 has the new and shiny source_location stuff. Unfortunately, it is not equally supported by all compilers.
+     I think gcc trunk, has it out of experimental, msvc as well?
+     Apple clang, does not have it. However, Apple clang does have the necessary builtins (for some reason) already.
+     So we can just copy the source_location definition from gcc's github and call it a day :)
+     */
     struct source_location
       {
       private:

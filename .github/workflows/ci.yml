@@ -13,6 +13,9 @@ jobs:
   lint:
     runs-on: ubuntu-latest
 
+    # not enabled for now
+    if: 'false'
+
     steps:
     - uses: actions/checkout@v2
       with:
@@ -81,6 +84,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    # not enabled for now
+    if: 'false'
+
     steps:
     - uses: actions/checkout@v2
       with:
@@ -115,6 +121,9 @@ jobs:
         os: [macos, ubuntu, windows]
 
     runs-on: ${{ matrix.os }}-latest
+
+    # not enabled for now
+    if: 'false'
 
     steps:
     - uses: actions/checkout@v2
