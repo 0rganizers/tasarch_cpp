@@ -28,7 +28,7 @@ Clearly the most important aspect of TAM and hence everything should focus on th
 Unfortunately, there are a few important aspects we need to support:
 
 -# **Multiple controllers** (e.g. Player 1 and Player 2)
--# **Different controllers** (e.g. SNES mouse), let's not worry too much about this for now, but we should keep it in mind for future compatibility
+-# **Different controllers** (e.g. SNES mouse), ~~let's not worry too much about this for now, but we should keep it in mind for future compatibility~~ (nevermind, if we want ds we definitely need this already for the screen :/)
 -# **Correct synchronization to frames of core**. \todo Figure out how this is done in BizHawk. What happens if you lag???
 
 -# **Support polling multiple times per frame**, see https://tasvideos.org/7245S why this is necessary.
@@ -67,7 +67,9 @@ In the following, we discuss certain requirements regarding performance (such as
 In general, TAMs should be efficient to deal with, both for the on disk representation and the in memory one. In particular, the following operations should be fast:
 
 - Serialization
-- 
+- Editing
+- Display
+- Scrubbing
 
 ## Soft Requirements {#softreq}
 
@@ -75,9 +77,42 @@ In the following, we discuss requirements that could be removed, if there is no 
 
 ### Save States for Scrubbing, etc. {#savestates}
 
+This is IMO almost a hard requirement. 
+The idea is that, like a normal movie, you can jump around in the movie and scrub to certain frames.
+
+@m_class{m-block m-success}
+
+@par Example
+You start recording some inputs in real time.
+After having recorded 180 frames of input (3 seconds), you notice that you messed up on frame 67.
+You pause recording and playback, then you right click on frame 67 and jump to there.
+You manually correct the input on frame 67 with the TAS input window (part of a future article).
+Finally, you jump to frame 180 and continue recording.
+
+**The problem**: How do we actually implement this? Unlike a normal movie, you cannot just scrub easily, especially with changing inputs.
+
+My proposed solution, would be something like the following:
+
+- Every `x` frames (configurable, per core?), while recording a TAM, a save state is made and saved with the TAM.
+- When the user jumps to frame `y`, we do the following:
+    - We search for the "next" previous frame `x'`, which has a save state associated with it.
+    - We load save state of frame `x'`
+    - We start playing back the recording until we reach frame `y`
+- When the user edits TAM, all save states created starting from the edit are invalidated and deleted.
+
+This worked quite well IMO with my POC tasarch for pokemon yellow. However, it will eat quite a lot of RAM and processing power for more demanding emulators such as dolphin.
+Not sure if we can offer a better solution there though.
+We should for sure have some good UI / UX there.
+For example, a loading indicator across the emulator window with a loading bar showing the progress of frames rendered from `x'` to `y`.
+
 ### Breakpoints
 
 IDEA: can be managed by gdb, by exposing / making them able to be set, via watchpoints on special addresses (64bit kernel addresses should work?) or gdb commands
+
+### Comments & labels
+
+Not sure if labels are really necessary, unless we want to be able to set breakpoints by label.
+But IMO comments would be quite nice, just like how you might want to add comments in your exploit script.
 
 # Proposed Design {#design}
 
@@ -216,6 +251,18 @@ struct SetControllerEvent : public FrameEvent {
     uint32_t device;
 };
 
+/*
+    This is only really for the server.
+    Since we don't want to encode & save a lot of long videos, we should restrict the amount of time you can request to be recorded.
+    This is done via this event.
+*/
+struct StartRecording : public FrameEvent {
+    /*
+        How many frames to record for.
+    */
+    size_t length;
+}
+
 struct Frame {
     size_t num;
     std::vector<SubFrame> sub_frames;
@@ -224,9 +271,59 @@ struct Frame {
     // TODO save states?
 };
 
+struct ROMInfo {
+    /*
+        The name of the rom as reported by libretro.
+    */
+    std::string name;
+
+    /*
+        MD5 of the rom file, used for warnings.
+        \todo This is actually kinda stupid, since for our purpose the rom on the server is always different!
+    */
+    std::string MD5;
+}
+
+struct CoreInfo {
+    /*
+        The name as reported by libretro.
+    */
+    std::string name;
+
+    /*
+        The version as reported by libretro.
+    */
+    std::string version;
+}
+
+struct SaveState {
+    /*
+        (Optional) name of the save state.
+    */
+    std::string name;
+
+    /*
+        (Optional) description of the save state.
+        Both only really used for initial save state.
+    */
+    std::string description;
+
+    /*
+        We might want to have these be external to the input and stuff.
+    */
+    std::vector<uint8_t> data;
+}
+
 struct TAM {
-    // TODO: general metadata
-    // TODO: init save state
+    ROMInfo rom;
+    CoreInfo core;
+    SaveState initial;
+
+    /*
+        \todo What would this be exactly?
+    */
+    std::string team_token;
+    
     std::vector<Frame> frames;
 };
 ```

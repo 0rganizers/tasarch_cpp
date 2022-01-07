@@ -39,7 +39,11 @@ Takes the number of the last fully rendered frame (`last`), adds `num` and then 
 
 \note `num` can be negative or zero!
 
-\par Example
+To make things clearer, see this example:
+
+@m_class{m-block m-success}
+
+@par Example
 You have a TAM file with three frames of recorded input: 0, 1, 2.
 You start playback and hit an unrelated breakpoint before frame 1 is fully rendered.
 You then execute `tam s 1`. `last = 0`, so we scrub to the end of rendering frame 1.
