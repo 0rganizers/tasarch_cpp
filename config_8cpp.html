@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Additional GDB Commands | tasarch</title>
+  <title>src/config/config.cpp file | tasarch</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="stylesheet" href="fixes.css" />
@@ -52,25 +52,29 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          Additional GDB Commands
+          <span class="m-breadcrumb"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a>/</span><span class="m-breadcrumb"><a href="dir_7e83d1792d529f4aa7126ac7e0b3b699.html">config</a>/</span>config.cpp <span class="m-thin">file</span>
         </h1>
+        <p><span></span></p>
         <nav class="m-block m-default">
           <h3>Contents</h3>
           <ul>
-            <li><a href="#autotoc_md17"><code>help [cmd=]</code></a></li>
-            <li><a href="#autotoc_md18"><code>frame [num=1]</code></a></li>
-            <li><a href="#autotoc_md19"><code>ipoll [num=1]</code></a></li>
-            <li><a href="#autotoc_md20"><code>fbreak [num]</code> (aliases: <code>fb</code>)</a></li>
             <li>
-              <a href="#autotoc_md21"><code>tam [subcmd]</code></a>
+              Reference
               <ul>
-                <li><a href="#autotoc_md22"><code>tam scrub abs [frame]</code> (aliases: <code>tam sa</code>)</a></li>
-                <li><a href="#scrub_rel"><code>tam scrub rel [num=1]</code> (aliases: <code>tam sr</code>)</a></li>
+                <li><a href="#namespaces">Namespaces</a></li>
               </ul>
             </li>
           </ul>
         </nav>
-<p>The commands below can be executed using <code>monitor cmd</code> inside gdb.</p><aside class="m-note m-dim"><h4><a href="todo.html#_todo000005" class="m-doc">Todo</a></h4><p>mention how to in IDA, ghidra and radare. also is it really monitor? dont think it ever worked for me lul.</p></aside><aside class="m-note m-dim"><h4><a href="todo.html#_todo000006" class="m-doc">Todo</a></h4><p>sort this list alphabetically!</p></aside><section id="autotoc_md17"><h2><a href="#autotoc_md17"><code>help [cmd=]</code></a></h2><p>Shows the usage of the command <code>cmd</code>. If no command is specified, it shows help of all commands.</p></section><section id="autotoc_md18"><h2><a href="#autotoc_md18"><code>frame [num=1]</code></a></h2><p>Steps until <code>num</code> frames have finished rendering.</p><aside class="m-note m-info"><h4>Note</h4><p>This means, if you for example hit a breakpoint in the middle of rendering a frame, <code>frame 1</code> will step until the current frame is finished.</p><p><code>num</code> must be at least 1, use <a href="#scrub_rel">scrubbing</a> for &quot;stepping&quot; backwards.</p></aside></section><section id="autotoc_md19"><h2><a href="#autotoc_md19"><code>ipoll [num=1]</code></a></h2><p>Steps until input has been polled <code>num</code> times. This is probably only useful for the Super Mario Bros 3 TAS lul.</p></section><section id="autotoc_md20"><h2><a href="#autotoc_md20"><code>fbreak [num]</code> (aliases: <code>fb</code>)</a></h2><p>Set a breakpoint before frame <code>num</code> of the current TAM.</p></section><section id="autotoc_md21"><h2><a href="#autotoc_md21"><code>tam [subcmd]</code></a></h2><p>Provides various commands to interface with the current TAM controls.</p><section id="autotoc_md22"><h3><a href="#autotoc_md22"><code>tam scrub abs [frame]</code> (aliases: <code>tam sa</code>)</a></h3></section><section id="scrub_rel"><h3><a href="#scrub_rel"><code>tam scrub rel [num=1]</code> (aliases: <code>tam sr</code>)</a></h3><p>Takes the number of the last fully rendered frame (<code>last</code>), adds <code>num</code> and then scrubs to the end of the resulting frame being rendered.</p><aside class="m-note m-info"><h4>Note</h4><p><code>num</code> can be negative or zero!</p></aside><p>To make things clearer, see this example:</p><aside class="m-block m-success"><h3>Example</h3><p>You have a TAM file with three frames of recorded input: 0, 1, 2. You start playback and hit an unrelated breakpoint before frame 1 is fully rendered. You then execute <code>tam s 1</code>. <code>last = 0</code>, so we scrub to the end of rendering frame 1. Therefore, the next frame being rendered would be frame 2. You now execute <code>tam s -1</code>, <code>last = 1</code>, so we scrub to the end of rendering frame 0.</p></aside></section></section>
+        <section id="namespaces">
+          <h2><a href="#namespaces">Namespaces</a></h2>
+          <dl class="m-doc">
+            <dt>namespace <a href="namespacetasarch.html" class="m-doc">tasarch</a></dt>
+            <dd><span></span></dd>
+            <dt>namespace <a href="namespacetasarch_1_1config.html" class="m-doc">tasarch::config</a></dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
       </div>
     </div>
   </div>
