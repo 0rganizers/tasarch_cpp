@@ -28,6 +28,8 @@ namespace tasarch::log {
     /// @param name The name. A hierarchy is created with "." syntax.
     std::shared_ptr<logger> get(std::string name);
 
+    void apply_all(const std::function<void(const std::shared_ptr<logger>)> &fun);
+
     class WithLogger {
     public:
         WithLogger(std::string name) : logger(get(name)) {}

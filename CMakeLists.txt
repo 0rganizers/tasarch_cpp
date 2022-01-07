@@ -35,6 +35,7 @@ find_package(Qt6 COMPONENTS Widgets Core5Compat OpenGLWidgets REQUIRED)
 
 find_package(fmt CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
+find_package(toml11 CONFIG REQUIRED)
 
 # find_package(PkgConfig REQUIRED)
 
@@ -57,8 +58,30 @@ find_package(spdlog CONFIG REQUIRED)
 
 # ---- Gather Files ----
 
-file(GLOB CPP_FILES "src/*.cpp" "src/gui/*.cpp" "src/test/*.cpp" "src/log/*.cpp")
-file(GLOB H_FILES "src/*.h" "src/gui/*.h" "src/test/*.h" "src/log/*.h")
+# COMMON src and libs across all targets (testing, gui and "server")
+set(COMMON_SRC_PATHS "${PROJECT_SOURCE_DIR}/src/log" "${PROJECT_SOURCE_DIR}/src/config")
+set(COMMON_LIBS "fmt::fmt" "spdlog::spdlog" "toml11::toml11")
+
+# src and libs for only gui
+set(UI_SRC_PATHS "src" "src/gui" "src/test" ${COMMON_SRC_PATHS})
+set(UI_LIBS "Qt6::Widgets" "Qt6::OpenGLWidgets" ${COMMON_LIBS})
+
+# function for globbing the src files
+
+function(glob_src_files src_paths out_cpp_files out_h_files)
+  set(cpp_glob "")
+  set(h_glob "")
+  foreach(src_path IN LISTS src_paths)
+    set(cpp_glob "${src_path}/*.cpp" ${cpp_glob})
+    set(h_glob "${src_path}/*.h" "${src_path}/*.hpp" ${h_glob})
+  endforeach()
+  file(GLOB cpp_files ${cpp_glob})
+  file(GLOB h_files ${h_glob})
+  set(${out_cpp_files} ${cpp_files} PARENT_SCOPE)
+  set(${out_h_files} ${h_files} PARENT_SCOPE)
+endfunction()
+
+glob_src_files("${UI_SRC_PATHS}" CPP_FILES H_FILES)
 file(GLOB UI_FILES "src/gui/*.ui")
 
 # ---- Declare executable ----
@@ -79,10 +102,10 @@ source_group(TREE src PREFIX src FILES ${CPP_FILES} ${H_FILES} ${UI_FILES})
 
 target_include_directories(tasarch_exe SYSTEM PUBLIC $<BUILD_INTERFACE:${EXTERNAL_INCLUDE_DIR}>)
 target_include_directories(tasarch_exe PUBLIC $<BUILD_INTERFACE:${SRC_INCLUDE_DIR}>)
-target_link_libraries(tasarch_exe Qt6::Widgets Qt6::OpenGLWidgets)
 
-target_link_libraries(tasarch_exe fmt::fmt)
-target_link_libraries(tasarch_exe spdlog::spdlog spdlog::spdlog_header_only)
+message(STATUS "Linking to libraries: ${UI_LIBS}")
+
+target_link_libraries(tasarch_exe ${UI_LIBS})
 
 # ---- Install rules ----
 

@@ -1,6 +1,7 @@
 #ifndef __LOGWINDOW_H
 #define __LOGWINDOW_H
 
+#include <QObject>
 #include <QWidget>
 #include "ui_logwindow.h"
 #include <string>

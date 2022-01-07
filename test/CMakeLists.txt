@@ -4,8 +4,26 @@
 
 project(tasarchTests LANGUAGES CXX)
 
-add_executable(tasarch_test source/tasarch_test.cpp)
-target_compile_features(tasarch_test PRIVATE cxx_std_17)
+set(TEST_SRC_PATHS "src" "src/config" ${COMMON_SRC_PATHS})
+set(TEST_LIBS ${COMMON_LIBS})
+
+glob_src_files("${TEST_SRC_PATHS}" TEST_CPP_FILES TEST_H_FILES)
+
+message(STATUS "test files: ${TEST_CPP_FILES}")
+
+add_executable(tasarch_test ${TEST_CPP_FILES} ${TEST_H_FILES})
+target_compile_features(tasarch_test PRIVATE cxx_std_20)
+
+# set_target_properties(
+#     tasarch_test PROPERTIES
+#     CMAKE_AUTOMOC OFF
+#     CMAKE_AUTORCC OFF
+#     CMAKE_AUTOUIC OFF
+# )
+
+target_link_libraries(tasarch_test ${TEST_LIBS})
+target_include_directories(tasarch_test SYSTEM PUBLIC $<BUILD_INTERFACE:${EXTERNAL_INCLUDE_DIR}>)
+target_include_directories(tasarch_test PUBLIC $<BUILD_INTERFACE:${SRC_INCLUDE_DIR}>)
 
 add_test(NAME tasarch_test COMMAND tasarch_test)
 

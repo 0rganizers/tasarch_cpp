@@ -5,6 +5,9 @@
 //  Created by Leonardo Galli on 03.01.22.
 //
 
+#include <mutex>
+#include <string>
+#include <unordered_map>
 #include "logging.h"
 #include "formatters.h"
 #include <spdlog/sinks/stdout_color_sinks.h>
@@ -12,11 +15,14 @@
 #include <spdlog/sinks/syslog_sink.h>
 #include <spdlog/sinks/dist_sink.h>
 #include <fmt/core.h>
+#include "config/config.h"
 
 namespace tasarch::log {
     // TODO: Do we really still need this?
     static std::vector<spdlog::sink_ptr> sink_list;
     static std::shared_ptr<spdlog::sinks::dist_sink_mt> dist_sink = nullptr;
+    static std::unordered_map<std::string, std::shared_ptr<logger>> registry;
+    std::mutex registry_mutex;
 
     auto setup_logging() -> void
     {
@@ -48,10 +54,17 @@ namespace tasarch::log {
 
     auto get(std::string name) -> std::shared_ptr<logger>
     {
-        // TODO: configuration here!
-        auto log = std::make_shared<logger>(name, dist_sink);
-        // sinks should be deciding what to log!
-        log->set_level(spdlog::level::trace);
+        std::lock_guard lock(registry_mutex);
+        auto found = registry.find(name);
+        std::shared_ptr<logger> log = nullptr;
+        if (found == registry.end())
+        {
+            log = std::make_shared<logger>(name, dist_sink);
+            log->set_level(config::conf.logging.levels.get_level(name));
+            registry[name] = log;
+        } else {
+            log = found->second;
+        }
         return log;
     }
 
@@ -59,5 +72,14 @@ namespace tasarch::log {
     {
         sink_list.push_back(sink);
         dist_sink->add_sink(sink);
+    }
+
+    void apply_all(const std::function<void (const std::shared_ptr<logger>)> &fun)
+    {
+        std::lock_guard<std::mutex> lock(registry_mutex);
+        for (auto &l : registry)
+        {
+            fun(l.second);
+        }
     }
 } // namespace tasarch::log
