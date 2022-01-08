@@ -4,7 +4,7 @@
 
 project(tasarchTests LANGUAGES CXX)
 
-set(TEST_SRC_PATHS "src" "src/config" ${COMMON_SRC_PATHS})
+set(TEST_SRC_PATHS "src" "src/config" "src/gdb" ${COMMON_SRC_PATHS})
 set(TEST_LIBS ${COMMON_LIBS})
 
 glob_src_files("${TEST_SRC_PATHS}" TEST_CPP_FILES TEST_H_FILES)

@@ -3,6 +3,8 @@
 
 #include <spdlog/spdlog.h>
 #include "logger.h"
+// Include all formatters, so hopefully they are always available :)
+#include "asio_formatters.h"
 
 #define TIME_PATTERN "%Y-%m-%d %H:%M:%S.%e"
 #define OFFSET_PATTERN "(%3oms)"

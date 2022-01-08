@@ -1,4 +1,6 @@
+#include <chrono>
 #include <iostream>
+#include <memory>
 #include <string>
 
 #include <QtWidgets/QApplication>
@@ -9,6 +11,7 @@
 
 #include "gui/MainWindow.h"
 #include <QSurfaceFormat>
+#include <thread>
 
 #include "log/logging.h"
 #include "log/formatters.h"
@@ -16,12 +19,21 @@
 #include <spdlog/sinks/qt_sinks.h>
 #include <toml/parser.hpp>
 #include "config/config.h"
+#include "gdb/server.h"
 
 auto main(int argc, char* argv[]) -> int
 {
     tasarch::log::setup_logging();
     auto root = tasarch::log::get("");
     tasarch::config::conf.reload();
+
+    auto server = std::make_shared<tasarch::gdb::server>(nullptr);
+    server->start();
+    while (!server->had_conn) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    }
+    server->stop();
+    return 0;
     
     auto logger = tasarch::log::get("tasarch");
     logger->info("Initializing QT application...");

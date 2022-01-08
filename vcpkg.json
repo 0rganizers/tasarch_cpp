@@ -4,6 +4,8 @@
     "dependencies": [
         "spdlog",
         "fmt",
-        "toml11"
+        "toml11",
+        "asio",
+        "cppcoro"
     ]
 }

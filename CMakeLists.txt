@@ -36,6 +36,8 @@ find_package(Qt6 COMPONENTS Widgets Core5Compat OpenGLWidgets REQUIRED)
 find_package(fmt CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 find_package(toml11 CONFIG REQUIRED)
+find_package(asio CONFIG REQUIRED)
+find_package(cppcoro CONFIG REQUIRED)
 
 # find_package(PkgConfig REQUIRED)
 
@@ -59,8 +61,8 @@ find_package(toml11 CONFIG REQUIRED)
 # ---- Gather Files ----
 
 # COMMON src and libs across all targets (testing, gui and "server")
-set(COMMON_SRC_PATHS "${PROJECT_SOURCE_DIR}/src/log" "${PROJECT_SOURCE_DIR}/src/config")
-set(COMMON_LIBS "fmt::fmt" "spdlog::spdlog" "toml11::toml11")
+set(COMMON_SRC_PATHS "${PROJECT_SOURCE_DIR}/src/log" "${PROJECT_SOURCE_DIR}/src/config" "${PROJECT_SOURCE_DIR}/src/gdb" "${PROJECT_SOURCE_DIR}/src/util")
+set(COMMON_LIBS "fmt::fmt" "spdlog::spdlog" "toml11::toml11" "asio" "asio::asio" "cppcoro")
 
 # src and libs for only gui
 set(UI_SRC_PATHS "src" "src/gui" "src/test" ${COMMON_SRC_PATHS})

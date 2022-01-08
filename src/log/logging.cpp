@@ -35,7 +35,7 @@ namespace tasarch::log {
         dist_sink = std::make_shared<spdlog::sinks::dist_sink_mt>();
         
         auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-        console_sink->set_level(spdlog::level::debug);
+        console_sink->set_level(spdlog::level::trace);
         auto formatter = std::make_unique<spdlog::pattern_formatter>();
         formatter->add_flag<ansi_color_msg_part>('|');
         formatter->set_pattern(COLOR_PATTERN);
