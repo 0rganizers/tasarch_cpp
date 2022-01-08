@@ -56,7 +56,7 @@
           <div class="m-doc-template">template&lt;&gt;</div>
           <span class="m-breadcrumb"><a href="namespacetoml.html">toml</a>::<wbr/></span>from&lt;spdlog::level::level_enum&gt; <span class="m-thin">struct</span>
         </h1>
-        <p><span></span></p>
+        <p>Needed to allow easy conversion from toml to spdlog::level. Unfortunately, I did not actually get this to work lul.</p>
         <nav class="m-block m-default">
           <h3>Contents</h3>
           <ul>
@@ -75,17 +75,55 @@
             <dt id="aa95067016d7497536027d4cce270a9ba">
               static const static std::vector&lt;spdlog::string_view_t&gt; <a href="#aa95067016d7497536027d4cce270a9ba" class="m-doc-self">all_names</a>
             </dt>
-            <dd><span></span></dd>
+            <dd>A list of all possible level names, so we can augment the error message to be more helpful :)</dd>
           </dl>
         </section>
         <section id="pub-static-methods">
           <h2><a href="#pub-static-methods">Public static functions</a></h2>
           <dl class="m-doc">
-            <dt id="a04c3565154ade14b7d3ccf30724dd6a7">
-              <span class="m-doc-wrap-bumper">static auto <a href="#a04c3565154ade14b7d3ccf30724dd6a7" class="m-doc-self">from_toml</a>(</span><span class="m-doc-wrap">const value&amp; v) -&gt; spdlog::level::level_enum -&gt; auto</span>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a04c3565154ade14b7d3ccf30724dd6a7" class="m-doc">from_toml</a>(</span><span class="m-doc-wrap">const value&amp; v) -&gt; spdlog::level::level_enum -&gt; auto</span>
             </dt>
-            <dd><span></span></dd>
+            <dd>Convert toml value to spdlog::level.</dd>
           </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="a04c3565154ade14b7d3ccf30724dd6a7"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static auto toml::<wbr />from&lt;spdlog::<wbr />level::<wbr />level_enum&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a04c3565154ade14b7d3ccf30724dd6a7" class="m-doc-self">from_toml</a>(</span><span class="m-doc-wrap">const value&amp; v) -&gt; spdlog::level::level_enum</span></span>
+            </h3>
+            <p>Convert toml value to spdlog::level.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr>
+                  <th>Returns</th>
+                  <td>spdlog::level::level_enum</td>
+                </tr>
+              </thead>
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>toml::type_error</td>
+                  <td>or toml::internal_error</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
         </section>
       </div>
     </div>

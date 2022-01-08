@@ -55,7 +55,7 @@
           <span class="m-breadcrumb"><a href="namespacetasarch.html">tasarch</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespacetasarch_1_1config.html">config</a>::<wbr/></span>log_levels <span class="m-thin">struct</span>
           <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="config_8h.html">&lt;src/config/config.h&gt;</a></div>
         </h1>
-        <p><span></span></p>
+        <p>This utility struct is used to hold the hierarchy of logging levels defined in a config.</p>
         <nav class="m-block m-default">
           <h3>Contents</h3>
           <ul>
@@ -69,6 +69,14 @@
             </li>
           </ul>
         </nav>
+<p>Lets take the following config for example:</p><pre class="m-code"><span class="k">[logging]</span><span class="w"></span>
+<span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;info&quot;</span><span class="w"></span>
+<span class="n">parent</span><span class="p">.</span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;trace&quot;</span><span class="w"></span>
+<span class="n">parent</span><span class="p">.</span><span class="n">child</span><span class="p">.</span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;err&quot;</span><span class="w"></span></pre><p>The resulting struct could be initialized as follows:</p><pre class="m-code"><span class="n">log_levels</span><span class="w"> </span><span class="n">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{.</span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">info</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="s">&quot;parent&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{.</span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">trace</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="s">&quot;child&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{.</span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">error</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">children</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{}}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}}}</span><span class="w"></span>
+<span class="p">}};</span><span class="w"></span></pre>
         <section id="typeless-methods">
           <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
@@ -81,14 +89,14 @@
         <section id="pub-methods">
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
-            <dt id="ac7df55b7cdd1211caa345a27e98c8e46">
-              <span class="m-doc-wrap-bumper">void <a href="#ac7df55b7cdd1211caa345a27e98c8e46" class="m-doc-self">from_toml</a>(</span><span class="m-doc-wrap">const toml::value&amp; v)</span>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#ac7df55b7cdd1211caa345a27e98c8e46" class="m-doc">from_toml</a>(</span><span class="m-doc-wrap">const toml::value&amp; v)</span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a38ba7dd03e2293b5bee1bf7209c1ff4b">
-              <span class="m-doc-wrap-bumper">auto <a href="#a38ba7dd03e2293b5bee1bf7209c1ff4b" class="m-doc-self">get_level</a>(</span><span class="m-doc-wrap">const std::string&amp; name) -&gt; spdlog::level::level_enum -&gt; auto</span>
+            <dd>Load hierarchy from the given toml value.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a38ba7dd03e2293b5bee1bf7209c1ff4b" class="m-doc">get_level</a>(</span><span class="m-doc-wrap">const std::string&amp; name) -&gt; spdlog::level::level_enum -&gt; auto</span>
             </dt>
-            <dd><span></span></dd>
+            <dd>(recursively) scans hierarchy of logging levels, to find best match for name.</dd>
           </dl>
         </section>
         <section id="pub-attribs">
@@ -103,6 +111,53 @@
             </dt>
             <dd><span></span></dd>
           </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="ac7df55b7cdd1211caa345a27e98c8e46"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void tasarch::<wbr />config::<wbr />log_levels::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ac7df55b7cdd1211caa345a27e98c8e46" class="m-doc-self">from_toml</a>(</span><span class="m-doc-wrap">const toml::value&amp; v)</span></span>
+            </h3>
+            <p>Load hierarchy from the given toml value.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a38ba7dd03e2293b5bee1bf7209c1ff4b"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">auto tasarch::<wbr />config::<wbr />log_levels::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a38ba7dd03e2293b5bee1bf7209c1ff4b" class="m-doc-self">get_level</a>(</span><span class="m-doc-wrap">const std::string&amp; name) -&gt; spdlog::level::level_enum</span></span>
+            </h3>
+            <p>(recursively) scans hierarchy of logging levels, to find best match for name.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">name</td>
+                  <td>Hierarchical name of log level to retrieved, where each level in the hierarchy is separated by a <code>.</code>.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>spdlog::level::level_enum</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>For example, we have the following config:</p><pre class="m-code"><span class="k">[logging]</span><span class="w"></span>
+<span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;info&quot;</span><span class="w"></span>
+<span class="n">parent</span><span class="p">.</span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;trace&quot;</span><span class="w"></span>
+<span class="n">parent</span><span class="p">.</span><span class="n">child</span><span class="p">.</span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;err&quot;</span><span class="w"></span></pre><p>A logger named <code>parent.child</code> will have a log level of <code>err</code>, one named <code>parent.child2</code> will have <code>trace</code>. A logger named <code>parent2</code> will have a log level of <code>info</code></p>
+          </div></section>
         </section>
       </div>
     </div>

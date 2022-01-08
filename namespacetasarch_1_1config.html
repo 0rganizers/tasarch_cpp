@@ -74,15 +74,15 @@
             <dt>
               struct <a href="structtasarch_1_1config_1_1config.html" class="m-doc">config</a>
             </dt>
-            <dd><span></span></dd>
+            <dd>Root configuration object. Currently only holds logging config.</dd>
             <dt>
               struct <a href="structtasarch_1_1config_1_1log__levels.html" class="m-doc">log_levels</a>
             </dt>
-            <dd><span></span></dd>
+            <dd>This utility struct is used to hold the hierarchy of logging levels defined in a config.</dd>
             <dt>
               struct <a href="structtasarch_1_1config_1_1logging.html" class="m-doc">logging</a>
             </dt>
-            <dd><span></span></dd>
+            <dd>Holds all configuration regarding logging.</dd>
           </dl>
         </section>
         <section id="func-members">
@@ -91,12 +91,12 @@
             <dt>
               <span class="m-doc-wrap-bumper">static auto <a href="#ad073a4171bd38fb8a2caf77dfac27dc1" class="m-doc">parse_toml</a>(</span><span class="m-doc-wrap">const std::string&amp; toml) -&gt; toml::value -&gt; auto</span>
             </dt>
-            <dd><span></span></dd>
+            <dd>Parse toml from a string. Convenience method really.</dd>
             <dt>
               <span class="m-doc-wrap-bumper">auto <a href="#a7f5ac372d710a400ed908124523d74b0" class="m-doc">merge_values</a>(</span><span class="m-doc-wrap">toml::value&amp; base,
               toml::value&amp; addition) -&gt; toml::value -&gt; auto</span>
             </dt>
-            <dd><span></span></dd>
+            <dd>Merges config values found in addition &quot;onto&quot; base. This is used to achieve something similar to vscode, where you have a user config and a workspace config.</dd>
           </dl>
         </section>
         <section id="var-members">
@@ -105,7 +105,7 @@
             <dt>
               <a href="structtasarch_1_1config_1_1config.html" class="m-doc">config</a> <a href="#ad71713ff4c277e54015ecd772741f205" class="m-doc">conf</a>
             </dt>
-            <dd><span></span></dd>
+            <dd>The globally shared root configuration object.</dd>
           </dl>
         </section>
         <section>
@@ -115,7 +115,24 @@
               <span class="m-doc-wrap-bumper">static auto tasarch::<wbr />config::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ad073a4171bd38fb8a2caf77dfac27dc1" class="m-doc-self">parse_toml</a>(</span><span class="m-doc-wrap">const std::string&amp; toml) -&gt; toml::value</span></span>
               <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="common_8h.html">&lt;src/config/common.h&gt;</a></div>
             </h3>
-            <p><span></span></p>
+            <p>Parse toml from a string. Convenience method really.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">toml</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>toml::value</td>
+                </tr>
+              </tfoot>
+            </table>
           </div></section>
           <section class="m-doc-details" id="a7f5ac372d710a400ed908124523d74b0"><div>
             <h3>
@@ -123,8 +140,47 @@
               toml::value&amp; addition) -&gt; toml::value</span></span>
               <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="merging_8h.html">&lt;src/config/merging.h&gt;</a></div>
             </h3>
-            <p><span></span></p>
-<aside class="m-note m-dim"><h4><a href="todo.html#_todo000003" class="m-doc">Todo</a></h4><p>Figure out how we could make this work better. Is this really how we want the merging to be?</p></aside>
+            <p>Merges config values found in addition &quot;onto&quot; base. This is used to achieve something similar to vscode, where you have a user config and a workspace config.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">base</td>
+                  <td>The base config to go from.</td>
+                </tr>
+                <tr>
+                  <td>addition</td>
+                  <td>The additional config values to merge onto.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>toml::value The merged config</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>The example below shows a resulting merge</p><pre class="m-code"><span class="c1"># base.toml</span><span class="w"></span>
+<span class="k">[table]</span><span class="w"></span>
+<span class="n">value</span><span class="p">.</span><span class="n">subvalue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;asdf&quot;</span><span class="w"></span>
+<span class="n">value</span><span class="p">.</span><span class="n">subvalue2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="w"></span>
+<span class="k">[table2]</span><span class="w"></span>
+<span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">]</span><span class="w"></span>
+
+<span class="c1"># addition.toml</span><span class="w"></span>
+<span class="n">table</span><span class="p">.</span><span class="n">value</span><span class="p">.</span><span class="n">subvalue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;asdf2&quot;</span><span class="w"></span>
+<span class="n">table2</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">]</span><span class="w"></span>
+<span class="n">table2</span><span class="p">.</span><span class="n">newval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">13.3</span><span class="w"></span>
+
+<span class="c1"># merged.toml</span><span class="w"></span>
+<span class="k">[table]</span><span class="w"></span>
+<span class="n">value</span><span class="p">.</span><span class="n">subvalue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;asdf2&quot;</span><span class="w"></span>
+<span class="n">value</span><span class="p">.</span><span class="n">subvalue2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="w"></span>
+<span class="k">[table2]</span><span class="w"></span>
+<span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">]</span><span class="w"></span>
+<span class="n">newval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">13.3</span><span class="w"></span></pre><aside class="m-note m-dim"><h4><a href="todo.html#_todo000008" class="m-doc">Todo</a></h4><p>Figure out how we could make this work better. Is this really how we want the merging to be?</p></aside>
           </div></section>
         </section>
         <section>
@@ -134,7 +190,8 @@
               <a href="structtasarch_1_1config_1_1config.html" class="m-doc">config</a> tasarch::<wbr />config::<wbr /><a href="#ad71713ff4c277e54015ecd772741f205" class="m-doc-self">conf</a>
               <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="config_8h.html">&lt;src/config/config.h&gt;</a></div>
             </h3>
-            <p><span></span></p>
+            <p>The globally shared root configuration object.</p>
+<aside class="m-note m-dim"><h4><a href="todo.html#_todo000005" class="m-doc">Todo</a></h4><p>Figure out a better way? especially with reloading? Can we just take references to individual fields?</p></aside>
           </div></section>
         </section>
       </div>
