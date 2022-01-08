@@ -1,4 +1,5 @@
 #include "MainWindow.h"
+#include "config/config.h"
 
 namespace tasarch::gui {
     ManagedWindow::ManagedWindow(QWidget* parent, QWidget* window, QString title, size_t idx) :
@@ -52,6 +53,11 @@ namespace tasarch::gui {
         auto mgd = new ManagedWindow(this, window, title, idx);
         this->windows.push_back(mgd);
         this->menubar->addMenu("Windows")->addAction(mgd->action);
+    }
+
+    void MainWindow::on_actionReloadConf()
+    {
+        tasarch::config::conf.reload();
     }
 } // namespace tasarch::gui
 

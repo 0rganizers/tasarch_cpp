@@ -1,22 +1,21 @@
 #ifndef __CONFIG_H
 #define __CONFIG_H
 
+#include "common.h"
 #include <spdlog/common.h>
 #include <spdlog/details/registry.h>
-#include <toml/from.hpp>
-#include <toml/get.hpp>
-#include "common.h"
 #include "log/logging.h"
 
 namespace toml {
     template<>
     struct from<spdlog::level::level_enum>
     {
+        const static inline std::vector<spdlog::string_view_t> all_names = SPDLOG_LEVEL_NAMES;
         static auto from_toml(const value& v) -> spdlog::level::level_enum
         {
             if (!v.is_string())
             {
-                throw toml::type_error(toml::format_error("cannot convert non string to logging level", v, "invalid type here"), v.location());
+                throw toml::type_error(toml::format_error("cannot convert non string to logging level", v, "invalid type here", {}, /*colorize=*/true), v.location());
             }
 
             std::string lvl_str = v.as_string().str;
@@ -28,7 +27,12 @@ namespace toml {
             {
                 if (lvl_str != "off")
                 {
-                    throw toml::internal_error(toml::format_error("invalid name for logging level", v, "invalid name here"), v.location());
+                    std::string allowed;
+                    for (auto name : all_names)
+                    {
+                        allowed += fmt::to_string(name) + " ";
+                    }
+                    throw toml::internal_error(toml::format_error("invalid name for logging level, allowed names are: " + allowed, v, "invalid name here", {}, true), v.location());
                 }
             }
 
@@ -104,6 +108,19 @@ namespace tasarch::config {
         void load_from(const toml::value& v)
         {
             this->logging.load_from(toml::find_or(v, "logging", toml::table()));
+        }
+
+        void reload()
+        {
+            auto logger = log::get("config");
+            try {
+                logger->info("Reloading config from $PWD/tasarch.toml");
+                auto config_val = toml::parse("tasarch.toml");
+                this->load_from(config_val);
+                logger->info("Loaded config from $PWD/tasarch.toml");
+            } catch (std::exception &e) {
+                logger->error("Failed to load config from $PWD/tasarch.toml, using default config!:\n{}", e.what());
+            }
         }
     };
 

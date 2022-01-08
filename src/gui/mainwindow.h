@@ -37,6 +37,7 @@ namespace tasarch::gui {
 
     private slots:
         void on_actionExit_triggered();
+        void on_actionReloadConf();
         
     private:
         std::vector<ManagedWindow*> windows;

@@ -20,6 +20,7 @@
     </item>
    </layout>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -29,18 +30,37 @@
      <height>24</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuTest">
+   <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>Test</string>
+     <string>File</string>
     </property>
-    <addaction name="actionTest2"/>
+    <addaction name="actionReload_Configuration"/>
    </widget>
-   <addaction name="menuTest"/>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuWindows">
+    <property name="title">
+     <string>Windows</string>
+    </property>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuWindows"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="actionTest2">
    <property name="text">
     <string>Test2</string>
+   </property>
+  </action>
+  <action name="actionReload_Configuration">
+   <property name="text">
+    <string>Reload Configuration</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+,</string>
    </property>
   </action>
  </widget>
@@ -52,8 +72,26 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionReload_Configuration</sender>
+   <signal>triggered()</signal>
+   <receiver>tasarch::gui::MainWindow</receiver>
+   <slot>on_actionReloadConf()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
  <slots>
   <slot>on_seqEdit_finished()</slot>
+  <slot>on_actionReloadConf()</slot>
  </slots>
 </ui>

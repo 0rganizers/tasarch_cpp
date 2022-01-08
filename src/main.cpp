@@ -14,10 +14,14 @@
 #include "log/formatters.h"
 #include "gui/LogWindow.h"
 #include <spdlog/sinks/qt_sinks.h>
+#include <toml/parser.hpp>
+#include "config/config.h"
 
 auto main(int argc, char* argv[]) -> int
 {
     tasarch::log::setup_logging();
+    auto root = tasarch::log::get("");
+    tasarch::config::conf.reload();
     
     auto logger = tasarch::log::get("tasarch");
     logger->info("Initializing QT application...");
