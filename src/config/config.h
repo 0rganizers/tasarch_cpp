@@ -7,10 +7,27 @@
 #include "log/logging.h"
 
 namespace toml {
+    /**
+     * @brief Needed to allow easy conversion from toml to spdlog::level. Unfortunately, I did not actually get this to work lul.
+     * 
+     * @tparam  
+     */
     template<>
     struct from<spdlog::level::level_enum>
     {
+        /**
+         * @brief A list of all possible level names, so we can augment the error message to be more helpful :)
+         * 
+         */
         const static inline std::vector<spdlog::string_view_t> all_names = SPDLOG_LEVEL_NAMES;
+
+        /**
+         * @brief Convert toml value to spdlog::level.
+         * 
+         * @throws toml::type_error or toml::internal_error
+         * @param v 
+         * @return spdlog::level::level_enum 
+         */
         static auto from_toml(const value& v) -> spdlog::level::level_enum
         {
             if (!v.is_string())
@@ -42,12 +59,39 @@ namespace toml {
 } // namespace toml
 
 namespace tasarch::config {
+    /**
+     * @brief This utility struct is used to hold the hierarchy of logging levels defined in a config.
+     * 
+     * Lets take the following config for example:
+     * @code {.toml}
+     * [logging]
+     * level = "info"
+     * parent.level = "trace"
+     * parent.child.level = "err"
+     * @endcode
+     * 
+     * The resulting struct could be initialized as follows:
+     * @code {.cpp}
+     log_levels root = {.level = info, .children = {
+         {"parent": {.level = trace, .children = {
+             "child": {.level = error, .children = {}}
+         }}}
+     }};
+     * @endcode
+     * 
+     * 
+     */
     struct log_levels {
         log_levels() = default;
 
         spdlog::level::level_enum level = spdlog::level::info;
         std::unordered_map<std::string, log_levels> children;
 
+        /**
+         * @brief Load hierarchy from the given toml value.
+         * 
+         * @param v 
+         */
         void from_toml(const toml::value& v)
         {
             // parse this level.
@@ -67,6 +111,23 @@ namespace tasarch::config {
             }
         }
 
+        /**
+         * @brief (recursively) scans hierarchy of logging levels, to find best match for name.
+         * 
+         * For example, we have the following config:
+         * @code {.toml}
+         * [logging]
+         * level = "info"
+         * parent.level = "trace"
+         * parent.child.level = "err"
+         * @endcode
+         * 
+         * A logger named `parent.child` will have a log level of `err`, one named `parent.child2` will have `trace`.
+         * A logger named `parent2` will have a log level of `info` 
+         *
+         * @param name Hierarchical name of log level to retrieved, where each level in the hierarchy is separated by a `.`.
+         * @return spdlog::level::level_enum 
+         */
         auto get_level(const std::string& name) -> spdlog::level::level_enum
         {
             if (name.empty()) return this->level;
@@ -88,10 +149,24 @@ namespace tasarch::config {
         }
     };
 
+    /**
+     * @brief Holds all configuration regarding logging.
+
+     * @todo For now this only holds the `log_levels`, update for more configuration in the future such as:
+     * - configuring different sinks
+     * - ???
+     * 
+     */
     struct logging {
 
         log_levels levels;
 
+        /**
+         * @brief Load the logging config from the toml value. 
+         * @note This also applies the newly loaded levels to all loggers!
+         * @todo Better way to refresh config?
+         * @param v 
+         */
         void load_from(const toml::value& v)
         {
             this->levels.from_toml(v);
@@ -102,14 +177,28 @@ namespace tasarch::config {
         }
     };
 
+    /**
+     * @brief Root configuration object. Currently only holds logging config.
+     * @todo add much more config.
+     */
     struct config {
         logging logging;
 
+        /**
+         * @brief Loads the whole configuration from the given toml value.
+         * @note For some configuration, this might trigger a reloading, such as for logging.
+         * 
+         * @param v 
+         */
         void load_from(const toml::value& v)
         {
             this->logging.load_from(toml::find_or(v, "logging", toml::table()));
         }
 
+        /**
+         * @brief Reloads the configuration from disk, if it can be parsed.
+         * @todo Merge user and workspace config.
+         */
         void reload()
         {
             auto logger = log::get("config");
@@ -124,6 +213,11 @@ namespace tasarch::config {
         }
     };
 
+    /**
+     * @brief The globally shared root configuration object.
+     * @todo Figure out a better way? especially with reloading? Can we just take references to individual fields?
+     * 
+     */
     extern config conf;
 } // namespace tasarch::config
 

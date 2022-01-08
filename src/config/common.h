@@ -8,6 +8,12 @@
 #include <toml/get.hpp>
 
 namespace tasarch::config {
+    /**
+     * @brief Parse toml from a string. Convenience method really.
+     * 
+     * @param toml 
+     * @return toml::value 
+     */
     static inline auto parse_toml(const std::string& toml) -> toml::value
     {
         std::istringstream inp(toml);

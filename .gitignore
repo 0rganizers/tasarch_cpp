@@ -1,6 +1,7 @@
 .idea/
 .vs/
 .vscode/
+.cache/
 build/
 cmake/open-cpp-coverage.cmake
 cmake-build-*/
@@ -9,3 +10,6 @@ CMakeLists.txt.user
 CMakeUserPresets.json
 *.log
 experiments/
+tasarch.toml
+compile_commands.json
+AppIcon.appiconset

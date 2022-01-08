@@ -134,13 +134,12 @@ child.level = "info")");
         test_logger(child, level_enum::info);
 
         // now child different from parent!
-//         config_val = tasarch::config::parse_toml(R"(logging.parent.level = 'trace'
-// [logging.parent]
-// child.level = "error")");
-//         tasarch::config::conf.load_from(config_val);
+        config_val = tasarch::config::parse_toml(R"([logging.parent]
+child.level = "error")");
+        tasarch::config::conf.load_from(config_val);
 
-//         test_logger(root, level_enum::info);
-//         test_logger(parent, level_enum::trace);
-//         test_logger(child, level_enum::err);
+        test_logger(root, level_enum::info);
+        test_logger(parent, level_enum::info);
+        test_logger(child, level_enum::err);
     };
 };
