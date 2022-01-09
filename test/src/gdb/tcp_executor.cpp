@@ -6,166 +6,91 @@
 #include <utility>
 #include <asio/awaitable.hpp>
 #include <asio/co_spawn.hpp>
+#include <asio/use_awaitable.hpp>
 #include <asio/use_future.hpp>
 #include "log/logging.h"
 #include "tcp_executor.h"
 #include <ut/ut.hpp>
 #include "config/config.h"
+#include "gdb/bg_executor.h"
 
 namespace tasarch::test::gdb {
 
-    auto create_socket_test(std::function<asio::awaitable<void> (tcp::socket, tcp::socket)> test, std::chrono::milliseconds timeout) -> std::function<void()>
+    auto create_socket_test(std::function<asio::awaitable<void> (tcp_socket, tcp_socket)> test, std::chrono::milliseconds timeout) -> std::function<void()>
     {
         return [&]{
-            auto logger = log::get("test.gdb");
-            auto *exec = new tcp_executor();
+            auto logger = log::get("test.tcp");
+            auto *exec = new tcp_server_client_test();
             exec->timeout = timeout;
-            logger->info("starting tcp_executor");
+            logger->trace("starting tcp_server_client_test");
             exec->start();
 
-            logger->info("creating socket pair...");
+            logger->trace("creating socket pair...");
             auto pair = exec->create_pair();
-            logger->info("created socket pair {}, {}", pair.first.local_endpoint(), pair.second.local_endpoint());
-            std::future<void> fut = asio::co_spawn(exec->io_context, [&]() -> asio::awaitable<void>{
-                logger->debug("executing test lambda");
+            logger->debug("created socket pair {}, {}", pair.first.local_endpoint(), pair.second.local_endpoint());
+            std::future<void> fut = asio::co_spawn(::tasarch::gdb::bg_executor::instance().io_context, [&]() -> asio::awaitable<void>{
+                logger->trace("executing test lambda");
                 co_await test(std::move(pair.first), std::move(pair.second));
-                logger->debug("finished executing test lambda");
+                logger->trace("finished executing test lambda");
             }, asio::use_future);
-            logger->info("waiting for future...");
+            logger->trace("waiting for future...");
             fut.wait();
-            logger->info("future finished, stopping executor...");
+            logger->trace("future finished, stopping executor...");
             exec->stop();
         };
     }
 
-    void tcp_executor::start()
+    void tcp_server_client_test::start()
     {
-        std::lock_guard lock(this->mutex);
-        if (this->io_thread != nullptr) {
-            logger->warn("Run thread already started!");
+        if (this->acceptor != nullptr) {
+            logger->warn("already started!");
+            return;
+        }
+        logger->info("Creating tcp acceptor on port {}", this->port);
+        tcp_acceptor acceptor(::tasarch::gdb::bg_executor::instance().io_context, {asio::ip::tcp::v4(), this->port});
+        this->acceptor = std::make_shared<tcp_acceptor>(std::move(acceptor));
+    }
+
+    void tcp_server_client_test::stop()
+    {
+        if (this->acceptor == nullptr) {
+            logger->warn("Never started!");
             return;
         }
 
-        logger->info("Starting thread for tcp executor io context");
-        this->should_stop = false;
-        this->io_thread = std::make_shared<std::thread>(&tcp_executor::run, this);
+        this->acceptor->close();
+        this->acceptor = nullptr;
     }
 
-    void tcp_executor::run()
+    auto tcp_server_client_test::create_pair_async() -> asio::awaitable<std::pair<tcp_socket, tcp_socket>>
     {
-        bool timeout_reached = false;
-        try {
-            this->logger->info("Restarting io context");
-            this->io_context.restart();
-            this->logger->info("Spawning accept coroutine");
-            asio::ip::tcp::acceptor acceptor(this->io_context, {asio::ip::tcp::v4(), this->port});
-            asio::co_spawn(this->io_context,
-                this->accept_connection(acceptor),
-                asio::detached);
-
-            // TODO: signals?
-            this->logger->info("Running io context");
-            this->io_context.run_for(this->timeout);
-            if (!this->should_stop) { timeout_reached = true; }
-            else {
-                this->logger->debug("closing tcp acceptor");
-                acceptor.close();
-            }
-            this->logger->info("Finished running io context");
-        } catch (std::exception& e) {
-            this->logger->error("Had unhandled exception while running tcp executor:\n{}", e.what());
-            this->stop();
-        }
-
-        if (timeout_reached) {
-            this->logger->error("Reached timeout while executing");
-            throw std::runtime_error("Reached timeout while executing!");
-        }
+        std::lock_guard lk(this->mutex);
+        tcp_socket local(::tasarch::gdb::bg_executor::instance().io_context);
+        logger->debug("Launching client connection coroutine");
+        asio::awaitable<void> local_conn = local.async_connect({asio::ip::tcp::v4(), this->port}, asio::use_awaitable);
+        logger->debug("Launching server accept coroutine");
+        asio::awaitable<tcp_socket> remote_conn = this->acceptor->async_accept();
+        logger->debug("Waiting on both to finish");
+        tcp_socket remote = co_await (std::move(local_conn) && std::move(remote_conn));
+        co_return std::make_pair(std::move(local), std::move(remote));
     }
 
-    void tcp_executor::stop()
+    auto tcp_server_client_test::create_pair() -> std::pair<tcp_socket, tcp_socket>
     {
-        std::lock_guard lock(this->mutex);
-        if (this->io_thread == nullptr) {
-            logger->warn("Thread was never started!");
-            return;
-        }
-        
-        if (this->should_stop) {
-            logger->warn("Thread was already told to stop!");
-            return;
-        }
-        
-        this->logger->info("Stopping executor...");
-        this->should_stop = true;
-        this->io_context.stop();
-        this->logger->info("Stopped io context, waiting on thread to exit...");
-        this->io_thread->join();
-        this->logger->info("Thread exited, cleaning up...");
-        this->io_thread = nullptr;
-    }
-
-    auto tcp_executor::create_pair() -> std::pair<tcp::socket, tcp::socket>
-    {
-        std::shared_ptr<std::shared_ptr<tcp::socket>> remote = std::make_shared<std::shared_ptr<tcp::socket>>(nullptr);
-        std::unique_lock lk(this->mutex);
-
-        this->logger->info("Creating remote, local pair...");
-
-        // Some other thread is currently inside create pair as well!
-        if (this->incoming != nullptr) {
-            this->logger->debug("other thread is also creating, waiting for it to finish!");
-            this->connected.wait(lk, [this]{ return this->incoming == nullptr; });
-        }
-
-        this->logger->debug("We are now creating!");
-
-        this->incoming = remote;
-
-        tcp::socket local(this->io_context);
-        this->logger->debug("notifying other threads, that we are about to connect!");
-        lk.unlock();
-        this->connected.notify_all();
-
-        this->logger->info("Trying to connect to server...");
-
-        local.connect({tcp::v4(), this->port});
-
-        this->logger->info("Connected to server! Now we tell the others!");
-        lk.lock();
-        if (*remote == nullptr) {
-            this->logger->warn("Hmm for some reason remote was still null, waiting on signal!");
-            this->accepted.wait(lk, [remote]{ return *remote != nullptr; });
-        }
-        this->logger->debug("Now really notifying others they are good too go again.");
-        lk.unlock();
-        this->connected.notify_all();
-
-        return std::make_pair(std::move(**remote), std::move(local));
-    }
-
-    auto tcp_executor::accept_connection(asio::ip::tcp::acceptor& acceptor) -> asio::awaitable<void>
-    {
-        this->logger->info("Starting accepting of connections...");
-        while (!this->should_stop) {
-            auto tcp_conn = co_await acceptor.async_accept(asio::use_awaitable);
-            std::unique_lock lk(this->mutex);
-
-            this->connected.wait(lk, [this]{ return this->incoming != nullptr; });
-
-            this->logger->info("Accepted connection from {}", tcp_conn.remote_endpoint());
-
-            std::shared_ptr<tcp::socket> remote = std::make_shared<tcp::socket>(std::move(tcp_conn));
-            *this->incoming = remote;
-
-            // notify create_pair, that remote is now available.
-            // but first reset incoming, so that we wait for the next create_pair invocation.
-            this->incoming = nullptr;
-            lk.unlock();
-            this->accepted.notify_one();
-        }
-        this->logger->info("Stopped running, closing acceptor...");
-        acceptor.close();
+        std::future<std::pair<std::shared_ptr<tcp_socket>, std::shared_ptr<tcp_socket>>> fut = asio::co_spawn(::tasarch::gdb::bg_executor::instance().io_context, [&]() -> asio::awaitable<std::pair<std::shared_ptr<tcp_socket>, std::shared_ptr<tcp_socket>>>{
+            // asio::basic_waitable_timer<std::chrono::system_clock> expiration(tasarch::gdb::bg_executor::instance().io_context, timeout);
+            // std::pair<tcp_socket, tcp_socket> res = co_await this->create_pair_async();
+            // co_return std::make_pair(std::move(res.first), std::move(res.second));;
+            // std::variant<std::pair<tcp_socket, tcp_socket>, std::monostate> res = co_await this->create_pair_async();// || expiration.async_wait(asio::use_awaitable));
+            // std::pair<tcp_socket, tcp_socket> act_res = std::get<std::pair<tcp_socket, tcp_socket>>(std::move(res));
+            // co_return std::move(act_res);
+            std::pair<tcp_socket, tcp_socket> res = co_await ::tasarch::gdb::awaitable_with_timeout(this->create_pair_async(), this->timeout);
+            co_return std::make_pair(std::make_shared<tcp_socket>(std::move(res.first)), std::make_shared<tcp_socket>(std::move(res.second)));
+            // co_return std::move(res);
+        }, asio::use_future);
+        fut.wait();
+        auto res = fut.get();
+        return std::make_pair(std::move(*res.first), std::move(*res.second));
     }
 } // namespace tasarch::test::gdb
 
@@ -176,7 +101,7 @@ ut::suite tcp_tests = []{
     using namespace ut;
     using asio::ip::tcp;
 
-    auto config_val = tasarch::config::parse_toml("logging.test.gdb.level = 'trace'");
+    auto config_val = tasarch::config::parse_toml("logging.test.gdb.level = 'trace'\nlogging.bgexec.level = 'trace'");
     tasarch::config::conf.load_from(config_val);
 
     "simple tcp test"_test = gdb::create_socket_test([](tcp::socket remote, tcp::socket local) -> asio::awaitable<void>{

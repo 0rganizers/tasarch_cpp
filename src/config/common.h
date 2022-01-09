@@ -1,5 +1,5 @@
-#ifndef __COMMON_H
-#define __COMMON_H
+#ifndef __CONFIG_COMMON_H
+#define __CONFIG_COMMON_H
 
 #define TOML11_PRESERVE_COMMENTS_BY_DEFAULT true
 #define TOML11_COLORIZE_ERROR_MESSAGE true
@@ -21,4 +21,4 @@ namespace tasarch::config {
     }
 } // namespace tasarch::config
 
-#endif /* __COMMON_H */
+#endif /* __CONFIG_COMMON_H */

@@ -2,8 +2,8 @@
 #include <stdexcept>
 #include "packet_io.h"  
 #include <asio/awaitable.hpp>
+#include <asio/bind_cancellation_slot.hpp>
 #include <asio/use_awaitable.hpp>
-#include <cppcoro/async_mutex.hpp>
 
 namespace tasarch::gdb {
     auto packet_io::send_packet(asio::mutable_buffer &send_buf) -> asio::awaitable<bool>
@@ -165,6 +165,9 @@ namespace tasarch::gdb {
                 case State::check_lo:
                 {
                     csum_low = decode_hex(c);
+                    /**
+                     * @todo Looking at gdbserver source, we should check for potential interrupt after current pkt buffer. Sometimes, interrupt is apparently sent / available with a previous packet.
+                     */
 
                     if (no_ack) {
                         // TODO: count - 1 here?
@@ -219,7 +222,10 @@ namespace tasarch::gdb {
         }
 
         this->curr_read_buf = asio::mutable_buffer(this->read_buf);
-        co_await this->socket.async_receive(this->read_buf, asio::use_awaitable);
+        size_t num = co_await this->socket.async_receive(this->read_buf, asio::use_awaitable);
+        if (num < 1) {
+            this->logger->warn("Received {} from socket!", num);
+        }
     }
 
     auto packet_io::get_byte() -> asio::awaitable<u8>

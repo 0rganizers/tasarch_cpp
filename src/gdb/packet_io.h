@@ -9,7 +9,6 @@
 #include <asio/buffer.hpp>
 #include "log/logging.h"
 #include "util/defines.h"
-#include <cppcoro/async_mutex.hpp>
 
 namespace tasarch::gdb {
 	static constexpr size_t gdb_packet_buffer_size = 32_KB;
@@ -70,7 +69,8 @@ namespace tasarch::gdb {
 			this->read_buf = asio::mutable_buffer(read_buf_storage.data(), gdb_transport_buffer_size);
 			this->write_buf_storage.fill(0);
 			this->write_buf = asio::mutable_buffer(write_buf_storage.data(), write_buf_storage.size());
-			this->curr_read_buf = asio::mutable_buffer(this->read_buf);
+			// current needs to be empty ya dingus!
+			this->curr_read_buf = asio::mutable_buffer(this->read_buf.data(), 0);
 			this->ack_buf = asio::const_buffer(&ack_storage, 1);
 			this->ack_err_buf = asio::const_buffer(&ack_err_storage, 1);
 		}
