@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>tasarch</title>
+  <title>tasarch::literals namespace | tasarch</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="stylesheet" href="fixes.css" />
@@ -33,7 +33,7 @@
                 <li><a href="usage.html">Using tasarch</a></li>
               </ol>
             </li>
-            <li><a href="namespaces.html" id="m-navbar-current">Namespaces</a></li>
+            <li><a href="namespaces.html">Namespaces</a></li>
           </ol>
           <ol class="m-col-t-6 m-col-m-none" start="3">
             <li><a href="annotated.html">Classes</a></li>
@@ -51,38 +51,39 @@
   <div class="m-container m-container-inflatable">
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
-        <h1>Namespaces</h1>
-        <ul class="m-doc">
-          <li>namespace <a href="namespaceasio_1_1experimental_1_1awaitable__operators.html" class="m-doc">asio::experimental::awaitable_operators</a> <span class="m-doc"><span></span></span></li>
-          <li>namespace <a href="namespacestd_1_1chrono__literals.html" class="m-doc">std::chrono_literals</a> <span class="m-doc"><span></span></span></li>
-          <li class="m-doc-collapsible">
-            <a href="#" onclick="return toggle(this)">namespace</a> <a href="namespacetasarch.html" class="m-doc">tasarch</a> <span class="m-doc"><span></span></span>
-            <ul class="m-doc">
-              <li>namespace <a href="namespacetasarch_1_1config.html" class="m-doc">config</a> <span class="m-doc"><span></span></span></li>
-              <li>namespace <a href="namespacetasarch_1_1gdb.html" class="m-doc">gdb</a> <span class="m-doc"><span></span></span></li>
-              <li>namespace <a href="namespacetasarch_1_1gui.html" class="m-doc">gui</a> <span class="m-doc"><span></span></span></li>
-              <li>namespace <a href="namespacetasarch_1_1literals.html" class="m-doc">literals</a> <span class="m-doc"><span></span></span></li>
-              <li>namespace <a href="namespacetasarch_1_1log.html" class="m-doc">log</a> <span class="m-doc"><span></span></span></li>
-            </ul>
-          </li>
-          <li>namespace <a href="namespacetoml.html" class="m-doc">toml</a> <span class="m-doc"><span></span></span></li>
-        </ul>
-        <script>
-        function toggle(e) {
-            e.parentElement.className = e.parentElement.className == 'm-doc-collapsible' ?
-                'm-doc-expansible' : 'm-doc-collapsible';
-            return false;
-        }
-        /* Collapse all nodes marked as such. Doing it via JS instead of
-           directly in markup so disabling it doesn't harm usability. The list
-           is somehow regenerated on every iteration and shrinks as I change
-           the classes. It's not documented anywhere and I'm not sure if this
-           is the same across browsers, so I am going backwards in that list to
-           be sure. */
-        var collapsed = document.getElementsByClassName("collapsed");
-        for(var i = collapsed.length - 1; i >= 0; --i)
-            collapsed[i].className = 'm-doc-expansible';
-        </script>
+        <h1>
+          <span class="m-breadcrumb"><a href="namespacetasarch.html">tasarch</a>::<wbr/></span>literals <span class="m-thin">namespace</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="literals_8h.html">&lt;src/util/literals.h&gt;</a></div>
+        </h1>
+        <p><span></span></p>
+        <nav class="m-block m-default">
+          <h3>Contents</h3>
+          <ul>
+            <li>
+              Reference
+              <ul>
+                <li><a href="#func-members">Functions</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+        <section id="func-members">
+          <h2><a href="#func-members">Functions</a></h2>
+          <dl class="m-doc">
+            <dt id="ae21bfdca56558397276105231324f439">
+              <span class="m-doc-wrap-bumper">auto <a href="#ae21bfdca56558397276105231324f439" class="m-doc-self">operator&quot;&quot;_KB</a>(</span><span class="m-doc-wrap">unsigned long long n) -&gt; <a href="defines_8h.html#aa1dec568e79152c892dcf63f445cbd7a" class="m-doc">ALWAYS_<wbr />INLINE</a> <a href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574" class="m-doc">u64</a> <span class="m-label m-flat m-primary">constexpr</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ab521c29016abd85c45c646c1d7331417">
+              <span class="m-doc-wrap-bumper">auto <a href="#ab521c29016abd85c45c646c1d7331417" class="m-doc-self">operator&quot;&quot;_MB</a>(</span><span class="m-doc-wrap">unsigned long long n) -&gt; <a href="defines_8h.html#aa1dec568e79152c892dcf63f445cbd7a" class="m-doc">ALWAYS_<wbr />INLINE</a> <a href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574" class="m-doc">u64</a> <span class="m-label m-flat m-primary">constexpr</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a72f4a5e8499640ecff8f3c6c99981ee2">
+              <span class="m-doc-wrap-bumper">auto <a href="#a72f4a5e8499640ecff8f3c6c99981ee2" class="m-doc-self">operator&quot;&quot;_GB</a>(</span><span class="m-doc-wrap">unsigned long long n) -&gt; <a href="defines_8h.html#aa1dec568e79152c892dcf63f445cbd7a" class="m-doc">ALWAYS_<wbr />INLINE</a> <a href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574" class="m-doc">u64</a> <span class="m-label m-flat m-primary">constexpr</span></span>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
       </div>
     </div>
   </div>
