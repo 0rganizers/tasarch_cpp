@@ -1,15 +1,19 @@
 #include <chrono>
+#include <exception>
+#include <functional>
 #include <future>
 #include <memory>
 #include <mutex>
+#include <optional>
 #include <stdexcept>
 #include <utility>
 #include <asio/awaitable.hpp>
 #include <asio/co_spawn.hpp>
 #include <asio/use_awaitable.hpp>
 #include <asio/use_future.hpp>
+#include "gdb/common.h"
 #include "log/logging.h"
-#include "tcp_executor.h"
+#include "tcp_server_client_test.h"
 #include <ut/ut.hpp>
 #include "config/config.h"
 #include "gdb/bg_executor.h"
@@ -18,7 +22,7 @@ namespace tasarch::test::gdb {
 
     auto create_socket_test(std::function<asio::awaitable<void> (tcp_socket, tcp_socket)> test, std::chrono::milliseconds timeout) -> std::function<void()>
     {
-        return [&]{
+        return [=]{
             auto logger = log::get("test.tcp");
             auto *exec = new tcp_server_client_test();
             exec->timeout = timeout;
@@ -28,15 +32,44 @@ namespace tasarch::test::gdb {
             logger->trace("creating socket pair...");
             auto pair = exec->create_pair();
             logger->debug("created socket pair {}, {}", pair.first.local_endpoint(), pair.second.local_endpoint());
-            std::future<void> fut = asio::co_spawn(::tasarch::gdb::bg_executor::instance().io_context, [&]() -> asio::awaitable<void>{
+            std::future<void> fut = asio::co_spawn(::tasarch::gdb::bg_executor::instance().io_context, [&, timeout]() -> asio::awaitable<void>{
                 logger->trace("executing test lambda");
-                co_await test(std::move(pair.first), std::move(pair.second));
+                co_await tasarch::gdb::awaitable_with_timeout(test(std::move(pair.first), std::move(pair.second)), timeout);
                 logger->trace("finished executing test lambda");
             }, asio::use_future);
             logger->trace("waiting for future...");
             fut.wait();
             logger->trace("future finished, stopping executor...");
             exec->stop();
+            // causes exception to be thrown!
+            fut.get();
+        };
+    }
+
+    auto create_dual_socket_test(std::function<asio::awaitable<void> (tcp_socket)> remote_test, std::function<asio::awaitable<void> (tcp_socket)> local_test, std::chrono::milliseconds timeout) -> std::function<void()>
+    {
+        return [=]{
+            auto logger = log::get("test.tcp");
+            auto *exec = new tcp_server_client_test();
+            exec->timeout = timeout;
+            logger->trace("starting tcp_server_client_test");
+            exec->start();
+
+            logger->trace("creating socket pair...");
+            auto pair = exec->create_pair();
+            logger->debug("created socket pair {}, {}", pair.first.local_endpoint(), pair.second.local_endpoint());
+            std::future<void> fut = asio::co_spawn(::tasarch::gdb::bg_executor::instance().io_context, [&, timeout]() -> asio::awaitable<void>{
+                logger->trace("executing test lambda");
+                co_await tasarch::gdb::awaitable_with_timeout((remote_test(std::move(pair.first)) && local_test(std::move(pair.second))), timeout);
+                logger->trace("finished executing test lambda");
+            }, asio::use_future);
+            logger->trace("waiting for future...");
+            fut.wait();
+            logger->trace("future finished, stopping executor...");
+            exec->stop();
+            // causes exception to be thrown!
+            // I think because of the && the exception is gonna be messed up :/
+            fut.get();
         };
     }
 
@@ -77,13 +110,12 @@ namespace tasarch::test::gdb {
 
     auto tcp_server_client_test::create_pair() -> std::pair<tcp_socket, tcp_socket>
     {
+        /**
+         * @brief We need to do the song and dance with `std::shared_ptr` here, since `asio::co_spawn` wants to be able to default initialize the result, in case of errors.
+         * Don't ask me why, that seems kinda like a bad design, but whatever, it's not too bad.
+         * 
+         */
         std::future<std::pair<std::shared_ptr<tcp_socket>, std::shared_ptr<tcp_socket>>> fut = asio::co_spawn(::tasarch::gdb::bg_executor::instance().io_context, [&]() -> asio::awaitable<std::pair<std::shared_ptr<tcp_socket>, std::shared_ptr<tcp_socket>>>{
-            // asio::basic_waitable_timer<std::chrono::system_clock> expiration(tasarch::gdb::bg_executor::instance().io_context, timeout);
-            // std::pair<tcp_socket, tcp_socket> res = co_await this->create_pair_async();
-            // co_return std::make_pair(std::move(res.first), std::move(res.second));;
-            // std::variant<std::pair<tcp_socket, tcp_socket>, std::monostate> res = co_await this->create_pair_async();// || expiration.async_wait(asio::use_awaitable));
-            // std::pair<tcp_socket, tcp_socket> act_res = std::get<std::pair<tcp_socket, tcp_socket>>(std::move(res));
-            // co_return std::move(act_res);
             std::pair<tcp_socket, tcp_socket> res = co_await ::tasarch::gdb::awaitable_with_timeout(this->create_pair_async(), this->timeout);
             co_return std::make_pair(std::make_shared<tcp_socket>(std::move(res.first)), std::make_shared<tcp_socket>(std::move(res.second)));
             // co_return std::move(res);
@@ -123,6 +155,23 @@ ut::suite tcp_tests = []{
         res = co_await remote.async_receive(asio::buffer(loc_msg), asio::use_awaitable);
         loc_msg.resize(res);
         expect(loc_msg == loc_to_rem) << "local was" << loc_msg << "but expected fdsa";
+        co_return;
+    });
+
+    "timeout test"_test = gdb::create_socket_test([](tcp::socket remote, tcp::socket local) -> asio::awaitable<void>{
+        std::string rem_to_loc = "asdf";
+
+        // no exception here
+        auto res = co_await tasarch::gdb::awaitable_with_timeout(remote.async_send(asio::buffer(rem_to_loc), asio::use_awaitable), 1000ms);
+        ut::log << "sent return value:" << res;
+
+        auto logger = tasarch::log::get("test.gdb");
+
+        logger->info("Closing socket");
+        local.close();
+        logger->info("Sending request now!");
+
+        throws_async_ex(tasarch::gdb::awaitable_with_timeout(remote.async_send(asio::buffer(rem_to_loc), asio::use_awaitable), 1000ms), tasarch::gdb::timed_out);
         co_return;
     });
 };

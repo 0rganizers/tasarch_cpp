@@ -107,7 +107,6 @@ namespace tasarch::gdb {
 		auto has_data() -> bool;
 		auto recv_data() -> asio::awaitable<void>;
 		auto get_byte() -> asio::awaitable<u8>;
-
 	};
 } // namespace tasarch::gdb
 

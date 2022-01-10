@@ -15,12 +15,14 @@
 #include <asio/execution_context.hpp>
 #include <asio/ip/basic_endpoint.hpp>
 #include "gdb/common.h"
+#include "async_test.h"
 
 using namespace std::chrono_literals;
 
 namespace tasarch::test::gdb {
 
     auto create_socket_test(std::function<asio::awaitable<void>(tcp_socket, tcp_socket)> test, std::chrono::milliseconds timeout = 5000ms) -> std::function<void()>;
+    auto create_dual_socket_test(std::function<asio::awaitable<void>(tcp_socket)> remote_test, std::function<asio::awaitable<void>(tcp_socket)> local_test, std::chrono::milliseconds timeout = 5000ms)  -> std::function<void()>;
 
     class tcp_server_client_test : log::WithLogger
     {

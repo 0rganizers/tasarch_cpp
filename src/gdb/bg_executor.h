@@ -11,7 +11,7 @@ namespace tasarch::gdb {
 	class bg_executor : log::WithLogger
 	{
 	public:
-		explicit bg_executor(int num_threads = 1) : log::WithLogger("bgexec"), io_context(num_threads), num_threads(num_threads) {}
+		explicit bg_executor(int num_threads = 2) : log::WithLogger("bgexec"), io_context(num_threads), num_threads(num_threads) {}
 		asio::io_context io_context;
 
 		void start();
@@ -22,7 +22,7 @@ namespace tasarch::gdb {
 		static auto instance() -> bg_executor &;
 
 	private:
-		int num_threads = 1;
+		int num_threads;
 		std::vector<std::shared_ptr<std::thread>> io_threads;
 		bool should_stop = false;
 		bool running = false;

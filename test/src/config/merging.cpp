@@ -121,7 +121,7 @@ value = [{pi = 3.14}, {e = 2.888}, {pi = 3.24}, {notpi = 3.14}])"
         }
     };
 
-    for (auto const tc : valid_test_cases) {
+    for (auto const &tc : valid_test_cases) {
         test("merge test: " + tc.name) = [tc, do_merge, expect_match] {
             auto merged = do_merge(tc.base, tc.addition);
             auto expected = parse_toml(tc.result);
@@ -146,7 +146,7 @@ value = "asdf")",
     };
 
 
-    for (auto const tc : invalid_test_cases) {
+    for (auto const &tc : invalid_test_cases) {
         test("invalid merge test: " + tc.name) = [tc, do_merge] {
             expect(throws([tc, do_merge] {
                 do_merge(tc.base, tc.addition);

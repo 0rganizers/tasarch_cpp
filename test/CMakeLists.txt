@@ -25,6 +25,10 @@ target_link_libraries(tasarch_test ${TEST_LIBS})
 target_include_directories(tasarch_test SYSTEM PUBLIC $<BUILD_INTERFACE:${EXTERNAL_INCLUDE_DIR}>)
 target_include_directories(tasarch_test PUBLIC $<BUILD_INTERFACE:${SRC_INCLUDE_DIR}>)
 
+# always compile tests with coverage!
+target_compile_options(tasarch_test PRIVATE "-Og" "-g" "--coverage")
+target_link_options(tasarch_test PRIVATE "--coverage")
+
 add_test(NAME tasarch_test COMMAND tasarch_test)
 
 add_folders(Test)

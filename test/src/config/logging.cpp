@@ -2,6 +2,7 @@
 #include <memory>
 #include <stdexcept>
 #include <spdlog/common.h>
+#include <toml/exception.hpp>
 #include <ut/ut.hpp>
 #include "config/common.h"
 #include "config/config.h"
@@ -69,6 +70,16 @@ ut::suite logging = []{
 
     const std::string info_msg = "INFO MESSAGE";
     const std::string trace_msg = "TRACE MESSAGE";
+
+    "level config throws type error"_test = [&]{
+        auto config_val = tasarch::config::parse_toml("logging.parent.level = 42");
+        expect(throws<toml::type_error>([&]{tasarch::config::conf.load_from(config_val);}));
+    };
+
+    "level config throws internal error"_test = [&]{
+        auto config_val = tasarch::config::parse_toml("logging.parent.level = 'invalid_level_name'");
+        expect(throws<toml::internal_error>([&]{tasarch::config::conf.load_from(config_val);}));
+    };
 
     "complex config test"_test = [&]{
         auto ts = std::make_shared<test_sink<std::mutex>>();

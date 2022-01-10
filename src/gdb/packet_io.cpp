@@ -8,6 +8,10 @@
 namespace tasarch::gdb {
     auto packet_io::send_packet(asio::mutable_buffer &send_buf) -> asio::awaitable<bool>
     {
+        /**
+         * @todo make this work better. Not sure whether this is fully to spec! (the interrupt detection part)
+         */
+        bool did_interrupt = false;
         this->logger->trace("sending data sized 0x{:x}", send_buf.size());
         while (true) {
             std::lock_guard lk(this->mutex);
@@ -54,9 +58,10 @@ namespace tasarch::gdb {
                 u8 c = co_await this->get_byte();
                 switch (c) {
                 case break_character:
-                    co_return true;
+                    did_interrupt = true;
+                    break;
                 case ack:
-                    co_return false;
+                    co_return did_interrupt;
                 case ack_err:
                     this->logger->warn("Received ack error, retransmitting...");
                     retransmit = true;
@@ -167,6 +172,7 @@ namespace tasarch::gdb {
                     csum_low = decode_hex(c);
                     /**
                      * @todo Looking at gdbserver source, we should check for potential interrupt after current pkt buffer. Sometimes, interrupt is apparently sent / available with a previous packet.
+                     * We dont need to do this, since our gdbstub runs on a separate thread and should be looking at the new command immediately!
                      */
 
                     if (no_ack) {
@@ -221,8 +227,8 @@ namespace tasarch::gdb {
             this->logger->warn("receiving new data, even though we still have {} buffered data available! This is likely a bug!", this->curr_read_buf.size());
         }
 
-        this->curr_read_buf = asio::mutable_buffer(this->read_buf);
         size_t num = co_await this->socket.async_receive(this->read_buf, asio::use_awaitable);
+        this->curr_read_buf = asio::mutable_buffer(this->read_buf.data(), num);
         if (num < 1) {
             this->logger->warn("Received {} from socket!", num);
         }
