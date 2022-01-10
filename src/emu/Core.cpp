@@ -9,11 +9,16 @@
 #include <unistd.h>
 #include <unordered_map>
 #include <QOpenGLContext>
+#include <QTimer>
+#include <QThread>
+#include <iostream>
 
 #include "libretro.h"
 #include "Core.h"
 #include "Callback.h"
 #include "Renderer.h"
+
+
 
 
 static std::unordered_map<std::string, std::string> core_variables = {};
@@ -198,12 +203,16 @@ static bool env_callback(void *core, unsigned int cmd, void *data) {
 
 void audio_sample(void *_core, int16_t left, int16_t right) {
     Core *core = (Core*) _core;
-    if(core->m_audio) core->m_audio->enqueue(left, right);
+    //core->DispatchToMainThread([=]{
+        if(core->m_audio) core->m_audio->enqueue(left, right);
+    //});
 }
 
 size_t audio_sample_batch(void *_core, const int16_t *data, size_t frames) { 
     Core *core = (Core*) _core;
-    if(core->m_audio) core->m_audio->enqueue(data, frames);
+    //core->DispatchToMainThread([=]{
+        if(core->m_audio) core->m_audio->enqueue(data, frames);
+    //});
     return frames;
 }
 
@@ -239,6 +248,12 @@ Core::Core(const char *core_path) {
         dlsym(m_core_handle, "retro_get_system_av_info");
     m_retro_run = (void(*)())
         dlsym(m_core_handle, "retro_run");
+    m_retro_serialize_size = (size_t(*)(void))
+		dlsym(m_core_handle, "retro_serialize_size");
+	m_retro_serialize = (bool(*)(void *, size_t))
+		dlsym(m_core_handle, "retro_serialize");
+	m_retro_unserialize = (bool(*)(const void*, size_t))
+		dlsym(m_core_handle, "retro_unserialize");
 
     void (*set_env)(void*) = (void (*)(void*)) dlsym(m_core_handle, "retro_set_environment");
     set_env(create_callback((void*) &env_callback, (void*) this));
@@ -373,7 +388,6 @@ GLuint Core::init_renderer(QOpenGLContext* context, QSurface* surface) {
 
     avinfo info = get_info();
 
-    m_audio = new AudioOutput(info.timing.sample_rate);
 
     return m_renderer->init(this, info.geometry.max_width, info.geometry.max_height);
 }
@@ -414,10 +428,15 @@ void Core::run() {
         // Already running
         return;
     }
+    
+    avinfo info = get_info();
+    m_audio = new AudioOutput(info.timing.sample_rate);
+
     this->m_stopped = false;
     this->m_render_thread = QThread::create([&]() {
         this->m_renderer->m_context->makeCurrent(this->m_renderer->m_surface);
         avinfo info = get_info();
+        //m_audio = new AudioOutput(info.timing.sample_rate);
         double average = 0.0;
         size_t num = 0;
         while (!this->m_stopped) {
@@ -428,8 +447,9 @@ void Core::run() {
             // sleep for the remaining time...
             //QThread::usleep((1000000 / info.timing.fps) - std::chrono::duration<double>(end-start).count());
 
-            while(end-start < std::chrono::nanoseconds((int)(1000000000.0 / info.timing.fps)))
+            while(end-start < std::chrono::nanoseconds((int)(1000000000.0 / info.timing.fps))) {
                 end = std::chrono::high_resolution_clock::now();
+            }
         }
 
         // the callback to render might be off by a few frames because it's
@@ -450,4 +470,19 @@ void Core::stop() {
     this->m_render_thread->quit();
     this->m_render_thread->wait();
     delete this->m_render_thread;
+}
+
+void Core::DispatchToMainThread(std::function<void()> callback)
+{
+    if(!m_main_thread) return;
+
+    QTimer* timer = new QTimer();
+    timer->moveToThread(m_main_thread);
+    timer->setSingleShot(true);
+    QObject::connect(timer, &QTimer::timeout, [=]()
+        {
+            callback();
+            timer->deleteLater();
+        });
+    QMetaObject::invokeMethod(timer, "start", Qt::QueuedConnection, Q_ARG(int, 0));
 }

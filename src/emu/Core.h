@@ -37,17 +37,20 @@ class Core {
         void (*m_retro_run)(void);
         bool (*m_retro_load_game)(const struct retro_game_info *game);
         void (*m_retro_get_system_info)(struct retro_system_av_info *info);
+		size_t (*m_retro_serialize_size)(void);
+		bool (*m_retro_serialize)(void*, size_t size);
+		bool (*m_retro_unserialize)(const void*, size_t size);
 
         bool m_loaded_game = false;
         int m_framebuffer = 0; // default == 0
 
         bool m_stopped = true;
-        QThread* m_render_thread;
 
 
     public:
         Renderer *m_renderer = nullptr;
         AudioOutput *m_audio = nullptr;
+        QThread* m_render_thread, *m_main_thread = nullptr;
 
         Core(const char *core_path);
         ~Core();
@@ -78,5 +81,7 @@ class Core {
 
         void run();
         void stop();
+
+        void DispatchToMainThread(std::function<void()> callback);
 
 };

@@ -63,7 +63,7 @@ namespace tasarch::gui {
             return;
         }
 
-// #define TEST_DOLPHIN
+//#define TEST_DOLPHIN
 #ifdef TEST_DOLPHIN 
         this->core = new Core("/home/aaron/Projects/TASarch/TASarch/dolphin_libretro.so");
         this->core->load_game("/home/aaron/Projects/isos/ww.iso");
@@ -73,6 +73,7 @@ namespace tasarch::gui {
 #endif
 
         this->core->init_renderer(subctx, surface);
+        this->core->m_main_thread = thread();
         // Need to make current again after setup!
         this->makeCurrent();
         this->initializeOpenGLFunctions();
