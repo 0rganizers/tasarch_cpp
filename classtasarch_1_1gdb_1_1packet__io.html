@@ -122,8 +122,8 @@
               <span class="m-doc-wrap-bumper">auto <a href="#a2419c361b983c7fe3c950fd684b7be1a" class="m-doc">receive_packet</a>(</span><span class="m-doc-wrap">asio::mutable_buffer&amp; recv_buf) -&gt; asio::awaitable&lt; bool &gt; -&gt; auto</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a6f7070866f977e5c14771d235216051d">
-              <span class="m-doc-wrap-bumper">auto <a href="#a6f7070866f977e5c14771d235216051d" class="m-doc-self">send_packet</a>(</span><span class="m-doc-wrap">asio::mutable_buffer&amp; send_buf) -&gt; asio::awaitable&lt; bool &gt; -&gt; auto</span>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a6f7070866f977e5c14771d235216051d" class="m-doc">send_packet</a>(</span><span class="m-doc-wrap">asio::mutable_buffer&amp; send_buf) -&gt; asio::awaitable&lt; bool &gt; -&gt; auto</span>
             </dt>
             <dd><span></span></dd>
           </dl>
@@ -148,7 +148,14 @@
               <span class="m-doc-wrap-bumper">auto tasarch::<wbr />gdb::<wbr />packet_io::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a2419c361b983c7fe3c950fd684b7be1a" class="m-doc-self">receive_packet</a>(</span><span class="m-doc-wrap">asio::mutable_buffer&amp; recv_buf) -&gt; asio::awaitable&lt; bool &gt;</span></span>
             </h3>
             <p><span></span></p>
-<aside class="m-note m-dim"><h4><a href="todo.html#_todo000014" class="m-doc">Todo</a></h4><p>Is there nothing better than this?</p></aside><aside class="m-note m-dim"><h4><a href="todo.html#_todo000015" class="m-doc">Todo</a></h4><p>Looking at gdbserver source, we should check for potential interrupt after current pkt buffer. Sometimes, interrupt is apparently sent / available with a previous packet.</p></aside>
+<aside class="m-note m-dim"><h4><a href="todo.html#_todo000014" class="m-doc">Todo</a></h4><p>Is there nothing better than this?</p></aside><aside class="m-note m-dim"><h4><a href="todo.html#_todo000015" class="m-doc">Todo</a></h4><p>Looking at gdbserver source, we should check for potential interrupt after current pkt buffer. Sometimes, interrupt is apparently sent / available with a previous packet. We dont need to do this, since our gdbstub runs on a separate thread and should be looking at the new command immediately!</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a6f7070866f977e5c14771d235216051d"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">auto tasarch::<wbr />gdb::<wbr />packet_io::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a6f7070866f977e5c14771d235216051d" class="m-doc-self">send_packet</a>(</span><span class="m-doc-wrap">asio::mutable_buffer&amp; send_buf) -&gt; asio::awaitable&lt; bool &gt;</span></span>
+            </h3>
+            <p><span></span></p>
+<aside class="m-note m-dim"><h4><a href="todo.html#_todo000013" class="m-doc">Todo</a></h4><p>make this work better. Not sure whether this is fully to spec! (the interrupt detection part)</p></aside>
           </div></section>
         </section>
       </div>

@@ -91,17 +91,26 @@
               class <a href="classtasarch_1_1gdb_1_1server.html" class="m-doc">server</a>
             </dt>
             <dd><span></span></dd>
+            <dt>
+              class <a href="classtasarch_1_1gdb_1_1timed__out.html" class="m-doc">timed_out</a>
+            </dt>
+            <dd><span></span></dd>
           </dl>
         </section>
         <section id="func-members">
           <h2><a href="#func-members">Functions</a></h2>
           <dl class="m-doc">
             <dt>
-              <div class="m-doc-template">template&lt;typename TResult&gt;</div>
+              <div class="m-doc-template">template&lt;typename TResult = void&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a href="#a7f54693e9f9e9b7982c3d680d1c48ca5" class="m-doc">awaitable_with_timeout</a>(</span><span class="m-doc-wrap">asio::awaitable&lt;TResult&gt; awaitable,
               const std::chrono::system_clock::duration&amp; timeout) -&gt; asio::awaitable&lt; TResult &gt; -&gt; auto</span>
             </dt>
             <dd>Use to await something with a timeout.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a229f84ffe1e4529777b3d93456409a67" class="m-doc">awaitable_with_timeout</a>(</span><span class="m-doc-wrap">asio::awaitable&lt;void&gt; awaitable,
+              const std::chrono::system_clock::duration&amp; timeout) -&gt; asio::awaitable&lt; void &gt; -&gt; auto</span>
+            </dt>
+            <dd>Special casing needed for void coroutines, as they dont return a value, so the variant is not working!</dd>
             <dt>
               <span class="m-doc-wrap-bumper">auto <a href="#a6cf1da2d3b665ddf1904044e4e2a4a6b" class="m-doc">decode_hex</a>(</span><span class="m-doc-wrap"><a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> c) -&gt; int -&gt; auto <span class="m-label m-flat m-primary">constexpr</span></span>
             </dt>
@@ -135,7 +144,7 @@
             <h3>
               <div class="m-doc-include m-code m-inverted m-right-m m-text-right"><span class="cp">#include</span> <a class="cpf" href="gdb_2common_8h.html">&lt;src/gdb/common.h&gt;</a></div>
               <div class="m-doc-template">
-                template&lt;typename TResult&gt;
+                template&lt;typename TResult = void&gt;
               </div>
               <span class="m-doc-wrap-bumper">auto tasarch::<wbr />gdb::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a7f54693e9f9e9b7982c3d680d1c48ca5" class="m-doc-self">awaitable_with_timeout</a>(</span><span class="m-doc-wrap">asio::awaitable&lt;TResult&gt; awaitable,
               const std::chrono::system_clock::duration&amp; timeout) -&gt; asio::awaitable&lt; TResult &gt;</span></span>
@@ -171,7 +180,36 @@
                 </tr>
               </tfoot>
             </table>
-<aside class="m-note m-dim"><h4><a href="todo.html#_todo000011" class="m-doc">Todo</a></h4><p>example</p></aside><aside class="m-note m-dim"><h4><a href="todo.html#_todo000012" class="m-doc">Todo</a></h4><p>timeout exception</p></aside>
+<aside class="m-note m-dim"><h4><a href="todo.html#_todo000011" class="m-doc">Todo</a></h4><p>example</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a229f84ffe1e4529777b3d93456409a67"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">auto tasarch::<wbr />gdb::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a229f84ffe1e4529777b3d93456409a67" class="m-doc-self">awaitable_with_timeout</a>(</span><span class="m-doc-wrap">asio::awaitable&lt;void&gt; awaitable,
+              const std::chrono::system_clock::duration&amp; timeout) -&gt; asio::awaitable&lt; void &gt;</span></span>
+              <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="gdb_2common_8h.html">&lt;src/gdb/common.h&gt;</a></div>
+            </h3>
+            <p>Special casing needed for void coroutines, as they dont return a value, so the variant is not working!</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">awaitable</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>timeout</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>asio::awaitable&lt;void&gt;</td>
+                </tr>
+              </tfoot>
+            </table>
           </div></section>
           <section class="m-doc-details" id="a6cf1da2d3b665ddf1904044e4e2a4a6b"><div>
             <h3>
