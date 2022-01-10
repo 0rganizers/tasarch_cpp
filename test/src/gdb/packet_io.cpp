@@ -1,5 +1,6 @@
 #include <array>
 #include <stdexcept>
+#include "gdb/common.h"
 #include "gdb/packet_io.h"
 #include "tcp_server_client_test.h"
 #include <asio/awaitable.hpp>
@@ -18,7 +19,7 @@ ut::suite packet_io_tests = []{
     using asio::ip::tcp;
 
     auto config_val = tasarch::config::parse_toml("logging.test.gdb.level = 'trace'\nlogging.gdb.level = 'trace'");
-    tasarch::config::conf.load_from(config_val);
+    tasarch::config::conf()->load_from(config_val);
 
     std::string mean_data = R"(This text file is a test input for GDB's file transfer commands.  It
 contains some characters which need to be escaped in remote protocol
@@ -139,7 +140,7 @@ abcdefghijklmnopqrstuvwxyz{|}~
         tasarch::gdb::packet_io io(remote);
         // this buf should be way too small!
         auto recv_buf = asio::mutable_buffer(packet_buf.data(), 10);
-        throws_async_ex(io.receive_packet(recv_buf), std::runtime_error);
+        throws_async_ex(io.receive_packet(recv_buf), tasarch::gdb::buffer_too_small);
     }, [&](tcp::socket local) -> asio::awaitable<void>{
         co_await local.async_send(asio::buffer(encoded_mean_data), asio::use_awaitable);
     });
@@ -163,5 +164,16 @@ abcdefghijklmnopqrstuvwxyz{|}~
         expect(recvd_str == encoded_mean_data);
         // respond with break, then ack
         co_await local.async_send(asio::buffer("\x03"+ack), asio::use_awaitable);
+    });
+
+    "timeout on local close"_test = gdb::create_dual_socket_test([&](tcp::socket remote) -> asio::awaitable<void>{
+        tasarch::gdb::packet_io io(remote);
+        // shorter timeout, so testing doesnt take as long!
+        io.timeout = 500ms;
+        auto recv_buf = asio::mutable_buffer(packet_buf.data(), packet_buf.size());
+        throws_async_ex(io.receive_packet(recv_buf), tasarch::gdb::timed_out);
+    }, [&](tcp::socket local) -> asio::awaitable<void>{
+        local.close();
+        co_return;
     });
 };

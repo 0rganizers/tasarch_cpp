@@ -60,7 +60,7 @@ namespace tasarch::log {
         if (found == registry.end())
         {
             log = std::make_shared<logger>(name, dist_sink);
-            log->set_level(config::conf.logging.levels.get_level(name));
+            log->set_level(config::conf()->logging.levels.get_level(name));
             registry[name] = log;
         } else {
             log = found->second;

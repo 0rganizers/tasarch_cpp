@@ -1,5 +1,6 @@
 #include <mutex>
 #include <stdexcept>
+#include "gdb/common.h"
 #include "packet_io.h"  
 #include <asio/awaitable.hpp>
 #include <asio/bind_cancellation_slot.hpp>
@@ -45,7 +46,7 @@ namespace tasarch::gdb {
 
             this->logger->trace("Done writing to write_buf_storage, sending for real...");
 
-            co_await this->socket.async_send(asio::mutable_buffer(write_buf_storage.data(), off), asio::use_awaitable);
+            co_await awaitable_with_timeout(this->socket.async_send(asio::mutable_buffer(write_buf_storage.data(), off), asio::use_awaitable), this->timeout);
 
             this->logger->trace("Sent data, checking for ack now: {}", this->no_ack);
 
@@ -76,8 +77,9 @@ namespace tasarch::gdb {
     auto packet_io::receive_packet(asio::mutable_buffer &recv_buf) -> asio::awaitable<bool>
     {
         while (true) {
-            if (!this->has_buffered_data() && !this->has_remote_data()) {
-                co_await this->socket.async_wait(tcp::socket::wait_read, asio::use_awaitable);
+            if (!this->has_buffered_data()) {
+                logger->trace("No buffered data, waiting to receive!");
+                co_await this->recv_data();
             }
 
             std::lock_guard lk(this->mutex);
@@ -132,7 +134,7 @@ namespace tasarch::gdb {
                         checksum += c;
                         if (count >= size - 1) {
                             logger->error("provided recv buffer ({}) is too small to fit data!", size);
-                            throw std::runtime_error("provided recv buffer is too small to fit data!");
+                            throw buffer_too_small(size);
                         }
                         if (c == escape) {
                             state = State::escaped;
@@ -153,7 +155,7 @@ namespace tasarch::gdb {
                     checksum += c;
                     if (count >= size - 1) {
                         logger->error("provided recv buffer ({}) is too small to fit data!", size);
-                        throw std::runtime_error("provided recv buffer is too small to fit data!");
+                        throw buffer_too_small(size);
                     }
                     dst[count++] = dec;
                     state = State::packet_data;
@@ -227,7 +229,7 @@ namespace tasarch::gdb {
             this->logger->warn("receiving new data, even though we still have {} buffered data available! This is likely a bug!", this->curr_read_buf.size());
         }
 
-        size_t num = co_await this->socket.async_receive(this->read_buf, asio::use_awaitable);
+        size_t num = co_await awaitable_with_timeout(this->socket.async_receive(this->read_buf, asio::use_awaitable), this->timeout);
         this->curr_read_buf = asio::mutable_buffer(this->read_buf.data(), num);
         if (num < 1) {
             this->logger->warn("Received {} from socket!", num);

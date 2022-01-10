@@ -134,18 +134,16 @@ ut::suite tcp_tests = []{
     using asio::ip::tcp;
 
     auto config_val = tasarch::config::parse_toml("logging.test.gdb.level = 'trace'\nlogging.bgexec.level = 'trace'");
-    tasarch::config::conf.load_from(config_val);
+    tasarch::config::conf()->load_from(config_val);
 
     "simple tcp test"_test = gdb::create_socket_test([](tcp::socket remote, tcp::socket local) -> asio::awaitable<void>{
         std::string rem_to_loc = "asdf";
         auto res = co_await remote.async_send(asio::buffer(rem_to_loc), asio::use_awaitable);
-        ut::log << "sent return value: " << res;
         std::string rem_msg;
         rem_msg.resize(1024);
         res = co_await local.async_receive(asio::buffer(rem_msg), asio::use_awaitable);
         // rem_msg.resize(res);
         rem_msg.resize(res);
-        ut::log << "recv return value: " << res;
         expect(rem_msg == rem_to_loc) << "remote was" << rem_msg << "but expected asdf, size:" << rem_msg.size() << "expected:" << rem_to_loc.size();
 
         std::string loc_to_rem = "fdsa";
@@ -163,7 +161,6 @@ ut::suite tcp_tests = []{
 
         // no exception here
         auto res = co_await tasarch::gdb::awaitable_with_timeout(remote.async_send(asio::buffer(rem_to_loc), asio::use_awaitable), 1000ms);
-        ut::log << "sent return value:" << res;
 
         auto logger = tasarch::log::get("test.gdb");
 

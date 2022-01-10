@@ -1,6 +1,7 @@
 #ifndef __CONFIG_H
 #define __CONFIG_H
 
+#include <memory>
 #include "common.h"
 #include <spdlog/common.h>
 #include <spdlog/details/registry.h>
@@ -183,6 +184,9 @@ namespace tasarch::config {
      */
     struct config {
         logging logging;
+        bool testing = false;
+
+        static auto instance() -> std::shared_ptr<config>;
 
         /**
          * @brief Loads the whole configuration from the given toml value.
@@ -213,12 +217,14 @@ namespace tasarch::config {
         }
     };
 
+    using conf_ptr = std::shared_ptr<config>;
+
     /**
-     * @brief The globally shared root configuration object.
-     * @todo Figure out a better way? especially with reloading? Can we just take references to individual fields?
-     * 
-     */
-    extern config conf;
+    * @brief Shared config instance used throught the app.
+    * 
+    * @return config& 
+    */
+    auto conf() -> conf_ptr;
 } // namespace tasarch::config
 
 #endif /* __CONFIG_H */

@@ -73,12 +73,12 @@ ut::suite logging = []{
 
     "level config throws type error"_test = [&]{
         auto config_val = tasarch::config::parse_toml("logging.parent.level = 42");
-        expect(throws<toml::type_error>([&]{tasarch::config::conf.load_from(config_val);}));
+        expect(throws<toml::type_error>([&]{tasarch::config::conf()->load_from(config_val);}));
     };
 
     "level config throws internal error"_test = [&]{
         auto config_val = tasarch::config::parse_toml("logging.parent.level = 'invalid_level_name'");
-        expect(throws<toml::internal_error>([&]{tasarch::config::conf.load_from(config_val);}));
+        expect(throws<toml::internal_error>([&]{tasarch::config::conf()->load_from(config_val);}));
     };
 
     "complex config test"_test = [&]{
@@ -88,6 +88,8 @@ ut::suite logging = []{
         auto root = tasarch::log::get("");
         auto parent = tasarch::log::get("parent");
         auto child = tasarch::log::get("parent.child");
+
+        auto conf = tasarch::config::conf();
 
         auto test_logger = [ts, info_msg, trace_msg](std::shared_ptr<tasarch::log::logger> logger, spdlog::level::level_enum lvl, const std::string msg = "", const boost::ut::reflection::source_location& loc = boost::ut::reflection::source_location::current()) {
             ts->clear();
@@ -120,7 +122,7 @@ ut::suite logging = []{
          * @todo Actually use loading functions when they exist.
          */
         auto config_val = tasarch::config::parse_toml("logging.parent.level = 'trace'");
-        tasarch::config::conf.load_from(config_val);
+        conf->load_from(config_val);
 
         test_logger(root, level_enum::info);
         test_logger(parent, level_enum::trace);
@@ -128,7 +130,7 @@ ut::suite logging = []{
 
         // ensure default is set back!
         config_val = tasarch::config::parse_toml("");
-        tasarch::config::conf.load_from(config_val);
+        conf->load_from(config_val);
 
         test_logger(root, level_enum::info);
         test_logger(parent, level_enum::info);
@@ -138,7 +140,7 @@ ut::suite logging = []{
         config_val = tasarch::config::parse_toml(R"(logging.parent.level = 'trace'
 [logging.parent]
 child.level = "info")");
-        tasarch::config::conf.load_from(config_val);
+        conf->load_from(config_val);
 
         test_logger(root, level_enum::info, "root logger for child != parent");
         test_logger(parent, level_enum::trace);
@@ -147,7 +149,7 @@ child.level = "info")");
         // now child different from parent!
         config_val = tasarch::config::parse_toml(R"([logging.parent]
 child.level = "error")");
-        tasarch::config::conf.load_from(config_val);
+        conf->load_from(config_val);
 
         test_logger(root, level_enum::info);
         test_logger(parent, level_enum::info);

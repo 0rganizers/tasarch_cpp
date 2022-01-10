@@ -9,6 +9,8 @@
             co_await awaitable; \
         } catch (const TException&) { \
             did_throw = true; \
+        } catch (std::exception& e) { \
+            did_throw = true; expect(false) << "expected different exception " #TException " to be thrown, instead got: " << e.what();\
         } catch (...) { \
             did_throw = true; expect(false) << "expected different exception " #TException " to be thrown!"; \
         } \

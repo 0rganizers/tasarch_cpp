@@ -5,6 +5,7 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
+#include <iomanip>
 #if defined(__cpp_modules)
 export module boost.ut;
 export import std;
@@ -1205,7 +1206,7 @@ auto operator<<(ostream& os, char const* s) -> ostream& {
     auto str() const { return out_.str(); }
     const auto& colors() const { return colors_; }
 
-   private:
+   protected:
     ut::colors colors_{};
     std::stringstream out_{};
   };
@@ -1218,7 +1219,12 @@ auto operator<<(ostream& os, char const* s) -> ostream& {
     }
 
     auto on(events::test_begin test_begin) -> void {
-      printer_ << "Running \"" << test_begin.name << "\"...";
+      std::cout << std::endl;
+      std::cout << std::setw(80) << std::left << std::setfill('*') << "" << "\n";
+      std::cout << "*    " << "Running \"" << std::string(test_begin.name) + "\"..." << "\n";
+      std::cout << std::setw(80) << std::left << std::setfill('*') << "" << "\n";
+      std::cout << std::endl;
+      printer_ << "Running \"" << std::string(test_begin.name) + "\"...";
       fails_ = asserts_.fail;
     }
 
@@ -1268,8 +1274,8 @@ auto operator<<(ostream& os, char const* s) -> ostream& {
                    ? name.substr(name.rfind('/') + 1)
                    : name;
       };
-      printer_ << "\n  " << short_name(assertion.location.file_name()) << ':'
-               << assertion.location.line() << ':' << printer_.colors().fail
+      printer_ << "\n  " << assertion.location.file_name() << ':'
+               << assertion.location.line() << " -> " << printer_.colors().fail
                << "FAILED" << printer_.colors().none << " [" << std::boolalpha
                << assertion.expr << printer_.colors().none << ']';
       ++asserts_.fail;
@@ -1280,7 +1286,6 @@ auto operator<<(ostream& os, char const* s) -> ostream& {
     auto on(events::summary) -> void {
       if (static auto once = true; once) {
         once = false;
-        if (tests_.fail or asserts_.fail) {
           printer_
               << "\n========================================================"
                  "=======================\n"
@@ -1292,6 +1297,7 @@ auto operator<<(ostream& os, char const* s) -> ostream& {
               << " | " << printer_.colors().fail << asserts_.fail << " failed"
               << printer_.colors().none << '\n';
           std::cerr << printer_.str() << std::endl;
+        if (tests_.fail or asserts_.fail) {
         } else {
           std::cout << printer_.colors().pass << "All tests passed"
                     << printer_.colors().none << " (" << asserts_.pass

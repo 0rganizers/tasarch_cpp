@@ -25,7 +25,7 @@ auto main(int argc, char* argv[]) -> int
 {
     tasarch::log::setup_logging();
     auto root = tasarch::log::get("");
-    tasarch::config::conf.reload();
+    tasarch::config::conf()->reload();
 
     auto server = std::make_shared<tasarch::gdb::server>(nullptr);
     server->start();
