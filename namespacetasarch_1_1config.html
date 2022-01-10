@@ -62,8 +62,8 @@
               Reference
               <ul>
                 <li><a href="#nested-classes">Classes</a></li>
+                <li><a href="#typedef-members">Typedefs</a></li>
                 <li><a href="#func-members">Functions</a></li>
-                <li><a href="#var-members">Variables</a></li>
               </ul>
             </li>
           </ul>
@@ -85,6 +85,15 @@
             <dd>Holds all configuration regarding logging.</dd>
           </dl>
         </section>
+        <section id="typedef-members">
+          <h2><a href="#typedef-members">Typedefs</a></h2>
+          <dl class="m-doc">
+            <dt>
+              using <a href="#ab1a8cbf55810d6fdfd9429db57b821bd" class="m-doc">conf_ptr</a> = std::shared_ptr&lt;<a href="structtasarch_1_1config_1_1config.html" class="m-doc">config</a>&gt;
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
         <section id="func-members">
           <h2><a href="#func-members">Functions</a></h2>
           <dl class="m-doc">
@@ -93,20 +102,25 @@
             </dt>
             <dd>Parse toml from a string. Convenience method really.</dd>
             <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ac6be2f66096e5090e36bebd257614658" class="m-doc">conf</a>(</span><span class="m-doc-wrap">) -&gt; conf_ptr -&gt; auto</span>
+            </dt>
+            <dd>Shared config instance used throught the app.</dd>
+            <dt>
               <span class="m-doc-wrap-bumper">auto <a href="#a7f5ac372d710a400ed908124523d74b0" class="m-doc">merge_values</a>(</span><span class="m-doc-wrap">toml::value&amp; base,
               toml::value&amp; addition) -&gt; toml::value -&gt; auto</span>
             </dt>
             <dd>Merges config values found in addition &quot;onto&quot; base. This is used to achieve something similar to vscode, where you have a user config and a workspace config.</dd>
           </dl>
         </section>
-        <section id="var-members">
-          <h2><a href="#var-members">Variables</a></h2>
-          <dl class="m-doc">
-            <dt>
-              <a href="structtasarch_1_1config_1_1config.html" class="m-doc">config</a> <a href="#ad71713ff4c277e54015ecd772741f205" class="m-doc">conf</a>
-            </dt>
-            <dd>The globally shared root configuration object.</dd>
-          </dl>
+        <section>
+          <h2>Typedef documentation</h2>
+          <section class="m-doc-details" id="ab1a8cbf55810d6fdfd9429db57b821bd"><div>
+            <h3>
+              using tasarch::<wbr />config::<wbr /><a href="#ab1a8cbf55810d6fdfd9429db57b821bd" class="m-doc-self">conf_ptr</a> = std::shared_ptr&lt;<a href="structtasarch_1_1config_1_1config.html" class="m-doc">config</a>&gt;
+              <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="config_8h.html">&lt;src/config/config.h&gt;</a></div>
+            </h3>
+            <p><span></span></p>
+          </div></section>
         </section>
         <section>
           <h2>Function documentation</h2>
@@ -130,6 +144,21 @@
                 <tr>
                   <th>Returns</th>
                   <td>toml::value</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ac6be2f66096e5090e36bebd257614658"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">auto tasarch::<wbr />config::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ac6be2f66096e5090e36bebd257614658" class="m-doc-self">conf</a>(</span><span class="m-doc-wrap">) -&gt; conf_ptr</span></span>
+              <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="config_8h.html">&lt;src/config/config.h&gt;</a></div>
+            </h3>
+            <p>Shared config instance used throught the app.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>config&amp;</td>
                 </tr>
               </tfoot>
             </table>
@@ -180,18 +209,7 @@
 <span class="n">value</span><span class="p">.</span><span class="n">subvalue2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="w"></span>
 <span class="k">[table2]</span><span class="w"></span>
 <span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">]</span><span class="w"></span>
-<span class="n">newval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">13.3</span><span class="w"></span></pre><aside class="m-note m-dim"><h4><a href="todo.html#_todo000008" class="m-doc">Todo</a></h4><p>Figure out how we could make this work better. Is this really how we want the merging to be?</p></aside>
-          </div></section>
-        </section>
-        <section>
-          <h2>Variable documentation</h2>
-          <section class="m-doc-details" id="ad71713ff4c277e54015ecd772741f205"><div>
-            <h3>
-              <a href="structtasarch_1_1config_1_1config.html" class="m-doc">config</a> tasarch::<wbr />config::<wbr /><a href="#ad71713ff4c277e54015ecd772741f205" class="m-doc-self">conf</a>
-              <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="config_8h.html">&lt;src/config/config.h&gt;</a></div>
-            </h3>
-            <p>The globally shared root configuration object.</p>
-<aside class="m-note m-dim"><h4><a href="todo.html#_todo000005" class="m-doc">Todo</a></h4><p>Figure out a better way? especially with reloading? Can we just take references to individual fields?</p></aside>
+<span class="n">newval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">13.3</span><span class="w"></span></pre><aside class="m-note m-dim"><h4><a href="todo.html#_todo000007" class="m-doc">Todo</a></h4><p>Figure out how we could make this work better. Is this really how we want the merging to be?</p></aside>
           </div></section>
         </section>
       </div>

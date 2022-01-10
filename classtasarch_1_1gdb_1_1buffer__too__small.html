@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>src/gdb/packet_io.h file | tasarch</title>
+  <title>tasarch::gdb::buffer_too_small class | tasarch</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="stylesheet" href="fixes.css" />
@@ -52,42 +52,49 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a>/</span><span class="m-breadcrumb"><a href="dir_e139b308d2d163cddd05844f545b3a0d.html">gdb</a>/</span>packet_io.h <span class="m-thin">file</span>
+          <span class="m-breadcrumb"><a href="namespacetasarch.html">tasarch</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespacetasarch_1_1gdb.html">gdb</a>::<wbr/></span>buffer_too_small <span class="m-thin">class</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="packet__io_8h.html">&lt;src/gdb/packet_io.h&gt;</a></div>
         </h1>
-        <p><span></span></p>
+        <p>Exception thrown when a buffer was too small to fit all recvd data.</p>
         <nav class="m-block m-default">
           <h3>Contents</h3>
           <ul>
             <li>
               Reference
               <ul>
-                <li><a href="#namespaces">Namespaces</a></li>
-                <li><a href="#nested-classes">Classes</a></li>
+                <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
               </ul>
             </li>
           </ul>
         </nav>
-        <section id="namespaces">
-          <h2><a href="#namespaces">Namespaces</a></h2>
+        <section id="typeless-methods">
+          <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
-            <dt>namespace <a href="namespacetasarch.html" class="m-doc">tasarch</a></dt>
-            <dd><span></span></dd>
-            <dt>namespace <a href="namespacetasarch_1_1gdb.html" class="m-doc">tasarch::gdb</a></dt>
-            <dd><span></span></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper"><a href="#a00a31f3c7423cf349c980539d18fadd2" class="m-doc">buffer_too_small</a>(</span><span class="m-doc-wrap">size_t buf_size) <span class="m-label m-flat m-info">explicit</span> </span>
+            </dt>
+            <dd>Construct a new exception.</dd>
           </dl>
         </section>
-        <section id="nested-classes">
-          <h2><a href="#nested-classes">Classes</a></h2>
-          <dl class="m-doc">
-            <dt>
-              class <a href="classtasarch_1_1gdb_1_1buffer__too__small.html" class="m-doc">tasarch::gdb::buffer_too_small</a>
-            </dt>
-            <dd>Exception thrown when a buffer was too small to fit all recvd data.</dd>
-            <dt>
-              class <a href="classtasarch_1_1gdb_1_1packet__io.html" class="m-doc">tasarch::gdb::packet_io</a>
-            </dt>
-            <dd>Implements the low-level transport protocol as specified by GDB. For details see <a href="https://sourceware.org/gdb/onlinedocs/gdb/Overview.html#Overview">https:/<wbr />/<wbr />sourceware.org/<wbr />gdb/<wbr />onlinedocs/<wbr />gdb/<wbr />Overview.html#Overview</a>.</dd>
-          </dl>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="a00a31f3c7423cf349c980539d18fadd2"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"> tasarch::<wbr />gdb::<wbr />buffer_too_small::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a00a31f3c7423cf349c980539d18fadd2" class="m-doc-self">buffer_too_small</a>(</span><span class="m-doc-wrap">size_t buf_size) <span class="m-label m-info">explicit</span> </span></span>
+            </h3>
+            <p>Construct a new exception.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">buf_size</td>
+                  <td>The size of the buffer, which was too small.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
         </section>
       </div>
     </div>

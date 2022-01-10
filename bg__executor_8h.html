@@ -82,7 +82,7 @@
             <dt>
               class <a href="classtasarch_1_1gdb_1_1bg__executor.html" class="m-doc">tasarch::gdb::bg_executor</a>
             </dt>
-            <dd><span></span></dd>
+            <dd>Responsible for handling multiple threads, that will then run coroutines (mostly io, mostly for gdbstub). Normally using asio, you would just run the executor inside the main thread. However, here the main thread belongs to the GUI, so we create background thread(s) to run the executor.</dd>
           </dl>
         </section>
       </div>

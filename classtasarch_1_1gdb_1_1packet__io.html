@@ -55,7 +55,7 @@
           <span class="m-breadcrumb"><a href="namespacetasarch.html">tasarch</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespacetasarch_1_1gdb.html">gdb</a>::<wbr/></span>packet_io <span class="m-thin">class</span>
           <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="packet__io_8h.html">&lt;src/gdb/packet_io.h&gt;</a></div>
         </h1>
-        <p><span></span></p>
+        <p>Implements the low-level transport protocol as specified by GDB. For details see <a href="https://sourceware.org/gdb/onlinedocs/gdb/Overview.html#Overview">https:/<wbr />/<wbr />sourceware.org/<wbr />gdb/<wbr />onlinedocs/<wbr />gdb/<wbr />Overview.html#Overview</a>.</p>
         <nav class="m-block m-default">
           <h3>Contents</h3>
           <ul>
@@ -71,35 +71,36 @@
             </li>
           </ul>
         </nav>
+<p>Basically, you give it a socket and you can then send and receive packets, going through the encoding mentioned in the link above.</p><aside class="m-note m-info"><h4>Note</h4><p>Whenever we speak of request below, this means a communcation from gdb -&gt; gdbserver, a response goes from gdbserver -&gt; gdb (makes sense, right?).</p></aside><aside class="m-note m-dim"><h4><a href="todo.html#_todo000019" class="m-doc">Todo</a></h4><p>For extra swag, make it more generic, i.e. accept stuff like a serial port as well :)</p></aside>
         <section id="pub-types">
           <h2><a href="#pub-types">Public types</a></h2>
           <dl class="m-doc">
-            <dt id="a9518d85df1186ca8fab70265253d75a4">
-              <span class="m-doc-wrap-bumper">enum <a href="#a9518d85df1186ca8fab70265253d75a4" class="m-doc-self">control_char</a>: <a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> { </span><span class="m-doc-wrap"><a href="#a9518d85df1186ca8fab70265253d75a4a1a04fd7a5be51c0ed73e91daec0d7787" class="m-doc">packet_begin</a> = &#x27;$&#x27;,
+            <dt>
+              <span class="m-doc-wrap-bumper">enum <a href="#a9518d85df1186ca8fab70265253d75a4" class="m-doc">control_char</a>: <a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> { </span><span class="m-doc-wrap"><a href="#a9518d85df1186ca8fab70265253d75a4a1a04fd7a5be51c0ed73e91daec0d7787" class="m-doc">packet_begin</a> = &#x27;$&#x27;,
               <a href="#a9518d85df1186ca8fab70265253d75a4ab133ad51ff52dc53eaf8d820913793f6" class="m-doc">packet_end</a> = &#x27;#&#x27;,
               <a href="#a9518d85df1186ca8fab70265253d75a4a979633dcf1d50253a1de4a88f8b48a06" class="m-doc">ack</a> = &#x27;+&#x27;,
               <a href="#a9518d85df1186ca8fab70265253d75a4ab8aedb488602b5d683666488acd91e65" class="m-doc">ack_err</a> = &#x27;-&#x27;,
               <a href="#a9518d85df1186ca8fab70265253d75a4a3f0058b8002414090a3a857a5a676310" class="m-doc">escape</a> = &#x27;}&#x27;,
               <a href="#a9518d85df1186ca8fab70265253d75a4a2159628c728b11cd711614513a6bc1a9" class="m-doc">rle</a> = &#x27;*&#x27; }</span>
             </dt>
-            <dd><span></span></dd>
+            <dd>Various control characters relevant to the protocol.</dd>
           </dl>
         </section>
         <section id="pub-static-methods">
           <h2><a href="#pub-static-methods">Public static functions</a></h2>
           <dl class="m-doc">
-            <dt id="ad3e1bf51c0de8341a5de628ad8388a59">
-              <span class="m-doc-wrap-bumper">static auto <a href="#ad3e1bf51c0de8341a5de628ad8388a59" class="m-doc-self">must_escape_request</a>(</span><span class="m-doc-wrap"><a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> c) -&gt; bool -&gt; auto <span class="m-label m-flat m-primary">constexpr</span></span>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#ad3e1bf51c0de8341a5de628ad8388a59" class="m-doc">must_escape_request</a>(</span><span class="m-doc-wrap"><a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> c) -&gt; bool -&gt; auto <span class="m-label m-flat m-primary">constexpr</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a17bc4d78bedd7cd1d53d1cef58bd97c2">
-              <span class="m-doc-wrap-bumper">static auto <a href="#a17bc4d78bedd7cd1d53d1cef58bd97c2" class="m-doc-self">must_escape_response</a>(</span><span class="m-doc-wrap"><a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> c) -&gt; bool -&gt; auto <span class="m-label m-flat m-primary">constexpr</span></span>
+            <dd>Whether the given character must be escaped in a request (gdb -&gt; gdbserver)</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a17bc4d78bedd7cd1d53d1cef58bd97c2" class="m-doc">must_escape_response</a>(</span><span class="m-doc-wrap"><a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> c) -&gt; bool -&gt; auto <span class="m-label m-flat m-primary">constexpr</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="ab1d8a5e557c87336b3b44e9954797951">
-              <span class="m-doc-wrap-bumper">static auto <a href="#ab1d8a5e557c87336b3b44e9954797951" class="m-doc-self">code_escape_char</a>(</span><span class="m-doc-wrap"><a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> c) -&gt; u8 -&gt; auto <span class="m-label m-flat m-primary">constexpr</span></span>
+            <dd>Whether the given character must be escaped in a response (gdbserver -&gt; gdb)</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#ab1d8a5e557c87336b3b44e9954797951" class="m-doc">code_escape_char</a>(</span><span class="m-doc-wrap"><a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> c) -&gt; u8 -&gt; auto <span class="m-label m-flat m-primary">constexpr</span></span>
             </dt>
-            <dd><span></span></dd>
+            <dd>Escape / unescape the given character.</dd>
           </dl>
         </section>
         <section id="typeless-methods">
@@ -114,48 +115,244 @@
         <section id="pub-methods">
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
-            <dt id="a1c9821695b01061a16d60fc8df01bdc8">
-              <span class="m-doc-wrap-bumper">void <a href="#a1c9821695b01061a16d60fc8df01bdc8" class="m-doc-self">set_no_ack</a>(</span><span class="m-doc-wrap">)</span>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a1c9821695b01061a16d60fc8df01bdc8" class="m-doc">set_no_ack</a>(</span><span class="m-doc-wrap">)</span>
             </dt>
-            <dd><span></span></dd>
+            <dd>Disable sending of acks. Also disables checksum checking!</dd>
             <dt>
               <span class="m-doc-wrap-bumper">auto <a href="#a2419c361b983c7fe3c950fd684b7be1a" class="m-doc">receive_packet</a>(</span><span class="m-doc-wrap">asio::mutable_buffer&amp; recv_buf) -&gt; asio::awaitable&lt; bool &gt; -&gt; auto</span>
             </dt>
-            <dd><span></span></dd>
+            <dd>Receive the latest packet into <code>recv_buf</code> and check whether an interrupt was encountered (see <code>break_character</code>).</dd>
             <dt>
               <span class="m-doc-wrap-bumper">auto <a href="#a6f7070866f977e5c14771d235216051d" class="m-doc">send_packet</a>(</span><span class="m-doc-wrap">asio::mutable_buffer&amp; send_buf) -&gt; asio::awaitable&lt; bool &gt; -&gt; auto</span>
             </dt>
-            <dd><span></span></dd>
+            <dd>Send the given data and check whether an interrupt was encountered (see <code>break_character</code>).</dd>
           </dl>
         </section>
         <section id="pub-attribs">
           <h2><a href="#pub-attribs">Public variables</a></h2>
           <dl class="m-doc">
-            <dt id="a06613027a786187bcd371a311750f8fc">
-              asio::const_buffer <a href="#a06613027a786187bcd371a311750f8fc" class="m-doc-self">ack_buf</a>
+            <dt>
+              asio::const_buffer <a href="#a06613027a786187bcd371a311750f8fc" class="m-doc">ack_buf</a>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a9cf4db267425eb505c78ffa13765c0ce">
-              asio::const_buffer <a href="#a9cf4db267425eb505c78ffa13765c0ce" class="m-doc-self">ack_err_buf</a>
+            <dd>one byte buffer containing the <code>ack</code> character.</dd>
+            <dt>
+              asio::const_buffer <a href="#a9cf4db267425eb505c78ffa13765c0ce" class="m-doc">ack_err_buf</a>
             </dt>
-            <dd><span></span></dd>
+            <dd>one byte buffer containing the <code>nack</code> character.</dd>
+            <dt id="aa78d1c30ee44f4a565d961b23fb0e613">
+              std::chrono::milliseconds <a href="#aa78d1c30ee44f4a565d961b23fb0e613" class="m-doc-self">timeout</a>
+            </dt>
+            <dd>The timeout after which <code><a href="classtasarch_1_1gdb_1_1packet__io.html#a2419c361b983c7fe3c950fd684b7be1a" class="m-doc">receive_<wbr />packet()</a></code> or <code><a href="classtasarch_1_1gdb_1_1packet__io.html#a6f7070866f977e5c14771d235216051d" class="m-doc">send_<wbr />packet()</a></code> should throw a <code><a href="classtasarch_1_1gdb_1_1timed__out.html" class="m-doc">timed_<wbr />out</a></code> exception. While no implementation (I know of) actually does this, it makes here imo. If one end dies, we dont want to hang forever. Furthermore, this should always be local communication anyways, so 5 seconds is plenty of time.</dd>
           </dl>
         </section>
         <section>
+          <h2>Enum documentation</h2>
+          <section class="m-doc-details" id="a9518d85df1186ca8fab70265253d75a4"><div>
+            <h3>
+              enum tasarch::<wbr />gdb::<wbr />packet_io::<wbr /><a href="#a9518d85df1186ca8fab70265253d75a4" class="m-doc-self">control_char</a>: <a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a>
+            </h3>
+            <p>Various control characters relevant to the protocol.</p>
+            <table class="m-table m-fullwidth m-flat m-doc">
+              <thead><tr><th style="width: 1%">Enumerators</th><th></th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><a href="#a9518d85df1186ca8fab70265253d75a4a1a04fd7a5be51c0ed73e91daec0d7787" class="m-doc-self" id="a9518d85df1186ca8fab70265253d75a4a1a04fd7a5be51c0ed73e91daec0d7787">packet_begin</a></td>
+                  <td>
+                  <p>Marks the beginning of a packet.</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td><a href="#a9518d85df1186ca8fab70265253d75a4ab133ad51ff52dc53eaf8d820913793f6" class="m-doc-self" id="a9518d85df1186ca8fab70265253d75a4ab133ad51ff52dc53eaf8d820913793f6">packet_end</a></td>
+                  <td>
+                  <p>Marks the end of packet data and beginning of checksum.</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td><a href="#a9518d85df1186ca8fab70265253d75a4a979633dcf1d50253a1de4a88f8b48a06" class="m-doc-self" id="a9518d85df1186ca8fab70265253d75a4a979633dcf1d50253a1de4a88f8b48a06">ack</a></td>
+                  <td>
+                  <p>Ack last packet as good.</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td><a href="#a9518d85df1186ca8fab70265253d75a4ab8aedb488602b5d683666488acd91e65" class="m-doc-self" id="a9518d85df1186ca8fab70265253d75a4ab8aedb488602b5d683666488acd91e65">ack_err</a></td>
+                  <td>
+                  <p>Demand resend of last packet (should mostly be due to checksum mismatch)</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td><a href="#a9518d85df1186ca8fab70265253d75a4a3f0058b8002414090a3a857a5a676310" class="m-doc-self" id="a9518d85df1186ca8fab70265253d75a4a3f0058b8002414090a3a857a5a676310">escape</a></td>
+                  <td>
+                  <p>Used to escape other control characters.</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td><a href="#a9518d85df1186ca8fab70265253d75a4a2159628c728b11cd711614513a6bc1a9" class="m-doc-self" id="a9518d85df1186ca8fab70265253d75a4a2159628c728b11cd711614513a6bc1a9">rle</a></td>
+                  <td>
+                  <p>Marks RLE bytes.</p>
+<aside class="m-note m-dim"><h4><a href="todo.html#_todo000021" class="m-doc">Todo</a></h4><p>Do we want to implement RLE for sending stuff?</p></aside>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+        </section>
+        <section>
           <h2>Function documentation</h2>
+          <section class="m-doc-details" id="ad3e1bf51c0de8341a5de628ad8388a59"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">static auto tasarch::<wbr />gdb::<wbr />packet_io::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ad3e1bf51c0de8341a5de628ad8388a59" class="m-doc-self">must_escape_request</a>(</span><span class="m-doc-wrap"><a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> c) -&gt; bool <span class="m-label m-primary">constexpr</span></span></span>
+            </h3>
+            <p>Whether the given character must be escaped in a request (gdb -&gt; gdbserver)</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">c</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>true</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a17bc4d78bedd7cd1d53d1cef58bd97c2"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">static auto tasarch::<wbr />gdb::<wbr />packet_io::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a17bc4d78bedd7cd1d53d1cef58bd97c2" class="m-doc-self">must_escape_response</a>(</span><span class="m-doc-wrap"><a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> c) -&gt; bool <span class="m-label m-primary">constexpr</span></span></span>
+            </h3>
+            <p>Whether the given character must be escaped in a response (gdbserver -&gt; gdb)</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">c</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>true</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ab1d8a5e557c87336b3b44e9954797951"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">static auto tasarch::<wbr />gdb::<wbr />packet_io::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ab1d8a5e557c87336b3b44e9954797951" class="m-doc-self">code_escape_char</a>(</span><span class="m-doc-wrap"><a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> c) -&gt; u8 <span class="m-label m-primary">constexpr</span></span></span>
+            </h3>
+            <p>Escape / unescape the given character.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">c</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>u8</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>We can use the same function for both, since its just a xor :)</p>
+          </div></section>
+          <section class="m-doc-details" id="a1c9821695b01061a16d60fc8df01bdc8"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void tasarch::<wbr />gdb::<wbr />packet_io::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a1c9821695b01061a16d60fc8df01bdc8" class="m-doc-self">set_no_ack</a>(</span><span class="m-doc-wrap">)</span></span>
+            </h3>
+            <p>Disable sending of acks. Also disables checksum checking!</p>
+<p>See <a href="https://sourceware.org/gdb/onlinedocs/gdb/Packet-Acknowledgment.html#Packet-Acknowledgment">https:/<wbr />/<wbr />sourceware.org/<wbr />gdb/<wbr />onlinedocs/<wbr />gdb/<wbr />Packet-Acknowledgment.html#Packet-Acknowledgment</a> for more.</p>
+          </div></section>
           <section class="m-doc-details" id="a2419c361b983c7fe3c950fd684b7be1a"><div>
             <h3>
               <span class="m-doc-wrap-bumper">auto tasarch::<wbr />gdb::<wbr />packet_io::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a2419c361b983c7fe3c950fd684b7be1a" class="m-doc-self">receive_packet</a>(</span><span class="m-doc-wrap">asio::mutable_buffer&amp; recv_buf) -&gt; asio::awaitable&lt; bool &gt;</span></span>
             </h3>
-            <p><span></span></p>
-<aside class="m-note m-dim"><h4><a href="todo.html#_todo000014" class="m-doc">Todo</a></h4><p>Is there nothing better than this?</p></aside><aside class="m-note m-dim"><h4><a href="todo.html#_todo000015" class="m-doc">Todo</a></h4><p>Looking at gdbserver source, we should check for potential interrupt after current pkt buffer. Sometimes, interrupt is apparently sent / available with a previous packet. We dont need to do this, since our gdbstub runs on a separate thread and should be looking at the new command immediately!</p></aside>
+            <p>Receive the latest packet into <code>recv_buf</code> and check whether an interrupt was encountered (see <code>break_character</code>).</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">recv_buf</td>
+                  <td>Buffer that will be holding the received packet data. Make it at least <code>gdb_packet_buffer_size</code> big.</td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr>
+                  <th>Returns</th>
+                  <td>asio::awaitable&lt;bool&gt; Whether a <code>break_character</code> was encountered or not.</td>
+                </tr>
+              </thead>
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><a href="classtasarch_1_1gdb_1_1timed__out.html" class="m-doc">timed_<wbr />out</a></td>
+                  <td>When the timeout given by <code>timeout</code> is reached.</td>
+                </tr>
+                <tr>
+                  <td><a href="classtasarch_1_1gdb_1_1buffer__too__small.html" class="m-doc">buffer_<wbr />too_<wbr />small</a></td>
+                  <td>When the given input buffer is not large enough for the full packet.</td>
+                </tr>
+              </tbody>
+            </table>
+<aside class="m-note m-danger"><h4>Warning</h4><p>The buffer needs to have preallocated storage, that also needs to be large enough! Furthermore, be sure to keep a backup, since the <code>size()</code> of the buffer will be changed to the packet size!</p></aside><aside class="m-note m-dim"><h4><a href="todo.html#_todo000014" class="m-doc">Todo</a></h4><p>Is there nothing better than this?</p></aside><aside class="m-note m-dim"><h4><a href="todo.html#_todo000015" class="m-doc">Todo</a></h4><p>Looking at gdbserver source, we should check for potential interrupt after current pkt buffer. Sometimes, interrupt is apparently sent / available with a previous packet. We dont need to do this, since our gdbstub runs on a separate thread and should be looking at the new command immediately!</p></aside>
           </div></section>
           <section class="m-doc-details" id="a6f7070866f977e5c14771d235216051d"><div>
             <h3>
               <span class="m-doc-wrap-bumper">auto tasarch::<wbr />gdb::<wbr />packet_io::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a6f7070866f977e5c14771d235216051d" class="m-doc-self">send_packet</a>(</span><span class="m-doc-wrap">asio::mutable_buffer&amp; send_buf) -&gt; asio::awaitable&lt; bool &gt;</span></span>
             </h3>
-            <p><span></span></p>
+            <p>Send the given data and check whether an interrupt was encountered (see <code>break_character</code>).</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>asio::awaitable&lt;bool&gt; Whether a <code>break_character</code> was encountered or not.</td>
+                </tr>
+              </thead>
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><a href="classtasarch_1_1gdb_1_1timed__out.html" class="m-doc">timed_<wbr />out</a></td>
+                  <td>When the timeout given by <code>timeout</code> is reached.</td>
+                </tr>
+              </tbody>
+            </table>
 <aside class="m-note m-dim"><h4><a href="todo.html#_todo000013" class="m-doc">Todo</a></h4><p>make this work better. Not sure whether this is fully to spec! (the interrupt detection part)</p></aside>
+          </div></section>
+        </section>
+        <section>
+          <h2>Variable documentation</h2>
+          <section class="m-doc-details" id="a06613027a786187bcd371a311750f8fc"><div>
+            <h3>
+              asio::const_buffer tasarch::<wbr />gdb::<wbr />packet_io::<wbr /><a href="#a06613027a786187bcd371a311750f8fc" class="m-doc-self">ack_buf</a>
+            </h3>
+            <p>one byte buffer containing the <code>ack</code> character.</p>
+<p>Used for easy sending of acks.</p>
+          </div></section>
+          <section class="m-doc-details" id="a9cf4db267425eb505c78ffa13765c0ce"><div>
+            <h3>
+              asio::const_buffer tasarch::<wbr />gdb::<wbr />packet_io::<wbr /><a href="#a9cf4db267425eb505c78ffa13765c0ce" class="m-doc-self">ack_err_buf</a>
+            </h3>
+            <p>one byte buffer containing the <code>nack</code> character.</p>
+<p>Used for easy sending of nacks.</p>
           </div></section>
         </section>
       </div>

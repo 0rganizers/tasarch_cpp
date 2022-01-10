@@ -74,7 +74,11 @@
             <dt>
               class <a href="classtasarch_1_1gdb_1_1bg__executor.html" class="m-doc">bg_executor</a>
             </dt>
-            <dd><span></span></dd>
+            <dd>Responsible for handling multiple threads, that will then run coroutines (mostly io, mostly for gdbstub). Normally using asio, you would just run the executor inside the main thread. However, here the main thread belongs to the GUI, so we create background thread(s) to run the executor.</dd>
+            <dt>
+              class <a href="classtasarch_1_1gdb_1_1buffer__too__small.html" class="m-doc">buffer_too_small</a>
+            </dt>
+            <dd>Exception thrown when a buffer was too small to fit all recvd data.</dd>
             <dt>
               class <a href="classtasarch_1_1gdb_1_1connection.html" class="m-doc">connection</a>
             </dt>
@@ -86,7 +90,7 @@
             <dt>
               class <a href="classtasarch_1_1gdb_1_1packet__io.html" class="m-doc">packet_io</a>
             </dt>
-            <dd><span></span></dd>
+            <dd>Implements the low-level transport protocol as specified by GDB. For details see <a href="https://sourceware.org/gdb/onlinedocs/gdb/Overview.html#Overview">https:/<wbr />/<wbr />sourceware.org/<wbr />gdb/<wbr />onlinedocs/<wbr />gdb/<wbr />Overview.html#Overview</a>.</dd>
             <dt>
               class <a href="classtasarch_1_1gdb_1_1server.html" class="m-doc">server</a>
             </dt>
@@ -94,7 +98,7 @@
             <dt>
               class <a href="classtasarch_1_1gdb_1_1timed__out.html" class="m-doc">timed_out</a>
             </dt>
-            <dd><span></span></dd>
+            <dd>Exception thrown when a timeout was reached.</dd>
           </dl>
         </section>
         <section id="func-members">
@@ -110,15 +114,15 @@
               <span class="m-doc-wrap-bumper">auto <a href="#a229f84ffe1e4529777b3d93456409a67" class="m-doc">awaitable_with_timeout</a>(</span><span class="m-doc-wrap">asio::awaitable&lt;void&gt; awaitable,
               const std::chrono::system_clock::duration&amp; timeout) -&gt; asio::awaitable&lt; void &gt; -&gt; auto</span>
             </dt>
-            <dd>Special casing needed for void coroutines, as they dont return a value, so the variant is not working!</dd>
+            <dd>Special casing needed for void coroutines, as they dont return a value, so the variant is not working! See <code><a href="namespacetasarch_1_1gdb.html#a7f54693e9f9e9b7982c3d680d1c48ca5" class="m-doc">awaitable_<wbr />with_<wbr />timeout()</a></code> for details.</dd>
             <dt>
               <span class="m-doc-wrap-bumper">auto <a href="#a6cf1da2d3b665ddf1904044e4e2a4a6b" class="m-doc">decode_hex</a>(</span><span class="m-doc-wrap"><a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> c) -&gt; int -&gt; auto <span class="m-label m-flat m-primary">constexpr</span></span>
             </dt>
-            <dd><span></span></dd>
+            <dd>Simple hex decoding of a nibble.</dd>
             <dt>
               <span class="m-doc-wrap-bumper">auto <a href="#a519433c8f66a7c9313caa07fdeb7c218" class="m-doc">encode_hex</a>(</span><span class="m-doc-wrap"><a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> v) -&gt; char -&gt; auto <span class="m-label m-flat m-primary">constexpr</span></span>
             </dt>
-            <dd><span></span></dd>
+            <dd>Simple hex encoding of a nibble.</dd>
           </dl>
         </section>
         <section id="var-members">
@@ -127,15 +131,15 @@
             <dt>
               static size_t <a href="#adec777c0dc396ec1010f3426f1dc1b9f" class="m-doc">gdb_packet_buffer_size</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
-            <dd><span></span></dd>
+            <dd>Size of the buffer for actual command packets.</dd>
             <dt>
               static size_t <a href="#a7b92dc12499aeeb2532e12669c5c22d5" class="m-doc">gdb_transport_buffer_size</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
-            <dd><span></span></dd>
+            <dd>Size of the buffer for receiving on the socket (so raw data).</dd>
             <dt>
               <a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> <a href="#a85f61c96ee2c2f036e5bb93cc5d73855" class="m-doc">break_character</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
-            <dd><span></span></dd>
+            <dd>Byte received when gdb client requests an interrupt.</dd>
           </dl>
         </section>
         <section>
@@ -173,14 +177,24 @@
                   <td></td>
                 </tr>
               </tbody>
-              <tfoot>
+              <thead>
                 <tr>
                   <th>Returns</th>
                   <td>asio::awaitable&lt;TResult&gt;</td>
                 </tr>
-              </tfoot>
+              </thead>
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><a href="classtasarch_1_1gdb_1_1timed__out.html" class="m-doc">timed_<wbr />out</a></td>
+                  <td>Timed out exception, signifying that the timeout has been reached.</td>
+                </tr>
+              </tbody>
             </table>
-<aside class="m-note m-dim"><h4><a href="todo.html#_todo000011" class="m-doc">Todo</a></h4><p>example</p></aside>
+<pre class="m-code"><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="o">::</span><span class="nn">chrono_literals</span><span class="p">;</span><span class="w"> </span><span class="c1">// for nice duration literals.</span>
+<span class="kt">size_t</span><span class="w"> </span><span class="n">num</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">co_await</span><span class="w"> </span><span class="n">awaitable_with_timeout</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">socket</span><span class="p">.</span><span class="n">async_receive</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">read_buf</span><span class="p">,</span><span class="w"> </span><span class="n">asio</span><span class="o">::</span><span class="n">use_awaitable</span><span class="p">),</span><span class="w"> </span><span class="mi">1000</span><span class="n">ms</span><span class="p">);</span><span class="w"></span></pre>
           </div></section>
           <section class="m-doc-details" id="a229f84ffe1e4529777b3d93456409a67"><div>
             <h3>
@@ -188,7 +202,7 @@
               const std::chrono::system_clock::duration&amp; timeout) -&gt; asio::awaitable&lt; void &gt;</span></span>
               <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="gdb_2common_8h.html">&lt;src/gdb/common.h&gt;</a></div>
             </h3>
-            <p>Special casing needed for void coroutines, as they dont return a value, so the variant is not working!</p>
+            <p>Special casing needed for void coroutines, as they dont return a value, so the variant is not working! See <code><a href="namespacetasarch_1_1gdb.html#a7f54693e9f9e9b7982c3d680d1c48ca5" class="m-doc">awaitable_<wbr />with_<wbr />timeout()</a></code> for details.</p>
             <table class="m-table m-fullwidth m-flat">
               <thead>
                 <tr><th colspan="2">Parameters</th></tr>
@@ -216,14 +230,50 @@
               <span class="m-doc-wrap-bumper">auto tasarch::<wbr />gdb::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a6cf1da2d3b665ddf1904044e4e2a4a6b" class="m-doc-self">decode_hex</a>(</span><span class="m-doc-wrap"><a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> c) -&gt; int <span class="m-label m-primary">constexpr</span></span></span>
               <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="packet__io_8h.html">&lt;src/gdb/packet_io.h&gt;</a></div>
             </h3>
-            <p><span></span></p>
+            <p>Simple hex decoding of a nibble.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">c</td>
+                  <td>The character.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>int Either the decoded nibble (<code>[0, 15]</code>) or <code>-1</code> on failure.</td>
+                </tr>
+              </tfoot>
+            </table>
+<aside class="m-note m-dim"><h4><a href="todo.html#_todo000017" class="m-doc">Todo</a></h4><p>Borrowed from atmosphere.</p></aside>
           </div></section>
           <section class="m-doc-details" id="a519433c8f66a7c9313caa07fdeb7c218"><div>
             <h3>
               <span class="m-doc-wrap-bumper">auto tasarch::<wbr />gdb::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a519433c8f66a7c9313caa07fdeb7c218" class="m-doc-self">encode_hex</a>(</span><span class="m-doc-wrap"><a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> v) -&gt; char <span class="m-label m-primary">constexpr</span></span></span>
               <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="packet__io_8h.html">&lt;src/gdb/packet_io.h&gt;</a></div>
             </h3>
-            <p><span></span></p>
+            <p>Simple hex encoding of a nibble.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td>The value.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>char</td>
+                </tr>
+              </tfoot>
+            </table>
+<aside class="m-note m-dim"><h4><a href="todo.html#_todo000018" class="m-doc">Todo</a></h4><p>Borrowed from atmosphere.</p></aside><aside class="m-note m-info"><h4>Note</h4><p>Even values beyond <code>[0, 15]</code> will be encoded, <code>v</code> is just <code>&amp; 0xf</code>&#x27;d.</p></aside>
           </div></section>
         </section>
         <section>
@@ -233,21 +283,24 @@
               static size_t tasarch::<wbr />gdb::<wbr /><a href="#adec777c0dc396ec1010f3426f1dc1b9f" class="m-doc-self">gdb_packet_buffer_size</a> <span class="m-label m-primary">constexpr</span>
               <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="packet__io_8h.html">&lt;src/gdb/packet_io.h&gt;</a></div>
             </h3>
-            <p><span></span></p>
+            <p>Size of the buffer for actual command packets.</p>
+<p>Size copied from atmosphere code, maybe we should look into what is best for our purposes?</p>
           </div></section>
           <section class="m-doc-details" id="a7b92dc12499aeeb2532e12669c5c22d5"><div>
             <h3>
               static size_t tasarch::<wbr />gdb::<wbr /><a href="#a7b92dc12499aeeb2532e12669c5c22d5" class="m-doc-self">gdb_transport_buffer_size</a> <span class="m-label m-primary">constexpr</span>
               <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="packet__io_8h.html">&lt;src/gdb/packet_io.h&gt;</a></div>
             </h3>
-            <p><span></span></p>
+            <p>Size of the buffer for receiving on the socket (so raw data).</p>
+<p>Also copied from atmosphere code.</p>
           </div></section>
           <section class="m-doc-details" id="a85f61c96ee2c2f036e5bb93cc5d73855"><div>
             <h3>
               <a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> tasarch::<wbr />gdb::<wbr /><a href="#a85f61c96ee2c2f036e5bb93cc5d73855" class="m-doc-self">break_character</a> <span class="m-label m-primary">constexpr</span>
               <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="packet__io_8h.html">&lt;src/gdb/packet_io.h&gt;</a></div>
             </h3>
-            <p><span></span></p>
+            <p>Byte received when gdb client requests an interrupt.</p>
+<p>The gdb client sends this on a ctrl-c on its end. Through this, it can tell the server to halt execution of its target, allowing things like adding breakpoints again (e.g. you messed up when adding them or dont trust gdb that they werent hit ;)).</p>
           </div></section>
         </section>
       </div>

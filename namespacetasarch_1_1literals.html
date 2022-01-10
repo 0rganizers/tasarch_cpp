@@ -55,7 +55,7 @@
           <span class="m-breadcrumb"><a href="namespacetasarch.html">tasarch</a>::<wbr/></span>literals <span class="m-thin">namespace</span>
           <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="literals_8h.html">&lt;src/util/literals.h&gt;</a></div>
         </h1>
-        <p><span></span></p>
+        <p>Handy collections of literals that can be useful throught the codebase :)</p>
         <nav class="m-block m-default">
           <h3>Contents</h3>
           <ul>
@@ -70,19 +70,43 @@
         <section id="func-members">
           <h2><a href="#func-members">Functions</a></h2>
           <dl class="m-doc">
-            <dt id="ae21bfdca56558397276105231324f439">
-              <span class="m-doc-wrap-bumper">auto <a href="#ae21bfdca56558397276105231324f439" class="m-doc-self">operator&quot;&quot;_KB</a>(</span><span class="m-doc-wrap">unsigned long long n) -&gt; <a href="defines_8h.html#aa1dec568e79152c892dcf63f445cbd7a" class="m-doc">ALWAYS_<wbr />INLINE</a> <a href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574" class="m-doc">u64</a> <span class="m-label m-flat m-primary">constexpr</span></span>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ae21bfdca56558397276105231324f439" class="m-doc">operator&quot;&quot;_KB</a>(</span><span class="m-doc-wrap">unsigned long long n) -&gt; <a href="defines_8h.html#aa1dec568e79152c892dcf63f445cbd7a" class="m-doc">ALWAYS_<wbr />INLINE</a> <a href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574" class="m-doc">u64</a> <span class="m-label m-flat m-primary">constexpr</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="ab521c29016abd85c45c646c1d7331417">
-              <span class="m-doc-wrap-bumper">auto <a href="#ab521c29016abd85c45c646c1d7331417" class="m-doc-self">operator&quot;&quot;_MB</a>(</span><span class="m-doc-wrap">unsigned long long n) -&gt; <a href="defines_8h.html#aa1dec568e79152c892dcf63f445cbd7a" class="m-doc">ALWAYS_<wbr />INLINE</a> <a href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574" class="m-doc">u64</a> <span class="m-label m-flat m-primary">constexpr</span></span>
+            <dd>(IEC) KiB, so <code>1024</code> bytes. Example:</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ab521c29016abd85c45c646c1d7331417" class="m-doc">operator&quot;&quot;_MB</a>(</span><span class="m-doc-wrap">unsigned long long n) -&gt; <a href="defines_8h.html#aa1dec568e79152c892dcf63f445cbd7a" class="m-doc">ALWAYS_<wbr />INLINE</a> <a href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574" class="m-doc">u64</a> <span class="m-label m-flat m-primary">constexpr</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a72f4a5e8499640ecff8f3c6c99981ee2">
-              <span class="m-doc-wrap-bumper">auto <a href="#a72f4a5e8499640ecff8f3c6c99981ee2" class="m-doc-self">operator&quot;&quot;_GB</a>(</span><span class="m-doc-wrap">unsigned long long n) -&gt; <a href="defines_8h.html#aa1dec568e79152c892dcf63f445cbd7a" class="m-doc">ALWAYS_<wbr />INLINE</a> <a href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574" class="m-doc">u64</a> <span class="m-label m-flat m-primary">constexpr</span></span>
+            <dd>(IEC) MiB, so <code>1024*1024</code> bytes. Example:</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a72f4a5e8499640ecff8f3c6c99981ee2" class="m-doc">operator&quot;&quot;_GB</a>(</span><span class="m-doc-wrap">unsigned long long n) -&gt; <a href="defines_8h.html#aa1dec568e79152c892dcf63f445cbd7a" class="m-doc">ALWAYS_<wbr />INLINE</a> <a href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574" class="m-doc">u64</a> <span class="m-label m-flat m-primary">constexpr</span></span>
             </dt>
-            <dd><span></span></dd>
+            <dd>(IEC) GiB, so <code>1024</code> bytes. Example:</dd>
           </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="ae21bfdca56558397276105231324f439"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a href="defines_8h.html#aa1dec568e79152c892dcf63f445cbd7a" class="m-doc">ALWAYS_<wbr />INLINE</a> <a href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574" class="m-doc">u64</a> tasarch::<wbr />literals::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ae21bfdca56558397276105231324f439" class="m-doc-self">operator&quot;&quot;_KB</a>(</span><span class="m-doc-wrap">unsigned long long n) <span class="m-label m-primary">constexpr</span></span></span>
+            </h3>
+            <p>(IEC) KiB, so <code>1024</code> bytes. Example:</p>
+<pre class="m-code"><span class="n">u64</span><span class="w"> </span><span class="n">packet_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="n">_KB</span><span class="p">;</span><span class="w"></span></pre>
+          </div></section>
+          <section class="m-doc-details" id="ab521c29016abd85c45c646c1d7331417"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a href="defines_8h.html#aa1dec568e79152c892dcf63f445cbd7a" class="m-doc">ALWAYS_<wbr />INLINE</a> <a href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574" class="m-doc">u64</a> tasarch::<wbr />literals::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ab521c29016abd85c45c646c1d7331417" class="m-doc-self">operator&quot;&quot;_MB</a>(</span><span class="m-doc-wrap">unsigned long long n) <span class="m-label m-primary">constexpr</span></span></span>
+            </h3>
+            <p>(IEC) MiB, so <code>1024*1024</code> bytes. Example:</p>
+<pre class="m-code"><span class="n">u64</span><span class="w"> </span><span class="n">file_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="n">_MB</span><span class="p">;</span><span class="w"></span></pre>
+          </div></section>
+          <section class="m-doc-details" id="a72f4a5e8499640ecff8f3c6c99981ee2"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a href="defines_8h.html#aa1dec568e79152c892dcf63f445cbd7a" class="m-doc">ALWAYS_<wbr />INLINE</a> <a href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574" class="m-doc">u64</a> tasarch::<wbr />literals::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a72f4a5e8499640ecff8f3c6c99981ee2" class="m-doc-self">operator&quot;&quot;_GB</a>(</span><span class="m-doc-wrap">unsigned long long n) <span class="m-label m-primary">constexpr</span></span></span>
+            </h3>
+            <p>(IEC) GiB, so <code>1024</code> bytes. Example:</p>
+<pre class="m-code"><span class="n">u64</span><span class="w"> </span><span class="n">game_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="n">_GB</span><span class="p">;</span><span class="w"></span></pre>
+          </div></section>
         </section>
       </div>
     </div>
