@@ -21,7 +21,7 @@ namespace tasarch::log {
     // TODO: Do we really still need this?
     static std::vector<spdlog::sink_ptr> sink_list;
     static std::shared_ptr<spdlog::sinks::dist_sink_mt> dist_sink = nullptr;
-    static std::unordered_map<std::string, std::shared_ptr<logger>> registry;
+    static std::unordered_map<std::string, std::shared_ptr<Logger>> registry;
     std::mutex registry_mutex;
 
     auto setup_logging() -> void
@@ -52,14 +52,14 @@ namespace tasarch::log {
         add_sink(syslog_sink);
     }
 
-    auto get(std::string name) -> std::shared_ptr<logger>
+    auto get(std::string name) -> std::shared_ptr<Logger>
     {
         std::lock_guard lock(registry_mutex);
         auto found = registry.find(name);
-        std::shared_ptr<logger> log = nullptr;
+        std::shared_ptr<Logger> log = nullptr;
         if (found == registry.end())
         {
-            log = std::make_shared<logger>(name, dist_sink);
+            log = std::make_shared<Logger>(name, dist_sink);
             log->set_level(config::conf()->logging.levels.get_level(name));
             registry[name] = log;
         } else {
@@ -74,7 +74,7 @@ namespace tasarch::log {
         dist_sink->add_sink(sink);
     }
 
-    void apply_all(const std::function<void (const std::shared_ptr<logger>)> &fun)
+    void apply_all(const std::function<void (const std::shared_ptr<Logger>)> &fun)
     {
         std::lock_guard<std::mutex> lock(registry_mutex);
         for (auto &l : registry)

@@ -91,7 +91,7 @@ ut::suite logging = []{
 
         auto conf = tasarch::config::conf();
 
-        auto test_logger = [ts, info_msg, trace_msg](std::shared_ptr<tasarch::log::logger> logger, spdlog::level::level_enum lvl, const std::string msg = "", const boost::ut::reflection::source_location& loc = boost::ut::reflection::source_location::current()) {
+        auto test_logger = [ts, info_msg, trace_msg](std::shared_ptr<tasarch::log::Logger> logger, spdlog::level::level_enum lvl, const std::string msg = "", const boost::ut::reflection::source_location& loc = boost::ut::reflection::source_location::current()) {
             ts->clear();
             ts->assert_no_message(info_msg, loc) << "even though we just cleared, in case" << msg;
 

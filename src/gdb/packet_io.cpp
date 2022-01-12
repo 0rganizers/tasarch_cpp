@@ -9,22 +9,22 @@
 #include "buffer.h"
 
 namespace tasarch::gdb {
-    auto packet_io::has_buffered_data() -> bool
+    auto PacketIO::has_buffered_data() -> bool
     {
         return this->read_buf.read_size() > 0;
     }
 
-    auto packet_io::has_remote_data() -> bool
+    auto PacketIO::has_remote_data() -> bool
     {
         return this->socket.available() > 0;
     }
 
-    auto packet_io::has_data() -> bool
+    auto PacketIO::has_data() -> bool
     {
         return this->has_buffered_data() || this->has_remote_data();
     }
 
-    auto packet_io::recv_data() -> asio::awaitable<void>
+    auto PacketIO::recv_data() -> asio::awaitable<void>
     {
         if (this->has_buffered_data()) {
             this->logger->warn("receiving new data, even though we still have {} buffered data available! This is likely a bug!", this->read_buf.read_size());
@@ -43,7 +43,7 @@ namespace tasarch::gdb {
         }
     }
 
-    auto packet_io::get_byte() -> asio::awaitable<u8>
+    auto PacketIO::get_byte() -> asio::awaitable<u8>
     {
         if (!this->has_buffered_data()) {
             /**

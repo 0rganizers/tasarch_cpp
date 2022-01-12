@@ -65,7 +65,7 @@ abcdefghijklmnopqrstuvwxyz{|}~
     };
 
     "simple packets test"_test = gdb::create_socket_test([&](tcp::socket remote, tcp::socket local) -> asio::awaitable<void>{
-        tasarch::gdb::packet_io io(remote);
+        tasarch::gdb::PacketIO io(remote);
         // for simple tests, no ack for now
         io.set_no_ack();
         rst_buf();
@@ -90,7 +90,7 @@ abcdefghijklmnopqrstuvwxyz{|}~
     });
 
     "simple send with ack test"_test = gdb::create_dual_socket_test([&](tcp::socket remote) -> asio::awaitable<void>{
-        tasarch::gdb::packet_io io(remote);
+        tasarch::gdb::PacketIO io(remote);
         rst_buf();
         bool did_break = co_await io.send_packet(mean_buffer);
         expect(!did_break) << "did not expect a break!";
@@ -103,7 +103,7 @@ abcdefghijklmnopqrstuvwxyz{|}~
     });
 
     "simple recv with ack test"_test = gdb::create_dual_socket_test([&](tcp::socket remote) -> asio::awaitable<void>{
-        tasarch::gdb::packet_io io(remote);
+        tasarch::gdb::PacketIO io(remote);
 
         buffer<gdb_packet_buffer_size> recv_buf;
         bool did_break = co_await io.receive_packet(recv_buf);
@@ -119,7 +119,7 @@ abcdefghijklmnopqrstuvwxyz{|}~
     });
 
     "simple send with no ack test"_test = gdb::create_dual_socket_test([&](tcp::socket remote) -> asio::awaitable<void>{
-        tasarch::gdb::packet_io io(remote);
+        tasarch::gdb::PacketIO io(remote);
         rst_buf();
         co_await io.send_packet(mean_buffer);
     }, [&](tcp::socket local) -> asio::awaitable<void>{
@@ -136,7 +136,7 @@ abcdefghijklmnopqrstuvwxyz{|}~
     });
 
     "simple recv with no ack test"_test = gdb::create_dual_socket_test([&](tcp::socket remote) -> asio::awaitable<void>{
-        tasarch::gdb::packet_io io(remote);
+        tasarch::gdb::PacketIO io(remote);
 
         buffer<gdb_packet_buffer_size> recv_buf;
         co_await io.receive_packet(recv_buf);
@@ -157,7 +157,7 @@ abcdefghijklmnopqrstuvwxyz{|}~
     });
 
     "check error on too large packet"_test = gdb::create_dual_socket_test([&](tcp::socket remote) -> asio::awaitable<void>{
-        tasarch::gdb::packet_io io(remote);
+        tasarch::gdb::PacketIO io(remote);
         // this buf should be way too small!
         buffer<10> recv_buf;
         throws_async_ex(io.receive_packet(recv_buf), tasarch::gdb::buffer_too_small);
@@ -166,7 +166,7 @@ abcdefghijklmnopqrstuvwxyz{|}~
     });
 
     "break character on read"_test = gdb::create_dual_socket_test([&](tcp::socket remote) -> asio::awaitable<void>{
-        tasarch::gdb::packet_io io(remote);
+        tasarch::gdb::PacketIO io(remote);
         buffer<gdb_packet_buffer_size> recv_buf;
         bool did_break = co_await io.receive_packet(recv_buf);
         expect(did_break) << "expected a break character!";
@@ -175,7 +175,7 @@ abcdefghijklmnopqrstuvwxyz{|}~
     });
 
     "break character on write"_test = gdb::create_dual_socket_test([&](tcp::socket remote) -> asio::awaitable<void>{
-        tasarch::gdb::packet_io io(remote);
+        tasarch::gdb::PacketIO io(remote);
         rst_buf();
         bool did_break = co_await io.send_packet(mean_buffer);
         expect(did_break) << "expected a break character!";
@@ -188,7 +188,7 @@ abcdefghijklmnopqrstuvwxyz{|}~
     });
 
     "timeout on local close"_test = gdb::create_dual_socket_test([&](tcp::socket remote) -> asio::awaitable<void>{
-        tasarch::gdb::packet_io io(remote);
+        tasarch::gdb::PacketIO io(remote);
         // shorter timeout, so testing doesnt take as long!
         io.timeout = 500ms;
         buffer<gdb_packet_buffer_size> recv_buf;

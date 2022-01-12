@@ -53,7 +53,7 @@ namespace tasarch::log {
         @brief Custom spdlog::logger subclass, so we can use C++20's source_location.
         We also add a bunch of additional convenience functions.
      */
-    class logger : public spdlog::logger {
+    class Logger : public spdlog::logger {
     public:
         
         /**
@@ -62,7 +62,7 @@ namespace tasarch::log {
          */
         ///@{
 #pragma mark Custom
-        std::shared_ptr<logger> child(std::string name);
+        std::shared_ptr<Logger> child(std::string name);
         ///@}
 
         
@@ -74,21 +74,21 @@ namespace tasarch::log {
         ///@{
 #pragma mark Constructors
         /// Empty logger
-        explicit logger(std::string name) : spdlog::logger(name)
+        explicit Logger(std::string name) : spdlog::logger(name)
         {}
 
         /// Logger with range on sinks
         template<typename It>
-        logger(std::string name, It begin, It end) : spdlog::logger(name, begin, end)
+        Logger(std::string name, It begin, It end) : spdlog::logger(name, begin, end)
         {}
 
         /// Logger with single sink
-        logger(std::string name, spdlog::sink_ptr single_sink)
+        Logger(std::string name, spdlog::sink_ptr single_sink)
             : spdlog::logger(name, single_sink)
         {}
 
         /// Logger with sinks init list
-        logger(std::string name, spdlog::sinks_init_list sinks)
+        Logger(std::string name, spdlog::sinks_init_list sinks)
             : spdlog::logger(name, sinks)
         {}
         

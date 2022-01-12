@@ -2,7 +2,7 @@
 #define __DEBUGGER_H
 
 namespace tasarch::gdb {
-	class debugger  
+	class Debugger  
 	{
 	public:
 		virtual void request_break() = 0;

@@ -103,7 +103,7 @@ namespace tasarch::gdb {
 	 *
 	 * @todo For extra swag, make it more generic, i.e. accept stuff like a serial port as well :)
 	 */
-	class packet_io : log::WithLogger
+	class PacketIO : log::WithLogger
 	{
 	public:
 
@@ -181,7 +181,7 @@ namespace tasarch::gdb {
 			return c ^ 0x20;
 		}
 
-		explicit packet_io(tcp::socket& socket) : log::WithLogger("gdb.io"),
+		explicit PacketIO(tcp::socket& socket) : log::WithLogger("gdb.io"),
 			socket(std::move(socket))
 		{
 			// this->read_buf_storage.fill(0);

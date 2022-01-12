@@ -86,7 +86,7 @@ namespace tasarch::config {
         log_levels() = default;
 
         spdlog::level::level_enum level = spdlog::level::info;
-        std::unordered_map<std::string, log_levels> children;
+        std::unordered_map<std::string, std::shared_ptr<log_levels>> children;
 
         /**
          * @brief Load hierarchy from the given toml value.
@@ -108,7 +108,8 @@ namespace tasarch::config {
             children.clear();
             for (auto [child, val] : v.as_table()) {
                 if (child == "level") continue;
-                children[child].from_toml(val);
+                children[child] = std::make_shared<log_levels>();
+                children[child]->from_toml(val);
             }
         }
 
@@ -143,7 +144,7 @@ namespace tasarch::config {
 
             if (this->children.contains(parent))
             {
-                return this->children[parent].get_level(child);
+                return this->children[parent]->get_level(child);
             }
 
             return this->level;
@@ -158,7 +159,7 @@ namespace tasarch::config {
      * - ???
      * 
      */
-    struct logging {
+    struct Logging {
 
         log_levels levels;
 
@@ -171,7 +172,7 @@ namespace tasarch::config {
         void load_from(const toml::value& v)
         {
             this->levels.from_toml(v);
-            log::apply_all([this](std::shared_ptr<log::logger> logger)
+            log::apply_all([this](std::shared_ptr<log::Logger> logger)
             {
                 logger->set_level(this->levels.get_level(logger->name()));
             });
@@ -183,7 +184,7 @@ namespace tasarch::config {
      * @todo add much more config.
      */
     struct config {
-        logging logging;
+        Logging logging;
         bool testing = false;
 
         static auto instance() -> std::shared_ptr<config>;

@@ -17,7 +17,7 @@ namespace tasarch::gdb {
 	class server : log::WithLogger
 	{
 	public:
-		explicit server(std::shared_ptr<debugger> debugger) : log::WithLogger("gdb.server"), debugger(std::move(debugger)) {}
+		explicit server(std::shared_ptr<Debugger> debugger) : log::WithLogger("gdb.server"), debugger(std::move(debugger)) {}
 		asio::ip::port_type port = 5555;
 
 		void start();
@@ -29,7 +29,7 @@ namespace tasarch::gdb {
 		std::vector<std::shared_ptr<connection>> connections;
 		std::mutex run_mutex;
 		bool running = false;
-		std::shared_ptr<debugger> debugger;
+		std::shared_ptr<Debugger> debugger;
 	};
 } // namespace tasarch::gdb
 

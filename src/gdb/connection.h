@@ -49,7 +49,7 @@ namespace tasarch::gdb {
 	class connection : log::WithLogger, std::enable_shared_from_this<connection>
 	{
 	public:
-		explicit connection(tcp::socket sock, std::shared_ptr<debugger> debugger) : log::WithLogger("gdb.conn"), debugger(std::move(debugger)), packet_io(sock)
+		explicit connection(tcp::socket sock, std::shared_ptr<Debugger> debugger) : log::WithLogger("gdb.conn"), debugger(std::move(debugger)), packet_io(sock)
 		{
 		}
 
@@ -63,10 +63,10 @@ namespace tasarch::gdb {
 		buffer<gdb_packet_buffer_size> packet_buf;
 		buffer<gdb_packet_buffer_size> resp_buf;
 
-		std::shared_ptr<debugger> debugger;
+		std::shared_ptr<Debugger> debugger;
 		bool should_stop = false;
 		bool running = false;
-		packet_io packet_io;
+		PacketIO packet_io;
 
 		void append_error(err_code code);
 		void append_ok();

@@ -28,15 +28,15 @@ namespace tasarch::log {
 
     /// Gets a named logger. Use this wherever you can, since it allows for hierarchical setting of level!
     /// @param name The name. A hierarchy is created with "." syntax.
-    std::shared_ptr<logger> get(std::string name);
+    std::shared_ptr<Logger> get(std::string name);
 
-    void apply_all(const std::function<void(const std::shared_ptr<logger>)> &fun);
+    void apply_all(const std::function<void(const std::shared_ptr<Logger>)> &fun);
 
     class WithLogger {
     public:
         WithLogger(std::string name) : logger(get(name)) {}
     protected:
-        std::shared_ptr<logger> logger;
+        std::shared_ptr<Logger> logger;
     };
 } // namespace tasarch::log
 
