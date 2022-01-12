@@ -14,6 +14,7 @@ namespace tasarch::gui {
 
     TestGLWidget::TestGLWidget(QWidget* parent) : QOpenGLWidget(parent), log::WithLogger("tasarch.testgl")
     {
+        logger->info("TestGLWidget constructed!");
     }
 
     auto TestGLWidget::createFBO() -> bool
@@ -63,10 +64,13 @@ namespace tasarch::gui {
             return;
         }
 
-//#define TEST_DOLPHIN
+#define TEST_DOLPHIN
 #ifdef TEST_DOLPHIN 
-        this->core = new Core("/home/aaron/Projects/TASarch/TASarch/dolphin_libretro.so");
-        this->core->load_game("/home/aaron/Projects/isos/ww.iso");
+        logger->info("Creating core...");
+        this->core = new Core("/home/leonardo/code/organizers/dolphin/build/dolphin_libretro.so");
+        logger->info("Loading game...");
+        this->core->load_game("/home/leonardo/ww.iso");
+        logger->info("Game loaded!");
 #else
         this->core = new Core("/home/aaron/Projects/TASarch/TASarch/desmume_libretro.so");
         this->core->load_game("/home/aaron/Projects/TASarch/TASarch/plat.nds");

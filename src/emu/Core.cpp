@@ -1,22 +1,34 @@
+#include <chrono>
+#include <csignal>
 #include <cstdarg>
 #include <dlfcn.h>
 
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
+#include <ratio>
 #include <string>
 #include <vector>
+#include <fmt/core.h>
+#include <pthread.h>
+#include <qobject.h>
+#include <sched.h>
+#include <spdlog/common.h>
+#include <sys/wait.h>
 #include <unistd.h>
 #include <unordered_map>
 #include <QOpenGLContext>
 #include <QTimer>
 #include <QThread>
 #include <iostream>
+#include <fstream>
 
 #include "libretro.h"
 #include "Core.h"
 #include "Callback.h"
 #include "Renderer.h"
+#include "log/logger.h"
+#include "log/logging.h"
 
 
 
@@ -25,6 +37,7 @@ static std::unordered_map<std::string, std::string> core_variables = {};
 static std::unordered_map<std::string, input_desc> input_descriptors = {};
 static retro_hw_context_reset_t context_reset = NULL;
 static retro_hw_context_reset_t context_deinit = NULL;
+static std::shared_ptr<tasarch::log::Logger> logger = tasarch::log::get("core");
 
 static GLuint get_framebuf(void *_core) {
     Core *core = (Core*) _core;
@@ -36,11 +49,36 @@ static bool set_rumble_state(unsigned port, enum retro_rumble_effect effect, uin
 }
 
 static void log_func(enum retro_log_level level, const char *fmt, ...) {
-    printf("[CORE][%d] ", level);
+    spdlog::level::level_enum lvl = spdlog::level::info;
+    char msg_buf[0x4000];
+    
+    // logger->info("Logging with level {}", level);
+    
     va_list args;
     va_start(args, fmt);
-    vprintf(fmt, args);
+    vsnprintf(msg_buf, 0x4000-1, fmt, args);
     va_end(args);
+
+    switch (level) {
+    case RETRO_LOG_DEBUG:
+        lvl = spdlog::level::debug;
+        logger->debug(msg_buf);
+        break;
+    case RETRO_LOG_WARN:
+        lvl = spdlog::level::warn;
+        logger->warn(msg_buf);
+        break;
+    case RETRO_LOG_ERROR:
+        lvl = spdlog::level::err;
+        logger->error(msg_buf);
+        break;
+    default:
+        logger->info(msg_buf);
+        break;
+    }
+
+    // logger->info("Finished logging");
+    
 }
 
 // perf stuff
@@ -89,7 +127,7 @@ static bool env_callback(void *core, unsigned int cmd, void *data) {
     case RETRO_ENVIRONMENT_SET_PIXEL_FORMAT:
     {
         const enum retro_pixel_format *fmt = (enum retro_pixel_format*) data;
-        printf("==> Pixel fmt: %d\n", *fmt);
+        logger->info("==> Pixel fmt: {}", *fmt);
         break;
     }
     case RETRO_ENVIRONMENT_SET_INPUT_DESCRIPTORS:
@@ -97,7 +135,7 @@ static bool env_callback(void *core, unsigned int cmd, void *data) {
         const struct retro_input_descriptor *inputs = 
             (const struct retro_input_descriptor *) data;
         while(inputs->description) {
-            printf("Input description: %s\n", inputs->description);
+            logger->info("Input description: {}", inputs->description);
             std::string name(inputs->description);
             input_descriptors[name] = {
                 inputs->port,
@@ -119,9 +157,9 @@ static bool env_callback(void *core, unsigned int cmd, void *data) {
     case RETRO_ENVIRONMENT_SET_HW_RENDER:
     {
         struct retro_hw_render_callback *hw = (struct retro_hw_render_callback*) data;
-        fprintf(stderr, "[+] HW RENDER: %d\n", hw->context_type);
+        logger->warn("HW RENDER: {}", hw->context_type);
         if(hw->context_type == RETRO_HW_CONTEXT_OPENGL_CORE) {
-            printf("Doing the opengl context!\n");
+            logger->info("Doing the opengl context!");
             context_reset = hw->context_reset;
             context_deinit = hw->context_destroy;
             hw->get_current_framebuffer = (retro_hw_get_current_framebuffer_t) 
@@ -136,7 +174,7 @@ static bool env_callback(void *core, unsigned int cmd, void *data) {
     case RETRO_ENVIRONMENT_GET_VARIABLE:
     {
         struct retro_variable *vars = (struct retro_variable*) data;
-        printf("[*] Getting variable: %s => %s\n", vars->key, core_variables[vars->key].c_str());
+        logger->info("Getting variable: {} => {}", vars->key, core_variables[vars->key]);
         vars->value = core_variables[vars->key].c_str();
         break;
     }
@@ -149,7 +187,7 @@ static bool env_callback(void *core, unsigned int cmd, void *data) {
     {
         const struct retro_variable *vars = (struct retro_variable*) data;
         while(vars->key || vars->value) {
-            printf("Key: %s\nValue: %s\n", vars->key, vars->value);
+            logger->info("setting Key: {}, Value: {}", vars->key, vars->value);
             std::string s(vars->value);
             std::string values = s.substr(s.find(";")+2);
             std::string defaultvalue = values.substr(0, values.find("|"));
@@ -193,7 +231,7 @@ static bool env_callback(void *core, unsigned int cmd, void *data) {
         break;
     }
     default:
-        fprintf(stderr, "[-] Not handled: %d\n", cmd);
+        logger->warn("Not handled: {}", cmd);
         return false;
     }
 
@@ -235,10 +273,11 @@ int16_t input_state(void *data, unsigned port, unsigned device, unsigned index, 
 }
 
 Core::Core(const char *core_path) {
+    logger = tasarch::log::get("core");
     m_core_handle = dlopen(core_path, RTLD_LAZY | RTLD_LOCAL);
 
     if(!m_core_handle) {
-        fprintf(stderr, "Could not open %s\n", core_path);
+        logger->critical("Could not open {}", core_path);
         exit(1);
     }
 
@@ -379,7 +418,7 @@ void Core::reset_context() {
 }
 
 GLuint Core::init_renderer(QOpenGLContext* context, QSurface* surface) {
-    printf("[!] Context reset: %p\n", context_reset);
+    logger->warn("Context reset: {:p}", (void*)context_reset);
     if(context_reset) { // using hw renderer
         m_renderer = new OpenGLRenderer(context, surface);
     } else {
@@ -423,6 +462,11 @@ void Core::wait_for_frame() {
     run_frame();
 }
 
+[[gnu::noinline]]
+void no_inline_serialize(Core* core, void* ser_buf, size_t ser_size) {
+    core->m_retro_serialize(ser_buf, ser_size);
+}
+
 void Core::run() {
     if (!this->m_stopped) {
         // Already running
@@ -436,20 +480,127 @@ void Core::run() {
     this->m_render_thread = QThread::create([&]() {
         this->m_renderer->m_context->makeCurrent(this->m_renderer->m_surface);
         avinfo info = get_info();
+        cpu_set_t cpuset;
+        CPU_ZERO(&cpuset);
+        unsigned int cpu = 0;
+        unsigned int node = 0;
+        getcpu(&cpu, &node);
+        // CPU_SET(cpu, &cpuset);
+        for (size_t i = 0; i < 2; i++) {
+            CPU_SET(i, &cpuset);
+
+        }
+        int rc = pthread_setaffinity_np((pthread_t)this->m_render_thread->currentThreadId(), sizeof(cpuset), &cpuset);
+        if (rc != 0) {
+            logger->critical("failed to set thread affinity!: {}", rc);
+        } else {
+            logger->critical("Set affinity ok.");
+        }
         //m_audio = new AudioOutput(info.timing.sample_rate);
         double average = 0.0;
         size_t num = 0;
+        auto prev_loop_start = std::chrono::high_resolution_clock::now();
+        double frame_time_s = 1 / info.timing.fps;
+        auto frame_time_dur = std::chrono::duration<double>(frame_time_s);
+        using sleep_duration = std::chrono::duration<unsigned long, std::micro>;
+        using display_duration = std::chrono::duration<double, std::milli>;
+        auto frame_time = std::chrono::duration_cast<sleep_duration>(frame_time_dur);
+        logger->info("frame time in us: {}", frame_time.count());
+        size_t ser_size = 0;
+        void* ser_buf = NULL;
+        sigignore( SIGCHLD );
+        size_t frames = 0;
+        pid_t prev_child = 0;
         while (!this->m_stopped) {
-            auto start = std::chrono::high_resolution_clock::now();
+            auto loop_start = std::chrono::high_resolution_clock::now();
             run_frame();
-            auto end = std::chrono::high_resolution_clock::now();
+            auto run_end = std::chrono::high_resolution_clock::now();
+            frames++;
 
-            // sleep for the remaining time...
+            
             //QThread::usleep((1000000 / info.timing.fps) - std::chrono::duration<double>(end-start).count());
+            
+            // while(end-start < std::chrono::nanoseconds((int)(1000000000.0 / info.timing.fps))) {
+            //     end = std::chrono::high_resolution_clock::now();
+            // }
+            auto loop_took = std::chrono::duration_cast<display_duration>(loop_start - prev_loop_start);
+            auto run_took = std::chrono::duration_cast<display_duration>(run_end - loop_start);
+            timing_loop.record(loop_took.count());
+            timing_run.record(run_took.count());
+            
+            if (frames > 60) {
 
-            while(end-start < std::chrono::nanoseconds((int)(1000000000.0 / info.timing.fps))) {
-                end = std::chrono::high_resolution_clock::now();
+                if (frames % 60 == 0) {
+                    if (ser_size == 0) {
+                        ser_size = this->m_retro_serialize_size();
+                        logger->info("Serialize size: {}", ser_size);
+                        ser_buf = malloc(2*ser_size);
+                        logger->info("ser_buf @ {:p}", ser_buf);
+                    }
+                    auto ser_begin = std::chrono::high_resolution_clock::now();
+                    // if (prev_child != 0) {
+                    //     kill(prev_child, SIGKILL);
+                    //     // int status;
+                    //     // waitpid(prev_child, &status, 0);
+                    //     // logger->info("child exited with {}", status);
+                    // }
+                    // logger->info("do ser");
+                    
+                    no_inline_serialize(this, ser_buf, ser_size);
+                    
+                    // logger->info("do ser fin");
+                    // if (!is_parent) {
+                    //     logger->info("We are in child with pid {}, writing state to disk...", getpid());
+                    //     std::string filename = fmt::format("states/frame_{:04}.sav", frames);
+                    //     std::ofstream myfile;
+                    //     myfile.open (filename, std::ios::out | std::ios::trunc | std::ios::binary);
+                    //     myfile.write((char*)ser_buf, ser_size);
+                    //     myfile.close();
+                    //     logger->info("killing my self");
+                    //     kill(getpid(), SIGKILL);
+                    //     exit(0);
+                    // } else {
+                    //     prev_child = *(pid_t*)ser_buf;
+                    //     logger->info("Spawned child: {}", prev_child);
+                    // }
+                    auto ser_end = std::chrono::high_resolution_clock::now();
+                    auto ser_took = std::chrono::duration_cast<display_duration>(ser_end - ser_begin);
+                    timing_ser.record(ser_took.count());
+                }
+
+                if (frames % 60 == 0) {
+                    // fprintf(stderr, "\033[J");
+                    logger->info("Current tid: {}", gettid());
+                    fprintf(stderr, "%-10s| %5s / %5s / %5s / %5s\n", "name", "min", "max", "avg", "val");
+                    fprintf(stderr, "---------------------------------------------\n");
+                    // fprintf(stderr, "%-10s|", "loop");
+                    // timing_loop.output(stderr);
+                    // puts("");
+                    // fprintf(stderr, "%-10s|", "run");
+                    // timing_run.output(stderr);
+                    // puts("");
+                    
+                    fprintf(stderr, "%-10s| %s\n", "loop", timing_loop.output().c_str());
+                    fprintf(stderr, "%-10s| %s\n", "run", timing_run.output().c_str());
+                    fprintf(stderr, "%-10s| %s\n", "ser", timing_ser.output().c_str());
+                    // fprintf(stderr, "\033[A\033[A\033[A\033[A\033[A");
+                }
+
             }
+
+            auto final = std::chrono::high_resolution_clock::now();
+            auto diff = final - loop_start;
+            auto diff_sl = std::chrono::duration_cast<sleep_duration>(diff);
+            auto rem = frame_time - diff_sl;
+            // sleep for the remaining time..
+            if (diff_sl < frame_time) {
+                // logger->info("sleeping for {} us", rem.count());
+                QThread::usleep(rem.count());
+            }
+
+            prev_loop_start = loop_start;
+
+            
         }
 
         // the callback to render might be off by a few frames because it's

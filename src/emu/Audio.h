@@ -3,6 +3,9 @@
 #include <QBuffer>
 #include <QQueue>
 #include <QMediaDevices>
+#include <QMutex>
+#include <QMutexLocker>
+#include <qmutex.h>
 
 // Custom AudioBuffer because the pushing somehow didn't work
 // accross threads... And since cores like dolphin use different
@@ -17,6 +20,8 @@ class AudioBuffer : public QIODevice, public QQueue<int16_t> {
         qint64 readData(char *data, qint64 maxSize) override;
         inline bool isSequential() const override { return true; }
         inline qint64 bytesAvailable() const override { return QIODevice::bytesAvailable() + (1<<16);}
+
+        QMutex mutex;
 };
 
 class AudioOutput {

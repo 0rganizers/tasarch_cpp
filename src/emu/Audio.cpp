@@ -1,4 +1,5 @@
 #include "Audio.h"
+#include <qmutex.h>
 
 #include <cmath>
 #include <iostream>
@@ -9,6 +10,8 @@ AudioBuffer::AudioBuffer() {
 
 qint64 AudioBuffer::readData(char *data, qint64 maxSize) {
     assert(maxSize % 2 == 0); // else not i16, what?!
+    QMutexLocker lk(&this->mutex);
+
     int16_t *samples = (int16_t*) data;
     qint64 numread = 0;
     memset(data, 0, maxSize); // 0 == default
@@ -24,7 +27,8 @@ qint64 AudioBuffer::readData(char *data, qint64 maxSize) {
 
 qint64 AudioBuffer::writeData(const char *data, qint64 maxSize) {
     assert(maxSize % 2 == 0); // else not i16, what?!
-
+    QMutexLocker lk(&this->mutex);
+    
     int16_t *samples = (int16_t*) data;
     for(int i = 0; i < maxSize / 2; i++) {
         enqueue(samples[i]);

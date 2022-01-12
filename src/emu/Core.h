@@ -1,5 +1,6 @@
 #pragma once
 
+#include "emu/timing.h"
 #include "libretro.h"
 #include "Audio.h"
 #include <vector>
@@ -32,7 +33,7 @@ typedef struct retro_system_av_info avinfo;
 class Renderer;
 
 class Core {
-    private:
+    public:
         void *m_core_handle;
         void (*m_retro_run)(void);
         bool (*m_retro_load_game)(const struct retro_game_info *game);
@@ -45,6 +46,10 @@ class Core {
         int m_framebuffer = 0; // default == 0
 
         bool m_stopped = true;
+
+        timing_info timing_run;
+        timing_info timing_loop;
+        timing_info timing_ser;
 
 
     public:

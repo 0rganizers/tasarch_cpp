@@ -7,6 +7,7 @@
 
 #include "logging.h"
 #include "formatters.h"
+#include <spdlog/common.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/syslog_sink.h>
@@ -46,6 +47,7 @@ namespace tasarch::log {
     {
         // TODO: configuration here!
         auto log = std::make_shared<Logger>(name, sink_list.begin(), sink_list.end());
+        log->set_level(spdlog::level::trace);
         return log;
     }
 

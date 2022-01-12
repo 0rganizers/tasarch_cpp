@@ -18,6 +18,8 @@ auto main(int argc, char* argv[]) -> int
     
     auto logger = tasarch::log::get("tasarch");
     logger->info("Initializing QT application...");
+
+
     
     // needs to be here, before we actually create the GUI!
     QSurfaceFormat form;
@@ -30,6 +32,12 @@ auto main(int argc, char* argv[]) -> int
     
     
     QApplication app(argc, argv);
+
+    //     QWidget window2;
+    // window2.resize(320, 240);
+    // window2.show();
+    // window2.setWindowTitle(
+    // QApplication::translate("toplevel", "Top-level widget"));
     
     auto window = new tasarch::gui::MainWindow();
     
