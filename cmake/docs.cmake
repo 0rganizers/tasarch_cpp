@@ -39,6 +39,16 @@ set(mcss_SOURCE_DIR "${PROJECT_SOURCE_DIR}/docs/m.css")
 set(mcss_script "${mcss_SOURCE_DIR}/documentation/doxygen.py")
 set(config "${working_dir}/conf.py")
 
+set(
+    DOCS_COVERAGE_HTML_COMMAND
+    genhtml --legend -f -q
+    "${PROJECT_BINARY_DIR}/docs_coverage.info"
+    -p "${PROJECT_SOURCE_DIR}"
+    -o "${PROJECT_BINARY_DIR}/docs_coverage_html"
+    CACHE STRING
+    "; separated command to generate an HTML report for the 'coverage' target"
+)
+
 # TODO: with the bash below this is not portable, but who would want to compile the docs on windows anyways.
 add_custom_target(
     docs
@@ -47,6 +57,8 @@ add_custom_target(
     "${DOXYGEN_OUTPUT_DIRECTORY}/xml"
     COMMAND "bash" "-c" "cd ${mcss_SOURCE_DIR}/css && ./postprocess.sh"
     COMMAND "${Python3_EXECUTABLE}" "${mcss_script}" "${config}"
+    COMMAND "${Python3_EXECUTABLE}" "-m" "coverxygen" "--xml-dir" "${DOXYGEN_OUTPUT_DIRECTORY}/xml" "--src-dir" "${PROJECT_SOURCE_DIR}" "--output" "${PROJECT_BINARY_DIR}/docs_coverage.info" "--prefix" "${PROJECT_SOURCE_DIR}/src" "--kind" "enum,enumvalue,friend,typedef,variable,function,signal,slot,class,struct,union,define,page"
+    COMMAND ${DOCS_COVERAGE_HTML_COMMAND}
     COMMENT "Building documentation using Doxygen and m.css"
     WORKING_DIRECTORY "${working_dir}"
     VERBATIM
