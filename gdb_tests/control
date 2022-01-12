@@ -1,0 +1,8 @@
+Package: customgdb
+Version: 14.0
+Section: base
+Priority: optional
+Architecture: amd64
+Depends: python3
+Maintainer: Leonardo Galli <leonardo.galli@vis.ethz.ch>
+Description: Custom build of GDB. This version of GDB provides cutting edge capabilities that the stock package does not provide.
