@@ -9,6 +9,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
 
+#include "gdb/bg_executor.h"
 #include "gui/MainWindow.h"
 #include <QSurfaceFormat>
 #include <thread>
@@ -26,13 +27,23 @@ auto main(int argc, char* argv[]) -> int
     tasarch::log::setup_logging();
     auto root = tasarch::log::get("");
     tasarch::config::conf()->reload();
+    root->trace("Config reloaded!");
+    root->debug("Debug message!");
+    root->info("Info message!");
+    root->warn("Warn message!");
+    root->error("Error message!");
+    root->critical("Critical message!");
+
+    tasarch::gdb::bg_executor::instance().start();
 
     auto server = std::make_shared<tasarch::gdb::server>(nullptr);
     server->start();
-    while (!server->had_conn) {
+    while (true) {
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
     server->stop();
+
+    tasarch::gdb::bg_executor::instance().stop();
     return 0;
     
     auto logger = tasarch::log::get("tasarch");

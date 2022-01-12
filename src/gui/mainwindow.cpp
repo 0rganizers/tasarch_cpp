@@ -57,7 +57,7 @@ namespace tasarch::gui {
 
     void MainWindow::on_actionReloadConf()
     {
-        tasarch::config::conf.reload();
+        tasarch::config::conf()->reload();
     }
 } // namespace tasarch::gui
 

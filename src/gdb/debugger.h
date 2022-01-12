@@ -4,6 +4,8 @@
 namespace tasarch::gdb {
 	class debugger  
 	{
+	public:
+		virtual void request_break() = 0;
 	};
 } // namespace tasarch::gdb
 

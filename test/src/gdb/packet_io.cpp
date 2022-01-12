@@ -1,4 +1,5 @@
 #include <array>
+#include <ostream>
 #include <stdexcept>
 #include "gdb/common.h"
 #include "gdb/packet_io.h"
@@ -10,6 +11,7 @@
 #include "config/config.h"
 #include "async_test.h"
 #include <asio/basic_waitable_timer.hpp>
+#include "gdb/buffer.h"
 
 namespace ut = boost::ut;
 namespace gdb = tasarch::test::gdb;
@@ -17,6 +19,7 @@ namespace gdb = tasarch::test::gdb;
 ut::suite packet_io_tests = []{
     using namespace ut;
     using asio::ip::tcp;
+    using namespace tasarch::gdb;
 
     auto config_val = tasarch::config::parse_toml("logging.test.gdb.level = 'trace'\nlogging.gdb.level = 'trace'");
     tasarch::config::conf()->load_from(config_val);
@@ -36,7 +39,12 @@ abcdefghijklmnopqrstuvwxyz{|}~
 )";
 
     std::string file_mean_data = "F1b9;" + mean_data;
-    asio::mutable_buffer mean_buffer = asio::buffer(file_mean_data);
+    buffer<gdb_packet_buffer_size> mean_buffer;
+
+    auto rst_buf = [&]{
+        mean_buffer.reset();
+        mean_buffer.append_buf(file_mean_data);
+    };
 
     std::string ack = "+";
     std::string nack = "-";
@@ -60,19 +68,30 @@ abcdefghijklmnopqrstuvwxyz{|}~
         tasarch::gdb::packet_io io(remote);
         // for simple tests, no ack for now
         io.set_no_ack();
+        rst_buf();
         co_await io.send_packet(mean_buffer);
         std::string recvd_str = co_await recv_string(local);
         expect(recvd_str == encoded_mean_data);
 
         co_await local.async_send(asio::buffer(encoded_mean_data), asio::use_awaitable);
-        auto recv_buf = asio::mutable_buffer(packet_buf.data(), packet_buf.size());
+        buffer<gdb_packet_buffer_size> recv_buf;
         co_await io.receive_packet(recv_buf);
-        std::string recv_msg(static_cast<char*>(recv_buf.data()), recv_buf.size());
-        expect(recv_msg == file_mean_data);
+        std::string recvd = recv_buf.get_str();
+        expect(recvd == file_mean_data);
+        std::ofstream recvd_file;
+        recvd_file.open("recvd.txt", std::ios::binary | std::ios::out | std::ios::trunc);
+        recvd_file << recvd;
+        recvd_file.close();
+
+        std::ofstream file_mean_f;
+        file_mean_f.open("file_mean_f.txt", std::ios::binary | std::ios::out | std::ios::trunc);
+        file_mean_f << file_mean_data;
+        file_mean_f.close();
     });
 
     "simple send with ack test"_test = gdb::create_dual_socket_test([&](tcp::socket remote) -> asio::awaitable<void>{
         tasarch::gdb::packet_io io(remote);
+        rst_buf();
         bool did_break = co_await io.send_packet(mean_buffer);
         expect(!did_break) << "did not expect a break!";
     }, [&](tcp::socket local) -> asio::awaitable<void>{
@@ -86,11 +105,11 @@ abcdefghijklmnopqrstuvwxyz{|}~
     "simple recv with ack test"_test = gdb::create_dual_socket_test([&](tcp::socket remote) -> asio::awaitable<void>{
         tasarch::gdb::packet_io io(remote);
 
-        auto recv_buf = asio::mutable_buffer(packet_buf.data(), packet_buf.size());
+        buffer<gdb_packet_buffer_size> recv_buf;
         bool did_break = co_await io.receive_packet(recv_buf);
         expect(!did_break) << "did not expect a break!";
-        std::string recv_msg(static_cast<char*>(recv_buf.data()), recv_buf.size());
-        expect(recv_msg == file_mean_data);
+        
+        expect(recv_buf.get_str() == file_mean_data);
 
     }, [&](tcp::socket local) -> asio::awaitable<void>{
         co_await local.async_send(asio::buffer(encoded_mean_data), asio::use_awaitable);
@@ -101,6 +120,7 @@ abcdefghijklmnopqrstuvwxyz{|}~
 
     "simple send with no ack test"_test = gdb::create_dual_socket_test([&](tcp::socket remote) -> asio::awaitable<void>{
         tasarch::gdb::packet_io io(remote);
+        rst_buf();
         co_await io.send_packet(mean_buffer);
     }, [&](tcp::socket local) -> asio::awaitable<void>{
         // we should have received already
@@ -118,10 +138,10 @@ abcdefghijklmnopqrstuvwxyz{|}~
     "simple recv with no ack test"_test = gdb::create_dual_socket_test([&](tcp::socket remote) -> asio::awaitable<void>{
         tasarch::gdb::packet_io io(remote);
 
-        auto recv_buf = asio::mutable_buffer(packet_buf.data(), packet_buf.size());
+        buffer<gdb_packet_buffer_size> recv_buf;
         co_await io.receive_packet(recv_buf);
-        std::string recv_msg(static_cast<char*>(recv_buf.data()), recv_buf.size());
-        expect(recv_msg == file_mean_data);
+        std::string rcvd = recv_buf.get_str();
+        expect(rcvd == file_mean_data);
     }, [&](tcp::socket local) -> asio::awaitable<void>{
         std::string wrong_cksum = encoded_mean_data.substr(0, encoded_mean_data.size() - 1) + "f";
         co_await local.async_send(asio::buffer(wrong_cksum), asio::use_awaitable);
@@ -139,7 +159,7 @@ abcdefghijklmnopqrstuvwxyz{|}~
     "check error on too large packet"_test = gdb::create_dual_socket_test([&](tcp::socket remote) -> asio::awaitable<void>{
         tasarch::gdb::packet_io io(remote);
         // this buf should be way too small!
-        auto recv_buf = asio::mutable_buffer(packet_buf.data(), 10);
+        buffer<10> recv_buf;
         throws_async_ex(io.receive_packet(recv_buf), tasarch::gdb::buffer_too_small);
     }, [&](tcp::socket local) -> asio::awaitable<void>{
         co_await local.async_send(asio::buffer(encoded_mean_data), asio::use_awaitable);
@@ -147,7 +167,7 @@ abcdefghijklmnopqrstuvwxyz{|}~
 
     "break character on read"_test = gdb::create_dual_socket_test([&](tcp::socket remote) -> asio::awaitable<void>{
         tasarch::gdb::packet_io io(remote);
-        auto recv_buf = asio::mutable_buffer(packet_buf.data(), packet_buf.size());
+        buffer<gdb_packet_buffer_size> recv_buf;
         bool did_break = co_await io.receive_packet(recv_buf);
         expect(did_break) << "expected a break character!";
     }, [&](tcp::socket local) -> asio::awaitable<void>{
@@ -156,6 +176,7 @@ abcdefghijklmnopqrstuvwxyz{|}~
 
     "break character on write"_test = gdb::create_dual_socket_test([&](tcp::socket remote) -> asio::awaitable<void>{
         tasarch::gdb::packet_io io(remote);
+        rst_buf();
         bool did_break = co_await io.send_packet(mean_buffer);
         expect(did_break) << "expected a break character!";
     }, [&](tcp::socket local) -> asio::awaitable<void>{
@@ -170,7 +191,7 @@ abcdefghijklmnopqrstuvwxyz{|}~
         tasarch::gdb::packet_io io(remote);
         // shorter timeout, so testing doesnt take as long!
         io.timeout = 500ms;
-        auto recv_buf = asio::mutable_buffer(packet_buf.data(), packet_buf.size());
+        buffer<gdb_packet_buffer_size> recv_buf;
         throws_async_ex(io.receive_packet(recv_buf), tasarch::gdb::timed_out);
     }, [&](tcp::socket local) -> asio::awaitable<void>{
         local.close();
