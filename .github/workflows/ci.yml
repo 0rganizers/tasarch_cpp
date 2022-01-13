@@ -187,7 +187,7 @@ jobs:
 
     - name: Install Doxygen
       run: sudo apt-get update -q
-        && sudo apt-get install doxygen -q -y
+        && sudo apt-get install doxygen lcov -q -y
 
     - name: Build docs
       run: cmake -B build -D "CMAKE_PROJECT_INCLUDE=$PWD/cmake/docs.cmake"
