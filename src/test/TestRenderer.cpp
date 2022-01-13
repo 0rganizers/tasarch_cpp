@@ -1,4 +1,5 @@
 #include "TestRenderer.h"
+#include <qopenglcontext.h>
 #include <chrono>
 
 const char *vertexShaderSource =
@@ -367,7 +368,7 @@ void main() {
 
 )";
 
-TestRenderer::TestRenderer(QOpenGLContext* context, QSurface* surface) : QOpenGLFunctions(context), tasarch::log::WithLogger("tasarch.testrenderer")
+TestRenderer::TestRenderer(QOpenGLContext* context, QSurface* surface) : QOpenGLExtraFunctions(context), tasarch::log::WithLogger("tasarch.testrenderer")
 {
     this->context = context;
     this->surface = surface;
@@ -413,7 +414,7 @@ auto TestRenderer::createFBO() -> bool
     CHECK_GL("something depth buffer");
     
     // Set "renderedTexture" as our colour attachement #0
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, this->outputRenderBuffer, 0);
+    this->glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, this->outputRenderBuffer, 0);
 
     // Set the list of draw buffers.
     GLenum DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};

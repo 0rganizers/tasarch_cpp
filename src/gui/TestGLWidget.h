@@ -9,11 +9,14 @@
 #define TestGLWidget_h
 
 #include <QOpenGLWidget>
+#include <qopenglcontext.h>
+#include <qopenglfunctions.h>
+#include <QOpenGLExtraFunctions>
 #include "test/TestRenderer.h"
 #include "log/logging.h"
 
 namespace tasarch::gui {
-    class TestGLWidget : public QOpenGLWidget, public log::WithLogger {
+    class TestGLWidget : public QOpenGLWidget, public QOpenGLExtraFunctions, public log::WithLogger {
     public:
         TestGLWidget(QWidget *parent);
     protected:

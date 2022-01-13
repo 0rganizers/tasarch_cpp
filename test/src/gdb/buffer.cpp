@@ -28,7 +28,7 @@ ut::suite buffer_tests = []{
     auto logger = tasarch::log::get("test.gdb");
 
     "conversion tests"_test = [&]{
-        buffer<128> buf;
+        buffer buf(128);
         logger->info("default sizes: {}, {}", buf.read_size(), buf.write_size());
         std::string initial = "testing";
         buf.append_buf(initial);

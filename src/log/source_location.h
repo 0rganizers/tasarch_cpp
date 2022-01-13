@@ -10,7 +10,8 @@
 #ifdef __cpp_lib_source_location
 #include <source_location>
 using source_location = std::source_location;
-#elifdef __cpp_lib_experimental_source_location
+#else
+#ifdef __cpp_lib_experimental_source_location
 #include <experimental/source_location>
 using source_location = std::experimental::source_location;
 #else
@@ -64,6 +65,6 @@ namespace tasarch::log {
         uint_least32_t _M_col;
       };
 }
-
+#endif /* __cpp_lib_experimental_source_location */
 #endif /* __cpp_lib_source_location */
 #endif /* __SOURCE_LOCATION_H */

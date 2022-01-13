@@ -6,8 +6,10 @@
 //
 
 #include "TestGLWidget.h"
+#include <qopenglcontext.h>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
+#include <QOpenGLExtraFunctions>
 #include <QOffscreenSurface>
 
 namespace tasarch::gui {
@@ -20,9 +22,9 @@ namespace tasarch::gui {
     auto TestGLWidget::createFBO() -> bool
     {
         // Now we also need to setup the fbo's here, otherwise, we cannot access the texture!
-        glGenFramebuffers(1, &this->blitFBO);
-        glBindFramebuffer(GL_FRAMEBUFFER, this->blitFBO);
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, this->tr->finalOutputBuffer, 0);
+        this->glGenFramebuffers(1, &this->blitFBO);
+        this->glBindFramebuffer(GL_FRAMEBUFFER, this->blitFBO);
+        this->glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, this->tr->finalOutputBuffer, 0);
         GLenum error = glGetError();
         if (error != GL_NO_ERROR) {
             logger->error("failed to setup framebuffer {}", error);
@@ -47,6 +49,7 @@ namespace tasarch::gui {
 
     auto TestGLWidget::initializeGL() -> void
     {
+        initializeOpenGLFunctions();
         logger->debug("initializing context");
         if (this->tr != nullptr) {
             this->tr->stop();
@@ -90,12 +93,13 @@ namespace tasarch::gui {
             this->didResize = false;
         }
         auto f = QOpenGLContext::currentContext()->functions();
-        glBindFramebuffer(GL_FRAMEBUFFER, this->defaultFramebufferObject());
+        f->glBindFramebuffer(GL_FRAMEBUFFER, this->defaultFramebufferObject());
         f->glBindFramebuffer(GL_DRAW_FRAMEBUFFER, this->defaultFramebufferObject());
         f->glBindFramebuffer(GL_READ_FRAMEBUFFER, this->blitFBO);
+        auto ef = QOpenGLContext::currentContext()->extraFunctions();
         {
             std::scoped_lock lock(this->tr->blit_output);
-            glBlitFramebuffer(0, 0, this->tr->width, this->tr->height, 0, 0, this->tr->width, this->tr->height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+            ef->glBlitFramebuffer(0, 0, this->tr->width, this->tr->height, 0, 0, this->tr->width, this->tr->height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
             glFlush();
             glFinish();
         }

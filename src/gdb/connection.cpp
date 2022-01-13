@@ -1,6 +1,6 @@
 #include <exception>
 #include <vector>
-#include "connection.h"  
+#include "connection.h"
 #include <asio/awaitable.hpp>
 #include <asio/co_spawn.hpp>
 #include <fmt/core.h>
@@ -127,6 +127,10 @@ namespace tasarch::gdb {
 
         case read_mem:
         this->append_hex("echo 'hacked';");
+        break;
+
+        case get:
+        this->handle_q();
         break;
 
         // case get:

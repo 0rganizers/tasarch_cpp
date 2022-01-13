@@ -2,7 +2,7 @@
 #define __TESTRENDERER_H
 
 #include <QOpenGLContext>
-#include <QOpenGLFunctions>
+#include <QOpenGLExtraFunctions>
 #include <QSurface>
 #include <mutex>
 #include <thread>
@@ -10,7 +10,7 @@
 #include <chrono>
 #include "log/logging.h"
 
-class TestRenderer : public QOpenGLFunctions, public tasarch::log::WithLogger {
+class TestRenderer : public QOpenGLExtraFunctions, public tasarch::log::WithLogger {
 public:
     TestRenderer(QOpenGLContext* context, QSurface* surface);
     ~TestRenderer();

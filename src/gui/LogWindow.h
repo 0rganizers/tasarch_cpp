@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QWidget>
-#include "ui_logwindow.h"
+#include "ui_LogWindow.h"
 #include <string>
 
 namespace tasarch::gui {

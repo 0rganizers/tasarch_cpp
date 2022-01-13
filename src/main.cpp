@@ -10,7 +10,7 @@
 #include <QtWidgets/QPushButton>
 
 #include "gdb/bg_executor.h"
-#include "gui/MainWindow.h"
+#include "gui/mainwindow.h"
 #include <QSurfaceFormat>
 #include <thread>
 

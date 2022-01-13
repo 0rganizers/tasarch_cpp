@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <utility>
+#include "clangd_fix.h"
 #include <asio/awaitable.hpp>
 #include <asio/buffer.hpp>
 #include "log/logging.h"
@@ -10,41 +11,11 @@
 #include "packet_io.h"
 #include "buffer.h"
 #include "gdb_err.h"
+#include "protocol.h"
+#include "coding.h"
 
 namespace tasarch::gdb {
 	using asio::ip::tcp;
-
-	enum packet_type : u8
-	{
-		enable_extended = '!',
-		query_stop_reason = '?',
-		cont = 'c',
-		cont_sig = 'C',
-		detach = 'D',
-		file_io = 'F',
-		read_gpr = 'g',
-		write_gpr = 'G',
-		set_thd = 'H',
-		step_cycle = 'i',
-		step_cycle_sig = 'I',
-		kill = 'k',
-		read_mem = 'm',
-		write_mem = 'M',
-		read_reg = 'p',
-		write_reg = 'P',
-		get = 'q',
-		set = 'Q',
-		reset = 'r',
-		restart = 'R',
-		step = 's',
-		step_sig = 'S',
-		search = 't',
-		query_thd = 'T',
-		vcont = 'v',
-		write_mem_bin = 'X',
-		add_break = 'z',
-		del_break = 'Z'
-	};
 
 	class connection : log::WithLogger, std::enable_shared_from_this<connection>
 	{
@@ -60,18 +31,23 @@ namespace tasarch::gdb {
 		void process_pkt();
 
 	private:
-		buffer<gdb_packet_buffer_size> packet_buf;
-		buffer<gdb_packet_buffer_size> resp_buf;
+		buffer packet_buf = buffer(gdb_packet_buffer_size);
+		buffer resp_buf = buffer(gdb_packet_buffer_size);
 
 		std::shared_ptr<Debugger> debugger;
 		bool should_stop = false;
 		bool running = false;
 		PacketIO packet_io;
 
+	#pragma mark Response Helpers
+
 		void append_error(err_code code);
 		void append_ok();
 		void append_str(std::string s);
 		void append_hex(std::string s);
+
+	#pragma mark Packet Handling
+		void handle_q(query_type type = get_val);
 	};
 } // namespace tasarch::gdb
 

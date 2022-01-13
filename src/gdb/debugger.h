@@ -5,7 +5,10 @@ namespace tasarch::gdb {
 	class Debugger  
 	{
 	public:
-		virtual void request_break() = 0;
+		virtual void request_break()
+		{
+			
+		}
 	};
 } // namespace tasarch::gdb
 

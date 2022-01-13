@@ -14,7 +14,9 @@ namespace tasarch::gdb {
 	enum err_code : u8
 	{
         // used by gdb everywhere
-        unknown = 1
+        unknown = 1,
+        // internal buffers used by gdbstub ran out of space!
+        buf_too_small = 2,
 	};
 
     class gdb_error : public std::runtime_error

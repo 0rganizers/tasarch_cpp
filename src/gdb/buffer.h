@@ -4,12 +4,14 @@
 #include <cstddef>
 #include <cstring>
 #include <stdexcept>
+#include "clangd_fix.h"
 #include <asio.hpp>
 #include <asio/buffer.hpp>
 #include "util/defines.h"
 #include <fmt/core.h>
 #include <concepts>
 #include <string>
+#include "util/warnings.h"
 
 namespace tasarch::gdb {
     /**
@@ -37,13 +39,17 @@ namespace tasarch::gdb {
         {TBuffer((decltype(buf.data()))ptr, num)} -> std::same_as<TBuffer>;
     };
 
-    template <size_t Size>
     class buffer
     {
 public:
+        explicit buffer(const size_t size) : max_size(size)
+        {
+            this->storage.resize(size);
+        }
+
 #pragma mark Simple Accessors
 
-        auto read_size() -> size_t
+        [[nodiscard]] auto read_size() const -> size_t
         {
             return this->write_off - this->read_off;
         }
@@ -59,9 +65,9 @@ public:
             return TBuffer((decltype(TBuffer().data()))(this->read_data()), this->read_size());
         }
 
-        auto write_size() -> size_t
+        [[nodiscard]] auto write_size() const -> size_t
         {
-            return Size - this->write_off;
+            return max_size - this->write_off;
         }
 
         auto write_data() -> u8*
@@ -118,7 +124,7 @@ public:
         void put_byte(u8 val)
         {
             if (this->write_size() < 1) {
-                throw buffer_too_small(Size);
+                throw buffer_too_small(max_size);
             }
             this->storage.at(this->write_off) = val;
             this->write_off++;
@@ -152,9 +158,10 @@ public:
         }
 
     private:
+        const size_t max_size = 0;
         size_t write_off = 0;
         size_t read_off = 0;
-        std::array<u8, Size> storage;
+        std::vector<u8> storage;
     };
 
 } // namespace tasarch::gdb
