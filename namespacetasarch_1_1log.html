@@ -84,7 +84,7 @@
             </dt>
             <dd></dd>
             <dt>
-              class <a href="classtasarch_1_1log_1_1logger.html" class="m-doc">logger</a>
+              class <a href="classtasarch_1_1log_1_1Logger.html" class="m-doc">Logger</a>
             </dt>
             <dd>Custom spdlog::logger subclass, so we can use C++20&#x27;s <a href="structtasarch_1_1log_1_1source__location.html" class="m-doc">source_<wbr />location</a>. We also add a bunch of additional convenience functions.</dd>
             <dt>
@@ -113,7 +113,7 @@
             </dt>
             <dd>Setup logging by creating some default sinks and other important things.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a href="#ab078d32751ba68b5b2a27774822740c9" class="m-doc">get</a>(</span><span class="m-doc-wrap">std::string name) -&gt; std::shared_ptr&lt; logger &gt; -&gt; auto</span>
+              <span class="m-doc-wrap-bumper">auto <a href="#a0ac147745df2d803995a04331fe4fb3b" class="m-doc">get</a>(</span><span class="m-doc-wrap">std::string name) -&gt; std::shared_ptr&lt; Logger &gt; -&gt; auto</span>
             </dt>
             <dd></dd>
             <dt>
@@ -121,7 +121,7 @@
             </dt>
             <dd></dd>
             <dt>
-              <span class="m-doc-wrap-bumper">void <a href="#ada66994d4c465e1fbc762bdfe836bb87" class="m-doc">apply_all</a>(</span><span class="m-doc-wrap">const std::function&lt;void(const std::shared_ptr&lt;<a href="classtasarch_1_1log_1_1logger.html" class="m-doc">logger</a>&gt;)&gt;&amp; fun)</span>
+              <span class="m-doc-wrap-bumper">void <a href="#afcd5a724c374c90c35217b40a7f5288a" class="m-doc">apply_all</a>(</span><span class="m-doc-wrap">const std::function&lt;void(const std::shared_ptr&lt;<a href="classtasarch_1_1log_1_1Logger.html" class="m-doc">Logger</a>&gt;)&gt;&amp; fun)</span>
             </dt>
             <dd><span></span></dd>
           </dl>
@@ -138,7 +138,7 @@
             </dt>
             <dd><span></span></dd>
             <dt>
-              static std::unordered_map&lt;std::string, std::shared_ptr&lt;<a href="classtasarch_1_1log_1_1logger.html" class="m-doc">logger</a>&gt;&gt; <a href="#a578e01d32c0c03d6a65248227002efd5" class="m-doc">registry</a>
+              static std::unordered_map&lt;std::string, std::shared_ptr&lt;<a href="classtasarch_1_1log_1_1Logger.html" class="m-doc">Logger</a>&gt;&gt; <a href="#ad21e93960ef17cd84f6860e3f7a515f7" class="m-doc">registry</a>
             </dt>
             <dd><span></span></dd>
             <dt>
@@ -154,7 +154,7 @@
               <span class="m-doc-wrap-bumper">auto tasarch::<wbr />log::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a680d956520c65cc0a4a2b06c68547840" class="m-doc-self">get_log_source_location</a>(</span><span class="m-doc-wrap">const <a href="structtasarch_1_1log_1_1source__location.html" class="m-doc">source_<wbr />location</a>&amp; location) <span class="m-label m-primary">constexpr</span></span></span>
               <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="logger_8h.html">&lt;src/log/logger.h&gt;</a></div>
             </h3>
-<p>Not sure why this is actually needed?</p><aside class="m-note m-dim"><h4><a href="todo.html#_todo000022" class="m-doc">Todo</a></h4><p>investigate necessity of this?</p></aside>
+<p>Not sure why this is actually needed?</p><aside class="m-note m-dim"><h4><a href="todo.html#_todo000025" class="m-doc">Todo</a></h4><p>investigate necessity of this?</p></aside>
           </div></section>
           <section class="m-doc-details" id="ab345253db7cf81634af2d9f2670df5c1"><div>
             <h3>
@@ -163,9 +163,9 @@
             </h3>
             <p>Setup logging by creating some default sinks and other important things.</p>
           </div></section>
-          <section class="m-doc-details" id="ab078d32751ba68b5b2a27774822740c9"><div>
+          <section class="m-doc-details" id="a0ac147745df2d803995a04331fe4fb3b"><div>
             <h3>
-              <span class="m-doc-wrap-bumper">auto tasarch::<wbr />log::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ab078d32751ba68b5b2a27774822740c9" class="m-doc-self">get</a>(</span><span class="m-doc-wrap">std::string name) -&gt; std::shared_ptr&lt; logger &gt;</span></span>
+              <span class="m-doc-wrap-bumper">auto tasarch::<wbr />log::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a0ac147745df2d803995a04331fe4fb3b" class="m-doc-self">get</a>(</span><span class="m-doc-wrap">std::string name) -&gt; std::shared_ptr&lt; Logger &gt;</span></span>
               <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="logging_8h.html">&lt;src/log/logging.h&gt;</a></div>
             </h3>
             <table class="m-table m-fullwidth m-flat">
@@ -188,9 +188,9 @@
             </h3>
 <p>Adds the given sink to the list of sinks to be used for any logger.</p><aside class="m-note m-info"><h4>Note</h4><p>This will not be applied retroactively, so make sure to add all sinks before you start using loggers!</p></aside>
           </div></section>
-          <section class="m-doc-details" id="ada66994d4c465e1fbc762bdfe836bb87"><div>
+          <section class="m-doc-details" id="afcd5a724c374c90c35217b40a7f5288a"><div>
             <h3>
-              <span class="m-doc-wrap-bumper">void tasarch::<wbr />log::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ada66994d4c465e1fbc762bdfe836bb87" class="m-doc-self">apply_all</a>(</span><span class="m-doc-wrap">const std::function&lt;void(const std::shared_ptr&lt;<a href="classtasarch_1_1log_1_1logger.html" class="m-doc">logger</a>&gt;)&gt;&amp; fun)</span></span>
+              <span class="m-doc-wrap-bumper">void tasarch::<wbr />log::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#afcd5a724c374c90c35217b40a7f5288a" class="m-doc-self">apply_all</a>(</span><span class="m-doc-wrap">const std::function&lt;void(const std::shared_ptr&lt;<a href="classtasarch_1_1log_1_1Logger.html" class="m-doc">Logger</a>&gt;)&gt;&amp; fun)</span></span>
               <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="logging_8h.html">&lt;src/log/logging.h&gt;</a></div>
             </h3>
             <p><span></span></p>
@@ -212,9 +212,9 @@
             </h3>
             <p><span></span></p>
           </div></section>
-          <section class="m-doc-details" id="a578e01d32c0c03d6a65248227002efd5"><div>
+          <section class="m-doc-details" id="ad21e93960ef17cd84f6860e3f7a515f7"><div>
             <h3>
-              static std::unordered_map&lt;std::string, std::shared_ptr&lt;<a href="classtasarch_1_1log_1_1logger.html" class="m-doc">logger</a>&gt;&gt; tasarch::<wbr />log::<wbr /><a href="#a578e01d32c0c03d6a65248227002efd5" class="m-doc-self">registry</a>
+              static std::unordered_map&lt;std::string, std::shared_ptr&lt;<a href="classtasarch_1_1log_1_1Logger.html" class="m-doc">Logger</a>&gt;&gt; tasarch::<wbr />log::<wbr /><a href="#ad21e93960ef17cd84f6860e3f7a515f7" class="m-doc-self">registry</a>
               <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="logging_8cpp.html">&lt;src/log/logging.cpp&gt;</a></div>
             </h3>
             <p><span></span></p>

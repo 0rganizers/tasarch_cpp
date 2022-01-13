@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>tasarch::gdb::connection class | tasarch</title>
+  <title>src/util/warnings.h file | tasarch</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="stylesheet" href="fixes.css" />
@@ -52,8 +52,7 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="namespacetasarch.html">tasarch</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespacetasarch_1_1gdb.html">gdb</a>::<wbr/></span>connection <span class="m-thin">class</span>
-          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="connection_8h.html">&lt;src/gdb/connection.h&gt;</a></div>
+          <span class="m-breadcrumb"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a>/</span><span class="m-breadcrumb"><a href="dir_b7878ad5ecbf2506f4125b9d34c97e45.html">util</a>/</span>warnings.h <span class="m-thin">file</span>
         </h1>
         <p><span></span></p>
         <nav class="m-block m-default">
@@ -62,52 +61,43 @@
             <li>
               Reference
               <ul>
-                <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
-                <li><a href="#pub-methods">Public functions</a></li>
+                <li><a href="#define-members">Defines</a></li>
               </ul>
             </li>
           </ul>
         </nav>
-        <section id="typeless-methods">
-          <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
+        <section id="define-members">
+          <h2><a href="#define-members">Defines</a></h2>
           <dl class="m-doc">
-            <dt id="a348f6c14c40026322d35788856e4e893">
-              <span class="m-doc-wrap-bumper"><a href="#a348f6c14c40026322d35788856e4e893" class="m-doc-self">connection</a>(</span><span class="m-doc-wrap">tcp::socket sock,
-              std::shared_ptr&lt;<a href="classtasarch_1_1gdb_1_1Debugger.html" class="m-doc">Debugger</a>&gt; debugger) <span class="m-label m-flat m-info">explicit</span> </span>
+            <dt id="af9522dd3633915e37db40d8c9ff2aad7">
+              <span class="m-doc-wrap-bumper">#define <a href="#af9522dd3633915e37db40d8c9ff2aad7" class="m-doc-self">DO_PRAGMA_</a>(</span><span class="m-doc-wrap">x)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ada73b2d44cead0bc85c99230016ec1ff">
+              <span class="m-doc-wrap-bumper">#define <a href="#ada73b2d44cead0bc85c99230016ec1ff" class="m-doc-self">DO_PRAGMA</a>(</span><span class="m-doc-wrap">x)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ad774736f48abcc49e8fe6c4256a83267">
+              <span class="m-doc-wrap-bumper">#define <a href="#ad774736f48abcc49e8fe6c4256a83267" class="m-doc-self">PUSH_WARNING_STATE</a></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a321c7ec3af9f7273fbf088946a12d940">
+              <span class="m-doc-wrap-bumper">#define <a href="#a321c7ec3af9f7273fbf088946a12d940" class="m-doc-self">POP_WARNING_STATE</a></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a08c94dcab5d2ac9bb890e9e46cf1f3eb">
+              <span class="m-doc-wrap-bumper">#define <a href="#a08c94dcab5d2ac9bb890e9e46cf1f3eb" class="m-doc-self">DISABLE_WARNING</a>(</span><span class="m-doc-wrap">WARNING_NAME)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="aee6c9e94041b4f5c8bc2618395a9a4d5">
+              <span class="m-doc-wrap-bumper">#define <a href="#aee6c9e94041b4f5c8bc2618395a9a4d5" class="m-doc-self">WARN_CAST_QUAL_GCC</a></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a4fc5886435d4215182500e5a19fd1d1e">
+              <span class="m-doc-wrap-bumper">#define <a href="#a4fc5886435d4215182500e5a19fd1d1e" class="m-doc-self">WARN_CAST_QUAL_CLANG</a></span>
             </dt>
             <dd><span></span></dd>
           </dl>
-        </section>
-        <section id="pub-methods">
-          <h2><a href="#pub-methods">Public functions</a></h2>
-          <dl class="m-doc">
-            <dt id="a1b6add0c8cf163d45ecdf55703286ba0">
-              <span class="m-doc-wrap-bumper">void <a href="#a1b6add0c8cf163d45ecdf55703286ba0" class="m-doc-self">start</a>(</span><span class="m-doc-wrap">)</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt>
-              <span class="m-doc-wrap-bumper">void <a href="#aeb2c717d1ee570e48be0e7a02593616d" class="m-doc">stop</a>(</span><span class="m-doc-wrap">)</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a6ab04895f8c7d6be830c125c223a049f">
-              <span class="m-doc-wrap-bumper">auto <a href="#a6ab04895f8c7d6be830c125c223a049f" class="m-doc-self">process</a>(</span><span class="m-doc-wrap">) -&gt; asio::awaitable&lt; void &gt; -&gt; auto</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="af61ff3d9836e4660bba60e2bdacdaaf7">
-              <span class="m-doc-wrap-bumper">void <a href="#af61ff3d9836e4660bba60e2bdacdaaf7" class="m-doc-self">process_pkt</a>(</span><span class="m-doc-wrap">)</span>
-            </dt>
-            <dd><span></span></dd>
-          </dl>
-        </section>
-        <section>
-          <h2>Function documentation</h2>
-          <section class="m-doc-details" id="aeb2c717d1ee570e48be0e7a02593616d"><div>
-            <h3>
-              <span class="m-doc-wrap-bumper">void tasarch::<wbr />gdb::<wbr />connection::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#aeb2c717d1ee570e48be0e7a02593616d" class="m-doc-self">stop</a>(</span><span class="m-doc-wrap">)</span></span>
-            </h3>
-            <p><span></span></p>
-<aside class="m-note m-dim"><h4><a href="todo.html#_todo000013" class="m-doc">Todo</a></h4><p>Locking!</p></aside>
-          </div></section>
         </section>
       </div>
     </div>

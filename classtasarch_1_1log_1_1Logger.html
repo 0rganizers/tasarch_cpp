@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>tasarch::log::logger class | tasarch</title>
+  <title>tasarch::log::Logger class | tasarch</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="stylesheet" href="fixes.css" />
@@ -52,7 +52,7 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="namespacetasarch.html">tasarch</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespacetasarch_1_1log.html">log</a>::<wbr/></span>logger <span class="m-thin">class</span>
+          <span class="m-breadcrumb"><a href="namespacetasarch.html">tasarch</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespacetasarch_1_1log.html">log</a>::<wbr/></span>Logger <span class="m-thin">class</span>
           <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="logger_8h.html">&lt;src/log/logger.h&gt;</a></div>
         </h1>
         <p>Custom spdlog::logger subclass, so we can use C++20&#x27;s <a href="structtasarch_1_1log_1_1source__location.html" class="m-doc">source_<wbr />location</a>. We also add a bunch of additional convenience functions.</p>
@@ -74,8 +74,8 @@
           <h2><a href="#custom-members">Custom Members</a></h2>
 <p>We add some custom members for convencience.</p>
           <dl class="m-doc">
-            <dt id="a18fb7caab28b5e2f00470447c150916c">
-              <span class="m-doc-wrap-bumper">auto <a href="#a18fb7caab28b5e2f00470447c150916c" class="m-doc-self">child</a>(</span><span class="m-doc-wrap">std::string name) -&gt; std::shared_ptr&lt;<a href="classtasarch_1_1log_1_1logger.html" class="m-doc">logger</a>&gt;</span>
+            <dt id="ab27f7e2d1b797a5f002d6bf7ab12cdb8">
+              <span class="m-doc-wrap-bumper">auto <a href="#ab27f7e2d1b797a5f002d6bf7ab12cdb8" class="m-doc-self">child</a>(</span><span class="m-doc-wrap">std::string name) -&gt; std::shared_ptr&lt;<a href="classtasarch_1_1log_1_1Logger.html" class="m-doc">Logger</a>&gt;</span>
             </dt>
             <dd><span></span></dd>
           </dl>
@@ -84,66 +84,66 @@
           <h2><a href="#constructors">Constructors</a></h2>
 <p>We need to implement all the constructors again, but we can just directly pass the given parameters!</p>
           <dl class="m-doc">
-            <dt id="adc287831f808e7dde615f7f088677ca1">
-              <span class="m-doc-wrap-bumper"><a href="#adc287831f808e7dde615f7f088677ca1" class="m-doc-self">logger</a>(</span><span class="m-doc-wrap">std::string name) <span class="m-label m-flat m-info">explicit</span> </span>
+            <dt id="a7dc29daf1a0b860b5ef0d5dcc1839247">
+              <span class="m-doc-wrap-bumper"><a href="#a7dc29daf1a0b860b5ef0d5dcc1839247" class="m-doc-self">Logger</a>(</span><span class="m-doc-wrap">std::string name) <span class="m-label m-flat m-info">explicit</span> </span>
             </dt>
             <dd>Empty logger.</dd>
-            <dt id="af987927712e8ce1231a582cadc9a20e1">
+            <dt id="af14e77a90aa9de1f4cea3f0ec459b8f4">
               <div class="m-doc-template">template&lt;typename It&gt;</div>
-              <span class="m-doc-wrap-bumper"><a href="#af987927712e8ce1231a582cadc9a20e1" class="m-doc-self">logger</a>(</span><span class="m-doc-wrap">std::string name,
+              <span class="m-doc-wrap-bumper"><a href="#af14e77a90aa9de1f4cea3f0ec459b8f4" class="m-doc-self">Logger</a>(</span><span class="m-doc-wrap">std::string name,
               It begin,
               It end)</span>
             </dt>
-            <dd>Logger with range on sinks.</dd>
-            <dt id="a7014c3ea91350ce8d48339d770bba701">
-              <span class="m-doc-wrap-bumper"><a href="#a7014c3ea91350ce8d48339d770bba701" class="m-doc-self">logger</a>(</span><span class="m-doc-wrap">std::string name,
+            <dd><a href="classtasarch_1_1log_1_1Logger.html" class="m-doc">Logger</a> with range on sinks.</dd>
+            <dt id="a960f0a6c4f7c5341108082a09439d39a">
+              <span class="m-doc-wrap-bumper"><a href="#a960f0a6c4f7c5341108082a09439d39a" class="m-doc-self">Logger</a>(</span><span class="m-doc-wrap">std::string name,
               spdlog::sink_ptr single_sink)</span>
             </dt>
-            <dd>Logger with single sink.</dd>
-            <dt id="a450c616d0afb1b97a4ba466c0204b6f5">
-              <span class="m-doc-wrap-bumper"><a href="#a450c616d0afb1b97a4ba466c0204b6f5" class="m-doc-self">logger</a>(</span><span class="m-doc-wrap">std::string name,
+            <dd><a href="classtasarch_1_1log_1_1Logger.html" class="m-doc">Logger</a> with single sink.</dd>
+            <dt id="a7458f06b832e0756be399ff5f4c2dcc1">
+              <span class="m-doc-wrap-bumper"><a href="#a7458f06b832e0756be399ff5f4c2dcc1" class="m-doc-self">Logger</a>(</span><span class="m-doc-wrap">std::string name,
               spdlog::sinks_init_list sinks)</span>
             </dt>
-            <dd>Logger with sinks init list.</dd>
+            <dd><a href="classtasarch_1_1log_1_1Logger.html" class="m-doc">Logger</a> with sinks init list.</dd>
           </dl>
         </section>
         <section id="variadic-log-functions">
           <h2><a href="#variadic-log-functions">Variadic Log Functions</a></h2>
 <p>To be able to use <a href="structtasarch_1_1log_1_1source__location.html" class="m-doc">source_<wbr />location</a>, we need to shadow the parent&#x27;s variadic and non variadic log functions.</p>
           <dl class="m-doc">
-            <dt id="a87ccee94fac30ef5d48a019415a355a9">
+            <dt id="acc07fc28adc2935ab79ac31c9151f681">
               <div class="m-doc-template">template&lt;typename... Args&gt;</div>
-              <span class="m-doc-wrap-bumper">void <a href="#a87ccee94fac30ef5d48a019415a355a9" class="m-doc-self">trace</a>(</span><span class="m-doc-wrap"><a href="structtasarch_1_1log_1_1format__with__location.html" class="m-doc">format_<wbr />with_<wbr />location</a> fmt,
+              <span class="m-doc-wrap-bumper">void <a href="#acc07fc28adc2935ab79ac31c9151f681" class="m-doc-self">trace</a>(</span><span class="m-doc-wrap"><a href="structtasarch_1_1log_1_1format__with__location.html" class="m-doc">format_<wbr />with_<wbr />location</a> fmt,
               Args &amp;&amp; ... args)</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="ae171a257310e9f3d5ff7a69d754f99dc">
+            <dt id="a55d5bd056ff89d19c5f007a215fc1a6c">
               <div class="m-doc-template">template&lt;typename... Args&gt;</div>
-              <span class="m-doc-wrap-bumper">void <a href="#ae171a257310e9f3d5ff7a69d754f99dc" class="m-doc-self">debug</a>(</span><span class="m-doc-wrap"><a href="structtasarch_1_1log_1_1format__with__location.html" class="m-doc">format_<wbr />with_<wbr />location</a> fmt,
+              <span class="m-doc-wrap-bumper">void <a href="#a55d5bd056ff89d19c5f007a215fc1a6c" class="m-doc-self">debug</a>(</span><span class="m-doc-wrap"><a href="structtasarch_1_1log_1_1format__with__location.html" class="m-doc">format_<wbr />with_<wbr />location</a> fmt,
               Args &amp;&amp; ... args)</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="af4431e694d7b2bc14267b73788ab4528">
+            <dt id="ad2d17bb15b1c91980a866915e85be44a">
               <div class="m-doc-template">template&lt;typename... Args&gt;</div>
-              <span class="m-doc-wrap-bumper">void <a href="#af4431e694d7b2bc14267b73788ab4528" class="m-doc-self">info</a>(</span><span class="m-doc-wrap"><a href="structtasarch_1_1log_1_1format__with__location.html" class="m-doc">format_<wbr />with_<wbr />location</a> fmt,
+              <span class="m-doc-wrap-bumper">void <a href="#ad2d17bb15b1c91980a866915e85be44a" class="m-doc-self">info</a>(</span><span class="m-doc-wrap"><a href="structtasarch_1_1log_1_1format__with__location.html" class="m-doc">format_<wbr />with_<wbr />location</a> fmt,
               Args &amp;&amp; ... args)</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a49c14d613a5f6558ddb44d5d83111895">
+            <dt id="addae275136f4223d1e1c3c2ee8c61986">
               <div class="m-doc-template">template&lt;typename... Args&gt;</div>
-              <span class="m-doc-wrap-bumper">void <a href="#a49c14d613a5f6558ddb44d5d83111895" class="m-doc-self">warn</a>(</span><span class="m-doc-wrap"><a href="structtasarch_1_1log_1_1format__with__location.html" class="m-doc">format_<wbr />with_<wbr />location</a> fmt,
+              <span class="m-doc-wrap-bumper">void <a href="#addae275136f4223d1e1c3c2ee8c61986" class="m-doc-self">warn</a>(</span><span class="m-doc-wrap"><a href="structtasarch_1_1log_1_1format__with__location.html" class="m-doc">format_<wbr />with_<wbr />location</a> fmt,
               Args &amp;&amp; ... args)</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="ace9edc8faa667f611db65e8a92b67934">
+            <dt id="a2c0dc982edbf2487293e650d25b1076d">
               <div class="m-doc-template">template&lt;typename... Args&gt;</div>
-              <span class="m-doc-wrap-bumper">void <a href="#ace9edc8faa667f611db65e8a92b67934" class="m-doc-self">error</a>(</span><span class="m-doc-wrap"><a href="structtasarch_1_1log_1_1format__with__location.html" class="m-doc">format_<wbr />with_<wbr />location</a> fmt,
+              <span class="m-doc-wrap-bumper">void <a href="#a2c0dc982edbf2487293e650d25b1076d" class="m-doc-self">error</a>(</span><span class="m-doc-wrap"><a href="structtasarch_1_1log_1_1format__with__location.html" class="m-doc">format_<wbr />with_<wbr />location</a> fmt,
               Args &amp;&amp; ... args)</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a77781c9ce951a67dfda17b2bafd7bbe7">
+            <dt id="af6fc7d4005c0fdd9c0e3c0f9b3e6b166">
               <div class="m-doc-template">template&lt;typename... Args&gt;</div>
-              <span class="m-doc-wrap-bumper">void <a href="#a77781c9ce951a67dfda17b2bafd7bbe7" class="m-doc-self">critical</a>(</span><span class="m-doc-wrap"><a href="structtasarch_1_1log_1_1format__with__location.html" class="m-doc">format_<wbr />with_<wbr />location</a> fmt,
+              <span class="m-doc-wrap-bumper">void <a href="#af6fc7d4005c0fdd9c0e3c0f9b3e6b166" class="m-doc-self">critical</a>(</span><span class="m-doc-wrap"><a href="structtasarch_1_1log_1_1format__with__location.html" class="m-doc">format_<wbr />with_<wbr />location</a> fmt,
               Args &amp;&amp; ... args)</span>
             </dt>
             <dd><span></span></dd>
@@ -152,39 +152,39 @@
         <section id="single-log-message">
           <h2><a href="#single-log-message">Single Log Message</a></h2>
           <dl class="m-doc">
-            <dt id="a23448a453e19264d85af781e4d44ab58">
+            <dt id="ab909a143331999a3108ddb602f482f5b">
               <div class="m-doc-template">template&lt;typename T&gt;</div>
-              <span class="m-doc-wrap-bumper">void <a href="#a23448a453e19264d85af781e4d44ab58" class="m-doc-self">trace</a>(</span><span class="m-doc-wrap">const T&amp; msg,
+              <span class="m-doc-wrap-bumper">void <a href="#ab909a143331999a3108ddb602f482f5b" class="m-doc-self">trace</a>(</span><span class="m-doc-wrap">const T&amp; msg,
               const <a href="structtasarch_1_1log_1_1source__location.html" class="m-doc">source_<wbr />location</a>&amp; location = <a href="structtasarch_1_1log_1_1source__location.html#aa8914f2fd3b38acb6dfd951695fb509c" class="m-doc">source_location::<wbr />current</a>())</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a99263cecaab38666910257452da25553">
+            <dt id="a4c2b811d99e62e9cedb7f41b9d978283">
               <div class="m-doc-template">template&lt;typename T&gt;</div>
-              <span class="m-doc-wrap-bumper">void <a href="#a99263cecaab38666910257452da25553" class="m-doc-self">debug</a>(</span><span class="m-doc-wrap">const T&amp; msg,
+              <span class="m-doc-wrap-bumper">void <a href="#a4c2b811d99e62e9cedb7f41b9d978283" class="m-doc-self">debug</a>(</span><span class="m-doc-wrap">const T&amp; msg,
               const <a href="structtasarch_1_1log_1_1source__location.html" class="m-doc">source_<wbr />location</a>&amp; location = <a href="structtasarch_1_1log_1_1source__location.html#aa8914f2fd3b38acb6dfd951695fb509c" class="m-doc">source_location::<wbr />current</a>())</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="adee7a7a5562441d7501752f4050fe8f1">
+            <dt id="a62a0b92a2b2fc900f4d8b1d49b933cc0">
               <div class="m-doc-template">template&lt;typename T&gt;</div>
-              <span class="m-doc-wrap-bumper">void <a href="#adee7a7a5562441d7501752f4050fe8f1" class="m-doc-self">info</a>(</span><span class="m-doc-wrap">const T&amp; msg,
+              <span class="m-doc-wrap-bumper">void <a href="#a62a0b92a2b2fc900f4d8b1d49b933cc0" class="m-doc-self">info</a>(</span><span class="m-doc-wrap">const T&amp; msg,
               const <a href="structtasarch_1_1log_1_1source__location.html" class="m-doc">source_<wbr />location</a>&amp; location = <a href="structtasarch_1_1log_1_1source__location.html#aa8914f2fd3b38acb6dfd951695fb509c" class="m-doc">source_location::<wbr />current</a>())</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a9a6f8534c4f71cde8dae5e6a0cc5564c">
+            <dt id="adeedc1f31e1c8debe61387a5f41eb885">
               <div class="m-doc-template">template&lt;typename T&gt;</div>
-              <span class="m-doc-wrap-bumper">void <a href="#a9a6f8534c4f71cde8dae5e6a0cc5564c" class="m-doc-self">warn</a>(</span><span class="m-doc-wrap">const T&amp; msg,
+              <span class="m-doc-wrap-bumper">void <a href="#adeedc1f31e1c8debe61387a5f41eb885" class="m-doc-self">warn</a>(</span><span class="m-doc-wrap">const T&amp; msg,
               const <a href="structtasarch_1_1log_1_1source__location.html" class="m-doc">source_<wbr />location</a>&amp; location = <a href="structtasarch_1_1log_1_1source__location.html#aa8914f2fd3b38acb6dfd951695fb509c" class="m-doc">source_location::<wbr />current</a>())</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a470b7bcb248694787442e115b91de3d3">
+            <dt id="a8081e5e6acbada581c18a9f59836ba28">
               <div class="m-doc-template">template&lt;typename T&gt;</div>
-              <span class="m-doc-wrap-bumper">void <a href="#a470b7bcb248694787442e115b91de3d3" class="m-doc-self">error</a>(</span><span class="m-doc-wrap">const T&amp; msg,
+              <span class="m-doc-wrap-bumper">void <a href="#a8081e5e6acbada581c18a9f59836ba28" class="m-doc-self">error</a>(</span><span class="m-doc-wrap">const T&amp; msg,
               const <a href="structtasarch_1_1log_1_1source__location.html" class="m-doc">source_<wbr />location</a>&amp; location = <a href="structtasarch_1_1log_1_1source__location.html#aa8914f2fd3b38acb6dfd951695fb509c" class="m-doc">source_location::<wbr />current</a>())</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a8706bfeeff610a93bef01e7c003bddca">
+            <dt id="af810738c5d9db452a0f57da6db583587">
               <div class="m-doc-template">template&lt;typename T&gt;</div>
-              <span class="m-doc-wrap-bumper">void <a href="#a8706bfeeff610a93bef01e7c003bddca" class="m-doc-self">critical</a>(</span><span class="m-doc-wrap">const T&amp; msg,
+              <span class="m-doc-wrap-bumper">void <a href="#af810738c5d9db452a0f57da6db583587" class="m-doc-self">critical</a>(</span><span class="m-doc-wrap">const T&amp; msg,
               const <a href="structtasarch_1_1log_1_1source__location.html" class="m-doc">source_<wbr />location</a>&amp; location = <a href="structtasarch_1_1log_1_1source__location.html#aa8914f2fd3b38acb6dfd951695fb509c" class="m-doc">source_location::<wbr />current</a>())</span>
             </dt>
             <dd><span></span></dd>

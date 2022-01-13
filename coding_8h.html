@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>tasarch::gdb::connection class | tasarch</title>
+  <title>src/gdb/coding.h file | tasarch</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="stylesheet" href="fixes.css" />
@@ -52,62 +52,45 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="namespacetasarch.html">tasarch</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespacetasarch_1_1gdb.html">gdb</a>::<wbr/></span>connection <span class="m-thin">class</span>
-          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="connection_8h.html">&lt;src/gdb/connection.h&gt;</a></div>
+          <span class="m-breadcrumb"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a>/</span><span class="m-breadcrumb"><a href="dir_e139b308d2d163cddd05844f545b3a0d.html">gdb</a>/</span>coding.h <span class="m-thin">file</span>
         </h1>
-        <p><span></span></p>
+        <p>This file contains all helpers used for encoding / decoding command arguments.</p>
         <nav class="m-block m-default">
           <h3>Contents</h3>
           <ul>
             <li>
               Reference
               <ul>
-                <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
-                <li><a href="#pub-methods">Public functions</a></li>
+                <li><a href="#namespaces">Namespaces</a></li>
+                <li><a href="#nested-classes">Classes</a></li>
               </ul>
             </li>
           </ul>
         </nav>
-        <section id="typeless-methods">
-          <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
+<aside class="m-note m-default"><h4>Author</h4><p>Leonardo Galli (<a href="mailto:leo@orgnz.rs">leo@orgnz.rs</a>)</p></aside><aside class="m-note m-default"><h4>Version</h4><p>0.1</p></aside><aside class="m-note m-default"><h4>Date</h4><p>2022-01-12</p></aside><aside class="m-note m-default"><h4>Copyright</h4><p>Copyright (c) 2022</p></aside>
+        <section id="namespaces">
+          <h2><a href="#namespaces">Namespaces</a></h2>
           <dl class="m-doc">
-            <dt id="a348f6c14c40026322d35788856e4e893">
-              <span class="m-doc-wrap-bumper"><a href="#a348f6c14c40026322d35788856e4e893" class="m-doc-self">connection</a>(</span><span class="m-doc-wrap">tcp::socket sock,
-              std::shared_ptr&lt;<a href="classtasarch_1_1gdb_1_1Debugger.html" class="m-doc">Debugger</a>&gt; debugger) <span class="m-label m-flat m-info">explicit</span> </span>
-            </dt>
+            <dt>namespace <a href="namespacetasarch.html" class="m-doc">tasarch</a></dt>
+            <dd><span></span></dd>
+            <dt>namespace <a href="namespacetasarch_1_1gdb.html" class="m-doc">tasarch::gdb</a></dt>
             <dd><span></span></dd>
           </dl>
         </section>
-        <section id="pub-methods">
-          <h2><a href="#pub-methods">Public functions</a></h2>
+        <section id="nested-classes">
+          <h2><a href="#nested-classes">Classes</a></h2>
           <dl class="m-doc">
-            <dt id="a1b6add0c8cf163d45ecdf55703286ba0">
-              <span class="m-doc-wrap-bumper">void <a href="#a1b6add0c8cf163d45ecdf55703286ba0" class="m-doc-self">start</a>(</span><span class="m-doc-wrap">)</span>
+            <dt>
+              <div class="m-doc-template">template&lt;typename TLocation&gt;</div>
+              struct <a href="structtasarch_1_1gdb_1_1IdCoder.html" class="m-doc">tasarch::gdb::IdCoder</a>
             </dt>
             <dd><span></span></dd>
             <dt>
-              <span class="m-doc-wrap-bumper">void <a href="#aeb2c717d1ee570e48be0e7a02593616d" class="m-doc">stop</a>(</span><span class="m-doc-wrap">)</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a6ab04895f8c7d6be830c125c223a049f">
-              <span class="m-doc-wrap-bumper">auto <a href="#a6ab04895f8c7d6be830c125c223a049f" class="m-doc-self">process</a>(</span><span class="m-doc-wrap">) -&gt; asio::awaitable&lt; void &gt; -&gt; auto</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="af61ff3d9836e4660bba60e2bdacdaaf7">
-              <span class="m-doc-wrap-bumper">void <a href="#af61ff3d9836e4660bba60e2bdacdaaf7" class="m-doc-self">process_pkt</a>(</span><span class="m-doc-wrap">)</span>
+              <div class="m-doc-template">template&lt;<a href="namespacetasarch_1_1gdb.html#acd2d02410bf8ecc8f86e6113f6d60ef5" class="m-doc">Coding</a> TChildCoder = <a href="structtasarch_1_1gdb_1_1IdCoder.html" class="m-doc">IdCoder</a>&lt;std::string&gt;, char Sep = &#x27;\0&#x27;&gt;</div>
+              struct <a href="structtasarch_1_1gdb_1_1StrCoder.html" class="m-doc">tasarch::gdb::StrCoder</a>
             </dt>
             <dd><span></span></dd>
           </dl>
-        </section>
-        <section>
-          <h2>Function documentation</h2>
-          <section class="m-doc-details" id="aeb2c717d1ee570e48be0e7a02593616d"><div>
-            <h3>
-              <span class="m-doc-wrap-bumper">void tasarch::<wbr />gdb::<wbr />connection::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#aeb2c717d1ee570e48be0e7a02593616d" class="m-doc-self">stop</a>(</span><span class="m-doc-wrap">)</span></span>
-            </h3>
-            <p><span></span></p>
-<aside class="m-note m-dim"><h4><a href="todo.html#_todo000013" class="m-doc">Todo</a></h4><p>Locking!</p></aside>
-          </div></section>
         </section>
       </div>
     </div>

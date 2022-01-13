@@ -62,6 +62,8 @@
               Reference
               <ul>
                 <li><a href="#nested-classes">Classes</a></li>
+                <li><a href="#enum-members">Enums</a></li>
+                <li><a href="#typedef-members">Typedefs</a></li>
                 <li><a href="#func-members">Functions</a></li>
                 <li><a href="#var-members">Variables</a></li>
               </ul>
@@ -76,6 +78,10 @@
             </dt>
             <dd>Responsible for handling multiple threads, that will then run coroutines (mostly io, mostly for gdbstub). Normally using asio, you would just run the executor inside the main thread. However, here the main thread belongs to the GUI, so we create background thread(s) to run the executor.</dd>
             <dt>
+              class <a href="classtasarch_1_1gdb_1_1buffer.html" class="m-doc">buffer</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt>
               class <a href="classtasarch_1_1gdb_1_1buffer__too__small.html" class="m-doc">buffer_too_small</a>
             </dt>
             <dd>Exception thrown when a buffer was too small to fit all recvd data.</dd>
@@ -84,11 +90,20 @@
             </dt>
             <dd><span></span></dd>
             <dt>
-              class <a href="classtasarch_1_1gdb_1_1debugger.html" class="m-doc">debugger</a>
+              class <a href="classtasarch_1_1gdb_1_1Debugger.html" class="m-doc">Debugger</a>
             </dt>
             <dd><span></span></dd>
             <dt>
-              class <a href="classtasarch_1_1gdb_1_1packet__io.html" class="m-doc">packet_io</a>
+              class <a href="classtasarch_1_1gdb_1_1gdb__error.html" class="m-doc">gdb_error</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt>
+              <div class="m-doc-template">template&lt;typename TLocation&gt;</div>
+              struct <a href="structtasarch_1_1gdb_1_1IdCoder.html" class="m-doc">IdCoder</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt>
+              class <a href="classtasarch_1_1gdb_1_1PacketIO.html" class="m-doc">PacketIO</a>
             </dt>
             <dd>Implements the low-level transport protocol as specified by GDB. For details see <a href="https://sourceware.org/gdb/onlinedocs/gdb/Overview.html#Overview">https:/<wbr />/<wbr />sourceware.org/<wbr />gdb/<wbr />onlinedocs/<wbr />gdb/<wbr />Overview.html#Overview</a>.</dd>
             <dt>
@@ -96,14 +111,99 @@
             </dt>
             <dd><span></span></dd>
             <dt>
+              <div class="m-doc-template">template&lt;<a href="namespacetasarch_1_1gdb.html#acd2d02410bf8ecc8f86e6113f6d60ef5" class="m-doc">Coding</a> TChildCoder = <a href="structtasarch_1_1gdb_1_1IdCoder.html" class="m-doc">IdCoder</a>&lt;std::string&gt;, char Sep = &#x27;\0&#x27;&gt;</div>
+              struct <a href="structtasarch_1_1gdb_1_1StrCoder.html" class="m-doc">StrCoder</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt>
               class <a href="classtasarch_1_1gdb_1_1timed__out.html" class="m-doc">timed_out</a>
             </dt>
             <dd>Exception thrown when a timeout was reached.</dd>
+            <dt>
+              class <a href="classtasarch_1_1gdb_1_1unknown__request.html" class="m-doc">unknown_request</a>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="enum-members">
+          <h2><a href="#enum-members">Enums</a></h2>
+          <dl class="m-doc">
+            <dt>
+              <span class="m-doc-wrap-bumper">enum <a href="#a6bd05e843f3edb235306b2b1a04b4e2b" class="m-doc">err_code</a>: <a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> { </span><span class="m-doc-wrap"><a href="#a6bd05e843f3edb235306b2b1a04b4e2ba98ad2ab90c74f17fdf9b22edc40c0860" class="m-doc">unknown</a> = 1,
+              <a href="#a6bd05e843f3edb235306b2b1a04b4e2baea0b8f0006dd562826248f5563bdbb06" class="m-doc">buf_too_small</a> = 2 }</span>
+            </dt>
+            <dd>Haha non standardization go brrr.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">enum <a href="#adc9cef09a19cf397fe69c1bac7ef8140" class="m-doc">packet_type</a>: <a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> { </span><span class="m-doc-wrap"><a href="#adc9cef09a19cf397fe69c1bac7ef8140ada0d7e8a00957befd38a4661cc6e8b98" class="m-doc">enable_extended</a> = &#x27;!&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140a535ff0e4d07b432fce6911f9142cbf10" class="m-doc">query_stop_reason</a> = &#x27;?&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140acfd3733b7fdd4e20d4920032ed1aa846" class="m-doc">cont</a> = &#x27;c&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140a7435323473d74960f412eda4ba9d824d" class="m-doc">cont_sig</a> = &#x27;C&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140ab46c9fcf842c831b9151cdfc08080fc7" class="m-doc">detach</a> = &#x27;D&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140a8e01e07e89daa5bd24f1b189c339b55e" class="m-doc">file_io</a> = &#x27;F&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140ad2180f2d57ab5e7e3dcc39dc920c1823" class="m-doc">read_gpr</a> = &#x27;g&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140a2a3f662bfff0a2300597c99211a8cf08" class="m-doc">write_gpr</a> = &#x27;G&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140a9d830a4330f08ca235ebbdc0e465875f" class="m-doc">set_thd</a> = &#x27;H&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140aa699de48795d1c29da24b9028a893750" class="m-doc">step_cycle</a> = &#x27;i&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140a2bfbe11d9f247e2902ce4d933d352dd3" class="m-doc">step_cycle_sig</a> = &#x27;I&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140aa2c84978aeca6c49335f3acc71aeae7e" class="m-doc">kill</a> = &#x27;k&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140afa099d08d0015bf60469ac23a3c9146d" class="m-doc">read_mem</a> = &#x27;m&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140a18a64015cefbb7e022ac2201c47803a1" class="m-doc">write_mem</a> = &#x27;M&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140ac292833d9f3eb1e4a72a4aafb4b29b26" class="m-doc">read_reg</a> = &#x27;p&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140a1b16b46e04d7f92303ffd4a7f9f783f5" class="m-doc">write_reg</a> = &#x27;P&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140af06f0cf310b464f3b3d4a0573ccdced2" class="m-doc">get</a> = &#x27;q&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140a1cf274883dc7697e0862336dcef15e05" class="m-doc">set</a> = &#x27;Q&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140ac1400caf9bfc79f4f44239b1489b4ec3" class="m-doc">reset</a> = &#x27;r&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140a099043f93f615da7e6b8a61c0e9a091e" class="m-doc">restart</a> = &#x27;R&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140a326e3048ced02eac2df7669733454172" class="m-doc">step</a> = &#x27;s&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140a0c4bec9f4317d3f87a824fdaf6fe48bb" class="m-doc">step_sig</a> = &#x27;S&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140ac5a75aac13b1c64282cb9df8acf8b8e6" class="m-doc">search</a> = &#x27;t&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140a9e5203a98ae5dd56803e5838eade72c6" class="m-doc">query_thd</a> = &#x27;T&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140a712bec15f18d2f18591683ec73f3f4ed" class="m-doc">vcont</a> = &#x27;v&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140a22fe83585a4600907555e71dec93a657" class="m-doc">write_mem_bin</a> = &#x27;X&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140a8f9c609646c514615f5a7442b9559c4d" class="m-doc">add_break</a> = &#x27;z&#x27;,
+              <a href="#adc9cef09a19cf397fe69c1bac7ef8140ab0531acc8bfb344cac3d794f4acd9646" class="m-doc">del_break</a> = &#x27;Z&#x27; }</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">enum <a href="#ae145d9e52a31ac95cd39cfb75e0cfbba" class="m-doc">query_type</a> { </span><span class="m-doc-wrap"><a href="#ae145d9e52a31ac95cd39cfb75e0cfbbaaf97326620d08cafd72e21aa550c7f4f6" class="m-doc">get_val</a> = 1 &lt;&lt; 0,
+              <a href="#ae145d9e52a31ac95cd39cfb75e0cfbbaaf6486cf3d4466693cdd9eb6b2d5bff86" class="m-doc">set_val</a> = 1 &lt;&lt; 1 }</span>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="typedef-members">
+          <h2><a href="#typedef-members">Typedefs</a></h2>
+          <dl class="m-doc">
+            <dt>
+              <div class="m-doc-template">template&lt;<a href="namespacetasarch_1_1gdb.html#acd2d02410bf8ecc8f86e6113f6d60ef5" class="m-doc">tasarch::<wbr />gdb::<wbr />Coding</a> TCoder&gt;</div>
+              using <a href="#ab711661e09a0b4c48b22fd82b5f63a8c" class="m-doc">extract_arg</a> = typename TCoder::value_type
+            </dt>
+            <dd><span></span></dd>
           </dl>
         </section>
         <section id="func-members">
           <h2><a href="#func-members">Functions</a></h2>
           <dl class="m-doc">
+            <dt>
+              <div class="m-doc-template">template&lt;typename ... TArgs, Callback&lt;TArgs...&gt; TCallback&gt;</div>
+              <span class="m-doc-wrap-bumper">void <a href="#a3490c3bf5c0b15f12851f46f33279d5e" class="m-doc">decode_buffer_impl</a>(</span><span class="m-doc-wrap"><a href="classtasarch_1_1gdb_1_1buffer.html" class="m-doc">tasarch::<wbr />gdb::<wbr />buffer</a>&amp; buf,
+              TCallback callback,
+              TArgs... args)</span>
+            </dt>
+            <dd>no decoding left, callback!</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<a href="namespacetasarch_1_1gdb.html#acd2d02410bf8ecc8f86e6113f6d60ef5" class="m-doc">tasarch::<wbr />gdb::<wbr />Coding</a> TCoder, <a href="namespacetasarch_1_1gdb.html#acd2d02410bf8ecc8f86e6113f6d60ef5" class="m-doc">tasarch::<wbr />gdb::<wbr />Coding</a> ... TCoders, NotCoding ... TArgs, Callback&lt;TArgs..., extract_arg&lt;TCoder&gt;, extract_arg&lt;TCoders&gt;...&gt; TCallback&gt;</div>
+              <span class="m-doc-wrap-bumper">void <a href="#ad4d73412968532e088f1542449070cc7" class="m-doc">decode_buffer_impl</a>(</span><span class="m-doc-wrap"><a href="classtasarch_1_1gdb_1_1buffer.html" class="m-doc">tasarch::<wbr />gdb::<wbr />buffer</a>&amp; buf,
+              TCallback callback,
+              TArgs... args)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<a href="namespacetasarch_1_1gdb.html#acd2d02410bf8ecc8f86e6113f6d60ef5" class="m-doc">tasarch::<wbr />gdb::<wbr />Coding</a> ... TCoders, Callback&lt;extract_arg&lt;TCoders&gt;...&gt; TCallback&gt;</div>
+              <span class="m-doc-wrap-bumper">void <a href="#a65f3e54664a9ee1c3c74adaacd7b81ac" class="m-doc">decode_buffer</a>(</span><span class="m-doc-wrap"><a href="classtasarch_1_1gdb_1_1buffer.html" class="m-doc">tasarch::<wbr />gdb::<wbr />buffer</a>&amp; buf,
+              TCallback callback)</span>
+            </dt>
+            <dd><span></span></dd>
             <dt>
               <div class="m-doc-template">template&lt;typename TResult = void&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a href="#a7f54693e9f9e9b7982c3d680d1c48ca5" class="m-doc">awaitable_with_timeout</a>(</span><span class="m-doc-wrap">asio::awaitable&lt;TResult&gt; awaitable,
@@ -116,6 +216,10 @@
             </dt>
             <dd>Special casing needed for void coroutines, as they dont return a value, so the variant is not working! See <code><a href="namespacetasarch_1_1gdb.html#a7f54693e9f9e9b7982c3d680d1c48ca5" class="m-doc">awaitable_<wbr />with_<wbr />timeout()</a></code> for details.</dd>
             <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#aec10c8ecd8e648115a115a19c5a5fe07" class="m-doc">max_packet_expansion</a>(</span><span class="m-doc-wrap">size_t packet_size) -&gt; size_t -&gt; auto <span class="m-label m-flat m-primary">constexpr</span></span>
+            </dt>
+            <dd>Returns the maximum number of bytes a packet of size packet_size can blow up due to escaping and checksum, etc.</dd>
+            <dt>
               <span class="m-doc-wrap-bumper">auto <a href="#a6cf1da2d3b665ddf1904044e4e2a4a6b" class="m-doc">decode_hex</a>(</span><span class="m-doc-wrap"><a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> c) -&gt; int -&gt; auto <span class="m-label m-flat m-primary">constexpr</span></span>
             </dt>
             <dd>Simple hex decoding of a nibble.</dd>
@@ -123,11 +227,51 @@
               <span class="m-doc-wrap-bumper">auto <a href="#a519433c8f66a7c9313caa07fdeb7c218" class="m-doc">encode_hex</a>(</span><span class="m-doc-wrap"><a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> v) -&gt; char -&gt; auto <span class="m-label m-flat m-primary">constexpr</span></span>
             </dt>
             <dd>Simple hex encoding of a nibble.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ac62688f0d3ddfa181a1194449518c179" class="m-doc">operator|</a>(</span><span class="m-doc-wrap"><a href="namespacetasarch_1_1gdb.html#ae145d9e52a31ac95cd39cfb75e0cfbba" class="m-doc">query_<wbr />type</a> a,
+              <a href="namespacetasarch_1_1gdb.html#ae145d9e52a31ac95cd39cfb75e0cfbba" class="m-doc">query_<wbr />type</a> b) -&gt; query_type -&gt; auto</span>
+            </dt>
+            <dd><span></span></dd>
           </dl>
         </section>
         <section id="var-members">
           <h2><a href="#var-members">Variables</a></h2>
           <dl class="m-doc">
+            <dt>
+              <div class="m-doc-template">template&lt;typename From, typename To&gt;</div>
+              concept <a href="#ae661dc9dd7d1257a67045d78b6aa1f8b" class="m-doc">convertible_to</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt>
+              <div class="m-doc-template">template&lt;typename TBuffer&gt;</div>
+              concept <a href="#a9847cd1acb8160bd34f18cc7889dc0bb" class="m-doc">Bufferable</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt>
+              <div class="m-doc-template">template&lt;typename TEncoder, typename TValue, typename TToLocation&gt;</div>
+              concept <a href="#ad9d76e31c1539510a15d2708e665a3e4" class="m-doc">Encoding</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt>
+              <div class="m-doc-template">template&lt;typename TDecoder, typename TValue, typename TFromLocation&gt;</div>
+              concept <a href="#a7f0f755996896cb09930b5e86d963acb" class="m-doc">Decoding</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt>
+              <div class="m-doc-template">template&lt;typename TCoder&gt;</div>
+              concept <a href="#acd2d02410bf8ecc8f86e6113f6d60ef5" class="m-doc">Coding</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt>
+              <div class="m-doc-template">template&lt;typename TNotCoder&gt;</div>
+              concept <a href="#a3fd711df7ee301cb48f2cc354e4e1d7a" class="m-doc">NotCoding</a>
+            </dt>
+            <dd></dd>
+            <dt>
+              <div class="m-doc-template">template&lt;typename TCallback, typename ... TArgs&gt;</div>
+              concept <a href="#a68b7b83102cac5e50b4a3db1ee23938f" class="m-doc">Callback</a>
+            </dt>
+            <dd><span></span></dd>
             <dt>
               static size_t <a href="#adec777c0dc396ec1010f3426f1dc1b9f" class="m-doc">gdb_packet_buffer_size</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
@@ -143,7 +287,80 @@
           </dl>
         </section>
         <section>
+          <h2>Enum documentation</h2>
+          <section class="m-doc-details" id="a6bd05e843f3edb235306b2b1a04b4e2b"><div>
+            <h3>
+              enum tasarch::<wbr />gdb::<wbr /><a href="#a6bd05e843f3edb235306b2b1a04b4e2b" class="m-doc-self">err_code</a>: <a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a>
+              <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="gdb__err_8h.html">&lt;src/gdb/gdb_err.h&gt;</a></div>
+            </h3>
+            <p>Haha non standardization go brrr.</p>
+<aside class="m-note m-dim"><h4><a href="todo.html#_todo000014" class="m-doc">Todo</a></h4><p>stringize!</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="adc9cef09a19cf397fe69c1bac7ef8140"><div>
+            <h3>
+              enum tasarch::<wbr />gdb::<wbr /><a href="#adc9cef09a19cf397fe69c1bac7ef8140" class="m-doc-self">packet_type</a>: <a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a>
+              <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="protocol_8h.html">&lt;src/gdb/protocol.h&gt;</a></div>
+            </h3>
+            <p><span></span></p>
+          </div></section>
+          <section class="m-doc-details" id="ae145d9e52a31ac95cd39cfb75e0cfbba"><div>
+            <h3>
+              enum tasarch::<wbr />gdb::<wbr /><a href="#ae145d9e52a31ac95cd39cfb75e0cfbba" class="m-doc-self">query_type</a>
+              <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="protocol_8h.html">&lt;src/gdb/protocol.h&gt;</a></div>
+            </h3>
+            <p><span></span></p>
+          </div></section>
+        </section>
+        <section>
+          <h2>Typedef documentation</h2>
+          <section class="m-doc-details" id="ab711661e09a0b4c48b22fd82b5f63a8c"><div>
+            <h3>
+              <div class="m-doc-include m-code m-inverted m-right-m m-text-right"><span class="cp">#include</span> <a class="cpf" href="coding_8h.html">&lt;src/gdb/coding.h&gt;</a></div>
+              <div class="m-doc-template">
+                template&lt;<a href="namespacetasarch_1_1gdb.html#acd2d02410bf8ecc8f86e6113f6d60ef5" class="m-doc">tasarch::<wbr />gdb::<wbr />Coding</a> TCoder&gt;
+              </div>
+              using tasarch::<wbr />gdb::<wbr /><a href="#ab711661e09a0b4c48b22fd82b5f63a8c" class="m-doc-self">extract_arg</a> = typename TCoder::value_type
+            </h3>
+            <p><span></span></p>
+          </div></section>
+        </section>
+        <section>
           <h2>Function documentation</h2>
+          <section class="m-doc-details" id="a3490c3bf5c0b15f12851f46f33279d5e"><div>
+            <h3>
+              <div class="m-doc-include m-code m-inverted m-right-m m-text-right"><span class="cp">#include</span> <a class="cpf" href="coding_8h.html">&lt;src/gdb/coding.h&gt;</a></div>
+              <div class="m-doc-template">
+                template&lt;typename ... TArgs, Callback&lt;TArgs...&gt; TCallback&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">void tasarch::<wbr />gdb::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a3490c3bf5c0b15f12851f46f33279d5e" class="m-doc-self">decode_buffer_impl</a>(</span><span class="m-doc-wrap"><a href="classtasarch_1_1gdb_1_1buffer.html" class="m-doc">tasarch::<wbr />gdb::<wbr />buffer</a>&amp; buf,
+              TCallback callback,
+              TArgs... args)</span></span>
+            </h3>
+            <p>no decoding left, callback!</p>
+          </div></section>
+          <section class="m-doc-details" id="ad4d73412968532e088f1542449070cc7"><div>
+            <h3>
+              <div class="m-doc-include m-code m-inverted m-right-m m-text-right"><span class="cp">#include</span> <a class="cpf" href="coding_8h.html">&lt;src/gdb/coding.h&gt;</a></div>
+              <div class="m-doc-template">
+                template&lt;<a href="namespacetasarch_1_1gdb.html#acd2d02410bf8ecc8f86e6113f6d60ef5" class="m-doc">tasarch::<wbr />gdb::<wbr />Coding</a> TCoder, <a href="namespacetasarch_1_1gdb.html#acd2d02410bf8ecc8f86e6113f6d60ef5" class="m-doc">tasarch::<wbr />gdb::<wbr />Coding</a> ... TCoders, NotCoding ... TArgs, Callback&lt;TArgs..., extract_arg&lt;TCoder&gt;, extract_arg&lt;TCoders&gt;...&gt; TCallback&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">void tasarch::<wbr />gdb::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ad4d73412968532e088f1542449070cc7" class="m-doc-self">decode_buffer_impl</a>(</span><span class="m-doc-wrap"><a href="classtasarch_1_1gdb_1_1buffer.html" class="m-doc">tasarch::<wbr />gdb::<wbr />buffer</a>&amp; buf,
+              TCallback callback,
+              TArgs... args)</span></span>
+            </h3>
+            <p><span></span></p>
+          </div></section>
+          <section class="m-doc-details" id="a65f3e54664a9ee1c3c74adaacd7b81ac"><div>
+            <h3>
+              <div class="m-doc-include m-code m-inverted m-right-m m-text-right"><span class="cp">#include</span> <a class="cpf" href="coding_8h.html">&lt;src/gdb/coding.h&gt;</a></div>
+              <div class="m-doc-template">
+                template&lt;<a href="namespacetasarch_1_1gdb.html#acd2d02410bf8ecc8f86e6113f6d60ef5" class="m-doc">tasarch::<wbr />gdb::<wbr />Coding</a> ... TCoders, Callback&lt;extract_arg&lt;TCoders&gt;...&gt; TCallback&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">void tasarch::<wbr />gdb::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a65f3e54664a9ee1c3c74adaacd7b81ac" class="m-doc-self">decode_buffer</a>(</span><span class="m-doc-wrap"><a href="classtasarch_1_1gdb_1_1buffer.html" class="m-doc">tasarch::<wbr />gdb::<wbr />buffer</a>&amp; buf,
+              TCallback callback)</span></span>
+            </h3>
+            <p><span></span></p>
+          </div></section>
           <section class="m-doc-details" id="a7f54693e9f9e9b7982c3d680d1c48ca5"><div>
             <h3>
               <div class="m-doc-include m-code m-inverted m-right-m m-text-right"><span class="cp">#include</span> <a class="cpf" href="gdb_2common_8h.html">&lt;src/gdb/common.h&gt;</a></div>
@@ -225,6 +442,31 @@
               </tfoot>
             </table>
           </div></section>
+          <section class="m-doc-details" id="aec10c8ecd8e648115a115a19c5a5fe07"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">auto tasarch::<wbr />gdb::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#aec10c8ecd8e648115a115a19c5a5fe07" class="m-doc-self">max_packet_expansion</a>(</span><span class="m-doc-wrap">size_t packet_size) -&gt; size_t <span class="m-label m-primary">constexpr</span></span></span>
+              <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="packet__io_8h.html">&lt;src/gdb/packet_io.h&gt;</a></div>
+            </h3>
+            <p>Returns the maximum number of bytes a packet of size packet_size can blow up due to escaping and checksum, etc.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">packet_size</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>size_t</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>It is calculated as <code>1 + 2*packet_size + 4</code> (packet_begin + escaping + checksum)</p>
+          </div></section>
           <section class="m-doc-details" id="a6cf1da2d3b665ddf1904044e4e2a4a6b"><div>
             <h3>
               <span class="m-doc-wrap-bumper">auto tasarch::<wbr />gdb::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a6cf1da2d3b665ddf1904044e4e2a4a6b" class="m-doc-self">decode_hex</a>(</span><span class="m-doc-wrap"><a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> c) -&gt; int <span class="m-label m-primary">constexpr</span></span></span>
@@ -248,7 +490,7 @@
                 </tr>
               </tfoot>
             </table>
-<aside class="m-note m-dim"><h4><a href="todo.html#_todo000017" class="m-doc">Todo</a></h4><p>Borrowed from atmosphere.</p></aside>
+<aside class="m-note m-dim"><h4><a href="todo.html#_todo000019" class="m-doc">Todo</a></h4><p>Borrowed from atmosphere.</p></aside>
           </div></section>
           <section class="m-doc-details" id="a519433c8f66a7c9313caa07fdeb7c218"><div>
             <h3>
@@ -273,11 +515,100 @@
                 </tr>
               </tfoot>
             </table>
-<aside class="m-note m-dim"><h4><a href="todo.html#_todo000018" class="m-doc">Todo</a></h4><p>Borrowed from atmosphere.</p></aside><aside class="m-note m-info"><h4>Note</h4><p>Even values beyond <code>[0, 15]</code> will be encoded, <code>v</code> is just <code>&amp; 0xf</code>&#x27;d.</p></aside>
+<aside class="m-note m-dim"><h4><a href="todo.html#_todo000020" class="m-doc">Todo</a></h4><p>Borrowed from atmosphere.</p></aside><aside class="m-note m-info"><h4>Note</h4><p>Even values beyond <code>[0, 15]</code> will be encoded, <code>v</code> is just <code>&amp; 0xf</code>&#x27;d.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="ac62688f0d3ddfa181a1194449518c179"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">auto tasarch::<wbr />gdb::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ac62688f0d3ddfa181a1194449518c179" class="m-doc-self">operator|</a>(</span><span class="m-doc-wrap"><a href="namespacetasarch_1_1gdb.html#ae145d9e52a31ac95cd39cfb75e0cfbba" class="m-doc">query_<wbr />type</a> a,
+              <a href="namespacetasarch_1_1gdb.html#ae145d9e52a31ac95cd39cfb75e0cfbba" class="m-doc">query_<wbr />type</a> b) -&gt; query_type</span></span>
+              <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="protocol_8h.html">&lt;src/gdb/protocol.h&gt;</a></div>
+            </h3>
+            <p><span></span></p>
           </div></section>
         </section>
         <section>
           <h2>Variable documentation</h2>
+          <section class="m-doc-details" id="ae661dc9dd7d1257a67045d78b6aa1f8b"><div>
+            <h3>
+              <div class="m-doc-include m-code m-inverted m-right-m m-text-right"><span class="cp">#include</span> <a class="cpf" href="buffer_8h.html">&lt;src/gdb/buffer.h&gt;</a></div>
+              <div class="m-doc-template">
+                template&lt;typename From, typename To&gt;
+              </div>
+              concept tasarch::<wbr />gdb::<wbr /><a href="#ae661dc9dd7d1257a67045d78b6aa1f8b" class="m-doc-self">convertible_to</a>
+            </h3>
+            <p><span></span></p>
+          </div></section>
+          <section class="m-doc-details" id="a9847cd1acb8160bd34f18cc7889dc0bb"><div>
+            <h3>
+              <div class="m-doc-include m-code m-inverted m-right-m m-text-right"><span class="cp">#include</span> <a class="cpf" href="buffer_8h.html">&lt;src/gdb/buffer.h&gt;</a></div>
+              <div class="m-doc-template">
+                template&lt;typename TBuffer&gt;
+              </div>
+              concept tasarch::<wbr />gdb::<wbr /><a href="#a9847cd1acb8160bd34f18cc7889dc0bb" class="m-doc-self">Bufferable</a>
+            </h3>
+            <p><span></span></p>
+          </div></section>
+          <section class="m-doc-details" id="ad9d76e31c1539510a15d2708e665a3e4"><div>
+            <h3>
+              <div class="m-doc-include m-code m-inverted m-right-m m-text-right"><span class="cp">#include</span> <a class="cpf" href="coding_8h.html">&lt;src/gdb/coding.h&gt;</a></div>
+              <div class="m-doc-template">
+                template&lt;typename TEncoder, typename TValue, typename TToLocation&gt;
+              </div>
+              concept tasarch::<wbr />gdb::<wbr /><a href="#ad9d76e31c1539510a15d2708e665a3e4" class="m-doc-self">Encoding</a>
+            </h3>
+            <p><span></span></p>
+          </div></section>
+          <section class="m-doc-details" id="a7f0f755996896cb09930b5e86d963acb"><div>
+            <h3>
+              <div class="m-doc-include m-code m-inverted m-right-m m-text-right"><span class="cp">#include</span> <a class="cpf" href="coding_8h.html">&lt;src/gdb/coding.h&gt;</a></div>
+              <div class="m-doc-template">
+                template&lt;typename TDecoder, typename TValue, typename TFromLocation&gt;
+              </div>
+              concept tasarch::<wbr />gdb::<wbr /><a href="#a7f0f755996896cb09930b5e86d963acb" class="m-doc-self">Decoding</a>
+            </h3>
+            <p><span></span></p>
+          </div></section>
+          <section class="m-doc-details" id="acd2d02410bf8ecc8f86e6113f6d60ef5"><div>
+            <h3>
+              <div class="m-doc-include m-code m-inverted m-right-m m-text-right"><span class="cp">#include</span> <a class="cpf" href="coding_8h.html">&lt;src/gdb/coding.h&gt;</a></div>
+              <div class="m-doc-template">
+                template&lt;typename TCoder&gt;
+              </div>
+              concept tasarch::<wbr />gdb::<wbr /><a href="#acd2d02410bf8ecc8f86e6113f6d60ef5" class="m-doc-self">Coding</a>
+            </h3>
+            <p><span></span></p>
+          </div></section>
+          <section class="m-doc-details" id="a3fd711df7ee301cb48f2cc354e4e1d7a"><div>
+            <h3>
+              <div class="m-doc-include m-code m-inverted m-right-m m-text-right"><span class="cp">#include</span> <a class="cpf" href="coding_8h.html">&lt;src/gdb/coding.h&gt;</a></div>
+              <div class="m-doc-template">
+                template&lt;typename TNotCoder&gt;
+              </div>
+              concept tasarch::<wbr />gdb::<wbr /><a href="#a3fd711df7ee301cb48f2cc354e4e1d7a" class="m-doc-self">NotCoding</a>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">TNotCoder</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+<aside class="m-note m-dim"><h4><a href="todo.html#_todo000010" class="m-doc">Todo</a></h4><p>not sure this is actually needed.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a68b7b83102cac5e50b4a3db1ee23938f"><div>
+            <h3>
+              <div class="m-doc-include m-code m-inverted m-right-m m-text-right"><span class="cp">#include</span> <a class="cpf" href="coding_8h.html">&lt;src/gdb/coding.h&gt;</a></div>
+              <div class="m-doc-template">
+                template&lt;typename TCallback, typename ... TArgs&gt;
+              </div>
+              concept tasarch::<wbr />gdb::<wbr /><a href="#a68b7b83102cac5e50b4a3db1ee23938f" class="m-doc-self">Callback</a>
+            </h3>
+            <p><span></span></p>
+          </div></section>
           <section class="m-doc-details" id="adec777c0dc396ec1010f3426f1dc1b9f"><div>
             <h3>
               static size_t tasarch::<wbr />gdb::<wbr /><a href="#adec777c0dc396ec1010f3426f1dc1b9f" class="m-doc-self">gdb_packet_buffer_size</a> <span class="m-label m-primary">constexpr</span>

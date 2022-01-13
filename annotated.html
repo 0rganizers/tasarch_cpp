@@ -63,19 +63,24 @@
                 <ul class="m-doc">
                   <li>struct <a href="structtasarch_1_1config_1_1config.html" class="m-doc">config</a> <span class="m-doc">Root configuration object. Currently only holds logging config.</span></li>
                   <li>struct <a href="structtasarch_1_1config_1_1log__levels.html" class="m-doc">log_levels</a> <span class="m-doc">This utility struct is used to hold the hierarchy of logging levels defined in a config.</span></li>
-                  <li>struct <a href="structtasarch_1_1config_1_1logging.html" class="m-doc">logging</a> <span class="m-doc">Holds all configuration regarding logging.</span></li>
+                  <li>struct <a href="structtasarch_1_1config_1_1Logging.html" class="m-doc">Logging</a> <span class="m-doc">Holds all configuration regarding logging.</span></li>
                 </ul>
               </li>
               <li class="m-doc-collapsible collapsed">
                 <a href="#" onclick="return toggle(this)">namespace</a> <a href="namespacetasarch_1_1gdb.html" class="m-doc">gdb</a> <span class="m-doc"><span></span></span>
                 <ul class="m-doc">
                   <li>class <a href="classtasarch_1_1gdb_1_1bg__executor.html" class="m-doc">bg_executor</a> <span class="m-doc">Responsible for handling multiple threads, that will then run coroutines (mostly io, mostly for gdbstub). Normally using asio, you would just run the executor inside the main thread. However, here the main thread belongs to the GUI, so we create background thread(s) to run the executor.</span></li>
+                  <li>class <a href="classtasarch_1_1gdb_1_1buffer.html" class="m-doc">buffer</a> <span class="m-doc"><span></span></span></li>
                   <li>class <a href="classtasarch_1_1gdb_1_1buffer__too__small.html" class="m-doc">buffer_too_small</a> <span class="m-doc">Exception thrown when a buffer was too small to fit all recvd data.</span></li>
                   <li>class <a href="classtasarch_1_1gdb_1_1connection.html" class="m-doc">connection</a> <span class="m-doc"><span></span></span></li>
-                  <li>class <a href="classtasarch_1_1gdb_1_1debugger.html" class="m-doc">debugger</a> <span class="m-doc"><span></span></span></li>
-                  <li>class <a href="classtasarch_1_1gdb_1_1packet__io.html" class="m-doc">packet_io</a> <span class="m-doc">Implements the low-level transport protocol as specified by GDB. For details see <a href="https://sourceware.org/gdb/onlinedocs/gdb/Overview.html#Overview">https:/<wbr />/<wbr />sourceware.org/<wbr />gdb/<wbr />onlinedocs/<wbr />gdb/<wbr />Overview.html#Overview</a>.</span></li>
+                  <li>class <a href="classtasarch_1_1gdb_1_1Debugger.html" class="m-doc">Debugger</a> <span class="m-doc"><span></span></span></li>
+                  <li>class <a href="classtasarch_1_1gdb_1_1gdb__error.html" class="m-doc">gdb_error</a> <span class="m-doc"><span></span></span></li>
+                  <li>struct <a href="structtasarch_1_1gdb_1_1IdCoder.html" class="m-doc">IdCoder</a> <span class="m-doc"><span></span></span></li>
+                  <li>class <a href="classtasarch_1_1gdb_1_1PacketIO.html" class="m-doc">PacketIO</a> <span class="m-doc">Implements the low-level transport protocol as specified by GDB. For details see <a href="https://sourceware.org/gdb/onlinedocs/gdb/Overview.html#Overview">https:/<wbr />/<wbr />sourceware.org/<wbr />gdb/<wbr />onlinedocs/<wbr />gdb/<wbr />Overview.html#Overview</a>.</span></li>
                   <li>class <a href="classtasarch_1_1gdb_1_1server.html" class="m-doc">server</a> <span class="m-doc"><span></span></span></li>
+                  <li>struct <a href="structtasarch_1_1gdb_1_1StrCoder.html" class="m-doc">StrCoder</a> <span class="m-doc"><span></span></span></li>
                   <li>class <a href="classtasarch_1_1gdb_1_1timed__out.html" class="m-doc">timed_out</a> <span class="m-doc">Exception thrown when a timeout was reached.</span></li>
+                  <li>class <a href="classtasarch_1_1gdb_1_1unknown__request.html" class="m-doc">unknown_request</a> <span class="m-doc"><span></span></span></li>
                 </ul>
               </li>
               <li class="m-doc-collapsible collapsed">
@@ -94,7 +99,7 @@
                   <li>class <a href="classtasarch_1_1log_1_1ansi__color__msg__part.html" class="m-doc">ansi_color_msg_part</a> <span class="m-doc"><span></span></span></li>
                   <li>class <a href="classtasarch_1_1log_1_1color__msg__part.html" class="m-doc">color_msg_part</a> <span class="m-doc"></span></li>
                   <li>struct <a href="structtasarch_1_1log_1_1format__with__location.html" class="m-doc">format_with_location</a> <span class="m-doc"></span></li>
-                  <li>class <a href="classtasarch_1_1log_1_1logger.html" class="m-doc">logger</a> <span class="m-doc">Custom spdlog::logger subclass, so we can use C++20&#x27;s <a href="structtasarch_1_1log_1_1source__location.html" class="m-doc">source_<wbr />location</a>. We also add a bunch of additional convenience functions.</span></li>
+                  <li>class <a href="classtasarch_1_1log_1_1Logger.html" class="m-doc">Logger</a> <span class="m-doc">Custom spdlog::logger subclass, so we can use C++20&#x27;s <a href="structtasarch_1_1log_1_1source__location.html" class="m-doc">source_<wbr />location</a>. We also add a bunch of additional convenience functions.</span></li>
                   <li>class <a href="classtasarch_1_1log_1_1qt__html__color__msg__part.html" class="m-doc">qt_html_color_msg_part</a> <span class="m-doc"><span></span></span></li>
                   <li>struct <a href="structtasarch_1_1log_1_1source__location.html" class="m-doc">source_location</a> <span class="m-doc"></span></li>
                   <li>class <a href="classtasarch_1_1log_1_1WithLogger.html" class="m-doc">WithLogger</a> <span class="m-doc"><span></span></span></li>

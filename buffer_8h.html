@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>tasarch::config::logging struct | tasarch</title>
+  <title>src/gdb/buffer.h file | tasarch</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="stylesheet" href="fixes.css" />
@@ -52,61 +52,42 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="namespacetasarch.html">tasarch</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespacetasarch_1_1config.html">config</a>::<wbr/></span>logging <span class="m-thin">struct</span>
-          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="config_8h.html">&lt;src/config/config.h&gt;</a></div>
+          <span class="m-breadcrumb"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a>/</span><span class="m-breadcrumb"><a href="dir_e139b308d2d163cddd05844f545b3a0d.html">gdb</a>/</span>buffer.h <span class="m-thin">file</span>
         </h1>
-        <p>Holds all configuration regarding logging.</p>
+        <p><span></span></p>
         <nav class="m-block m-default">
           <h3>Contents</h3>
           <ul>
             <li>
               Reference
               <ul>
-                <li><a href="#pub-methods">Public functions</a></li>
-                <li><a href="#pub-attribs">Public variables</a></li>
+                <li><a href="#namespaces">Namespaces</a></li>
+                <li><a href="#nested-classes">Classes</a></li>
               </ul>
             </li>
           </ul>
         </nav>
-<aside class="m-note m-dim"><h4><a href="todo.html#_todo000003" class="m-doc">Todo</a></h4><p>For now this only holds the <code><a href="structtasarch_1_1config_1_1log__levels.html" class="m-doc">log_<wbr />levels</a></code>, update for more configuration in the future such as:</p><ul><li>configuring different sinks</li><li>???</li></ul></aside>
-        <section id="pub-methods">
-          <h2><a href="#pub-methods">Public functions</a></h2>
+        <section id="namespaces">
+          <h2><a href="#namespaces">Namespaces</a></h2>
           <dl class="m-doc">
-            <dt>
-              <span class="m-doc-wrap-bumper">void <a href="#a5d6990fbcec3c736ed167be8a9a43c2d" class="m-doc">load_from</a>(</span><span class="m-doc-wrap">const toml::value&amp; v)</span>
-            </dt>
-            <dd>Load the logging config from the toml value.</dd>
-          </dl>
-        </section>
-        <section id="pub-attribs">
-          <h2><a href="#pub-attribs">Public variables</a></h2>
-          <dl class="m-doc">
-            <dt id="a781132e14e55b141728d96ea306b8359">
-              <a href="structtasarch_1_1config_1_1log__levels.html" class="m-doc">log_<wbr />levels</a> <a href="#a781132e14e55b141728d96ea306b8359" class="m-doc-self">levels</a>
-            </dt>
+            <dt>namespace <a href="namespacetasarch.html" class="m-doc">tasarch</a></dt>
+            <dd><span></span></dd>
+            <dt>namespace <a href="namespacetasarch_1_1gdb.html" class="m-doc">tasarch::gdb</a></dt>
             <dd><span></span></dd>
           </dl>
         </section>
-        <section>
-          <h2>Function documentation</h2>
-          <section class="m-doc-details" id="a5d6990fbcec3c736ed167be8a9a43c2d"><div>
-            <h3>
-              <span class="m-doc-wrap-bumper">void tasarch::<wbr />config::<wbr />logging::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a5d6990fbcec3c736ed167be8a9a43c2d" class="m-doc-self">load_from</a>(</span><span class="m-doc-wrap">const toml::value&amp; v)</span></span>
-            </h3>
-            <p>Load the logging config from the toml value.</p>
-            <table class="m-table m-fullwidth m-flat">
-              <thead>
-                <tr><th colspan="2">Parameters</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="width: 1%">v</td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
-<aside class="m-note m-info"><h4>Note</h4><p>This also applies the newly loaded levels to all loggers!</p></aside><aside class="m-note m-dim"><h4><a href="todo.html#_todo000005" class="m-doc">Todo</a></h4><p>Better way to refresh config?</p></aside>
-          </div></section>
+        <section id="nested-classes">
+          <h2><a href="#nested-classes">Classes</a></h2>
+          <dl class="m-doc">
+            <dt>
+              class <a href="classtasarch_1_1gdb_1_1buffer__too__small.html" class="m-doc">tasarch::gdb::buffer_too_small</a>
+            </dt>
+            <dd>Exception thrown when a buffer was too small to fit all recvd data.</dd>
+            <dt>
+              class <a href="classtasarch_1_1gdb_1_1buffer.html" class="m-doc">tasarch::gdb::buffer</a>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
         </section>
       </div>
     </div>
