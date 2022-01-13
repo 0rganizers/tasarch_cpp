@@ -7,6 +7,7 @@
 #include <asio/buffer.hpp>
 #include <asio/use_awaitable.hpp>
 #include "buffer.h"
+#include "coding.h"
 
 namespace tasarch::gdb {
     auto PacketIO::has_buffered_data() -> bool

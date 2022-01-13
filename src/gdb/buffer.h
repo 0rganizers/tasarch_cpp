@@ -4,7 +4,7 @@
 #include <cstddef>
 #include <cstring>
 #include <stdexcept>
-#include "clangd_fix.h"
+#include "asio.h"
 #include <asio.hpp>
 #include <asio/buffer.hpp>
 #include "util/defines.h"
@@ -12,6 +12,7 @@
 #include <concepts>
 #include <string>
 #include "util/warnings.h"
+#include "util/concepts.h"
 
 namespace tasarch::gdb {
     /**
@@ -29,15 +30,35 @@ namespace tasarch::gdb {
 		explicit buffer_too_small(size_t buf_size) : std::runtime_error(fmt::format("provided buffer (0x{:x}) too small", buf_size)) {}
 	};
 
-    template <typename From, typename To>
-    concept convertible_to = std::is_convertible_v<From, To>;
-
     template<typename TBuffer>
     concept Bufferable = requires(TBuffer buf, u8* ptr, size_t num) {
         {buf.data()} -> convertible_to<void*>;
         {buf.size()} -> convertible_to<size_t>;
         {TBuffer((decltype(buf.data()))ptr, num)} -> std::same_as<TBuffer>;
     };
+
+    // template<POD T>
+    // struct wrapped
+    // {
+    //     wrapped(u8* ptr, size_t num)
+    //     {
+    //         if (num != sizeof(T)) {
+    //             throw std::runtime_error("Invalid number of bytes ");
+    //         }
+    //     }
+
+    //     T* data_;
+
+    //     auto data() -> void*
+    //     {
+    //         return data_;
+    //     }
+
+    //     auto size() -> size_t
+    //     {
+    //         return sizeof(T);
+    //     }
+    // };
 
     class buffer
     {
@@ -93,12 +114,23 @@ public:
             return val;
         }
 
-        template<typename TBuffer>
-        auto get_buf(size_t num) -> TBuffer requires Bufferable<TBuffer>
+        void read_require(size_t num) const
         {
             if (this->read_size() < num) {
                 throw std::out_of_range(fmt::format("Not enough bytes in buffer: {} < {}", this->read_size(), num));
             }
+        }
+
+        void get_count(size_t num)
+        {
+            this->read_require(num);
+            this->read_off += num;
+        }
+
+        template<typename TBuffer>
+        auto get_buf(size_t num) -> TBuffer requires Bufferable<TBuffer>
+        {
+            this->read_require(num);
             TBuffer ret((decltype(TBuffer().data()))this->read_data(), num);
             this->read_off += num;
             return ret;
@@ -111,15 +143,23 @@ public:
             return str;
         }
 
-        void get_count(size_t num)
+        template<typename T>
+        auto read_into(T* elem)
         {
-            if (this->read_size() < num) {
-                throw std::out_of_range(fmt::format("Not enough bytes in buffer: {} < {}", this->read_size(), num));
-            }
+            size_t num = sizeof(elem);
+            this->read_require(num);
+            std::memcpy(elem, this->read_data(), num);
             this->read_off += num;
         }
 
 #pragma mark Put Functions
+
+        void write_require(size_t num) const
+        {
+            if (this->write_size() < num) {
+                throw buffer_too_small(this->write_size());
+            }
+        }
 
         void put_byte(u8 val)
         {
@@ -133,19 +173,24 @@ public:
         template<typename TBuffer>
         void append_buf(TBuffer& buf) requires Bufferable<TBuffer>
         {
-            if (this->write_size() < buf.size()) {
-                throw buffer_too_small(this->write_size());
-            }
+            this->write_require(buf.size());
             std::memcpy(this->write_data(), buf.data(), buf.size());
             this->write_off += buf.size();
         }
 
         void put_count(size_t num)
         {
-            if (this->write_size() < num) {
-                // TODO: Kinda too late at this point lmao
-                throw buffer_too_small(this->write_size());
-            }
+            // TODO: Kinda too late at this point lmao
+            this->write_require(num);
+            this->write_off += num;
+        }
+
+        template<typename T>
+        void write_outof(T* elem)
+        {
+            size_t num = sizeof(T);
+            this->write_require(num);
+            std::memcpy(this->write_data(), elem, num);
             this->write_off += num;
         }
 

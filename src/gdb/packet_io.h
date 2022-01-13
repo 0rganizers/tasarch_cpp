@@ -7,7 +7,7 @@
 #include <exception>
 #include <stdexcept>
 #include "util/literals.h"
-#include "clangd_fix.h"
+#include "asio.h"
 #include <asio.hpp>
 #include <asio/awaitable.hpp>
 #include <asio/buffer.hpp>
@@ -60,39 +60,6 @@ namespace tasarch::gdb {
 	 * Through this, it can tell the server to halt execution of its target, allowing things like adding breakpoints again (e.g. you messed up when adding them or dont trust gdb that they werent hit ;)).
 	 */
 	constexpr u8 break_character = '\x03'; /* ctrl-c */
-
-	/**
-	 * @brief Simple hex decoding of a nibble.
-	 *
-	 * @todo Borrowed from atmosphere.
-	 * 
-	 * @param c The character.
-	 * @return int Either the decoded nibble (`[0, 15]`) or `-1` on failure.
-	 */
-	constexpr auto decode_hex(u8 c) -> int {
-		if ('a' <= c && c <= 'f') {
-			return 10 + (c - 'a');
-		} else if ('A' <= c && c <= 'F') {
-			return 10 + (c - 'A');
-		} else if ('0' <= c && c <= '9') {
-			return 0 + (c - '0');
-		} else {
-			return -1;
-		}
-	}
-
-	/**
-	 * @brief Simple hex encoding of a nibble.
-	 *
-	 * @todo Borrowed from atmosphere.
-	 * 
-	 * @param v The value.
-	 * @note Even values beyond `[0, 15]` will be encoded, `v` is just `& 0xf`'d.
-	 * @return char 
-	 */
-	constexpr auto encode_hex(u8 v) -> char {
-		return "0123456789abcdef"[v & 0xF];
-	}
 
 	/**
 	 * @brief Implements the low-level transport protocol as specified by GDB.
