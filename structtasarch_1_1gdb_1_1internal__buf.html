@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>src/util/defines.h file | tasarch</title>
+  <title>tasarch::gdb::internal_buf struct | tasarch</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="stylesheet" href="fixes.css" />
@@ -52,7 +52,8 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a>/</span><span class="m-breadcrumb"><a href="dir_b7878ad5ecbf2506f4125b9d34c97e45.html">util</a>/</span>defines.h <span class="m-thin">file</span>
+          <span class="m-breadcrumb"><a href="namespacetasarch.html">tasarch</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespacetasarch_1_1gdb.html">gdb</a>::<wbr/></span>internal_buf <span class="m-thin">struct</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="easter__eggs_8h.html">&lt;src/gdb/easter_eggs.h&gt;</a></div>
         </h1>
         <p><span></span></p>
         <nav class="m-block m-default">
@@ -61,100 +62,23 @@
             <li>
               Reference
               <ul>
-                <li><a href="#typedef-members">Typedefs</a></li>
-                <li><a href="#define-members">Defines</a></li>
+                <li><a href="#pub-attribs">Public variables</a></li>
               </ul>
             </li>
           </ul>
         </nav>
-        <section id="typedef-members">
-          <h2><a href="#typedef-members">Typedefs</a></h2>
+        <section id="pub-attribs">
+          <h2><a href="#pub-attribs">Public variables</a></h2>
           <dl class="m-doc">
-            <dt id="a1af9f95651e921615e75917a6dd1b574">
-              using <a href="#a1af9f95651e921615e75917a6dd1b574" class="m-doc-self">u64</a> = uint64_t
+            <dt id="add2558f5ab5410fe0b439689e54e4051">
+              size_t <a href="#add2558f5ab5410fe0b439689e54e4051" class="m-doc-self">address</a>
             </dt>
             <dd><span></span></dd>
-            <dt id="a70c1fcc1a4e96af8f6580f708657cd41">
-              using <a href="#a70c1fcc1a4e96af8f6580f708657cd41" class="m-doc-self">u32</a> = uint32_t
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a6dbf9516e516c901604625282c174aa4">
-              using <a href="#a6dbf9516e516c901604625282c174aa4" class="m-doc-self">u16</a> = uint16_t
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a987e4d6cf789cb59dbb390728271e4d6">
-              using <a href="#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc-self">u8</a> = uint8_t
+            <dt id="a0e6f354e7e06dbfd925836bc566c54bf">
+              size_t <a href="#a0e6f354e7e06dbfd925836bc566c54bf" class="m-doc-self">len</a>
             </dt>
             <dd><span></span></dd>
           </dl>
-        </section>
-        <section id="define-members">
-          <h2><a href="#define-members">Defines</a></h2>
-          <dl class="m-doc">
-            <dt>
-              <span class="m-doc-wrap-bumper">#define <a href="#a463380876083913ee3764113b803c040" class="m-doc">NON_COPYABLE</a>(</span><span class="m-doc-wrap">cls)</span>
-            </dt>
-            <dd></dd>
-            <dt id="a67b09e0309d32c3ee1c4289c85bd9e04">
-              <span class="m-doc-wrap-bumper">#define <a href="#a67b09e0309d32c3ee1c4289c85bd9e04" class="m-doc-self">NON_MOVEABLE</a>(</span><span class="m-doc-wrap">cls)</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a70bcfb31ed7541c93affcfae1c246950">
-              <span class="m-doc-wrap-bumper">#define <a href="#a70bcfb31ed7541c93affcfae1c246950" class="m-doc-self">ALIGNED</a>(</span><span class="m-doc-wrap">algn)</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="aa1728270d73c5d1598de1fd691762eb1">
-              <span class="m-doc-wrap-bumper">#define <a href="#aa1728270d73c5d1598de1fd691762eb1" class="m-doc-self">NORETURN</a></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a35306caaad06f39f942e29da4da6061d">
-              <span class="m-doc-wrap-bumper">#define <a href="#a35306caaad06f39f942e29da4da6061d" class="m-doc-self">WEAK_SYMBOL</a></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="af7c2c5eccecb746f1ff9e54d82f46a75">
-              <span class="m-doc-wrap-bumper">#define <a href="#af7c2c5eccecb746f1ff9e54d82f46a75" class="m-doc-self">ALWAYS_INLINE_LAMBDA</a></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="aa1dec568e79152c892dcf63f445cbd7a">
-              <span class="m-doc-wrap-bumper">#define <a href="#aa1dec568e79152c892dcf63f445cbd7a" class="m-doc-self">ALWAYS_INLINE</a></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a1b173d22e57d9395897acbd8de62d505">
-              <span class="m-doc-wrap-bumper">#define <a href="#a1b173d22e57d9395897acbd8de62d505" class="m-doc-self">NOINLINE</a></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a4f4c7357dd27269e2ebd025d5cbc8a16">
-              <span class="m-doc-wrap-bumper">#define <a href="#a4f4c7357dd27269e2ebd025d5cbc8a16" class="m-doc-self">CONCATENATE_IMPL</a>(</span><span class="m-doc-wrap">s1,
-              s2)</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a38b0435c1b5de5dead9be614a2512736">
-              <span class="m-doc-wrap-bumper">#define <a href="#a38b0435c1b5de5dead9be614a2512736" class="m-doc-self">CONCATENATE</a>(</span><span class="m-doc-wrap">s1,
-              s2)</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="afe2e1e5fe1908d14e6a74c3190fbb8e5">
-              <span class="m-doc-wrap-bumper">#define <a href="#afe2e1e5fe1908d14e6a74c3190fbb8e5" class="m-doc-self">BITSIZEOF</a>(</span><span class="m-doc-wrap">x)</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a3428692efe6051ef30016ffde1a9f7bb">
-              <span class="m-doc-wrap-bumper">#define <a href="#a3428692efe6051ef30016ffde1a9f7bb" class="m-doc-self">STRINGIZE</a>(</span><span class="m-doc-wrap">x)</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="abe365693b784b0470549b63af6c923c1">
-              <span class="m-doc-wrap-bumper">#define <a href="#abe365693b784b0470549b63af6c923c1" class="m-doc-self">STRINGIZE_IMPL</a>(</span><span class="m-doc-wrap">x)</span>
-            </dt>
-            <dd><span></span></dd>
-          </dl>
-        </section>
-        <section>
-          <h2>Define documentation</h2>
-          <section class="m-doc-details" id="a463380876083913ee3764113b803c040"><div>
-            <h3>
-              <span class="m-doc-wrap-bumper">#define <a href="#a463380876083913ee3764113b803c040" class="m-doc-self">NON_COPYABLE</a>(</span><span class="m-doc-wrap">cls)</span>
-            </h3>
-<aside class="m-note m-dim"><h4><a href="todo.html#_todo000030" class="m-doc">Todo</a></h4><p>This is taken from atmosphere source code. Check legality.</p></aside>
-          </div></section>
         </section>
       </div>
     </div>

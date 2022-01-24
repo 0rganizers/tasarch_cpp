@@ -75,6 +75,8 @@
             <dd><span></span></dd>
             <dt>namespace <a href="namespacetasarch_1_1gdb.html" class="m-doc">tasarch::gdb</a></dt>
             <dd><span></span></dd>
+            <dt>namespace <a href="namespacetasarch_1_1gdb_1_1coders.html" class="m-doc">tasarch::gdb::coders</a></dt>
+            <dd><span></span></dd>
           </dl>
         </section>
         <section id="nested-classes">
@@ -84,10 +86,30 @@
               <div class="m-doc-template">template&lt;typename TLocation&gt;</div>
               struct <a href="structtasarch_1_1gdb_1_1IdCoder.html" class="m-doc">tasarch::gdb::IdCoder</a>
             </dt>
+            <dd>Like id function, does nothing to its input. Useful as default cases for certain coders that have a &quot;child&quot;.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<a href="namespacetasarch_1_1gdb.html#acd2d02410bf8ecc8f86e6113f6d60ef5" class="m-doc">Coding</a> TChildCoder = <a href="structtasarch_1_1gdb_1_1IdCoder.html" class="m-doc">IdCoder</a>&lt;std::string&gt;, char Sep = &#x27;\0&#x27;, bool SepReq = false&gt;</div>
+              struct <a href="structtasarch_1_1gdb_1_1StrCoder.html" class="m-doc">tasarch::gdb::StrCoder</a>
+            </dt>
+            <dd>Decodes the contents of buffer up until it can find the separator <code>Sep</code> or the end of the buffer is reached. If <code>SepReq</code> is true, an exception is thrown, if the end of string is reached before finding the separator. Once it has a string of characters, it calls upon the underlying child coder to decode the string into a useful value. This allows nicely nesting coders, to e.g. decode a hex number separated by a comma. If you need to have the full string returned, you can use the <code><a href="structtasarch_1_1gdb_1_1IdCoder.html" class="m-doc">IdCoder</a></code> as mentioned before.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<a href="namespacetasarch_1_1gdb.html#acd2d02410bf8ecc8f86e6113f6d60ef5" class="m-doc">Coding</a> TChildCoder&gt;</div>
+              struct <a href="structtasarch_1_1gdb_1_1OptCoder.html" class="m-doc">tasarch::gdb::OptCoder</a>
+            </dt>
             <dd><span></span></dd>
             <dt>
-              <div class="m-doc-template">template&lt;<a href="namespacetasarch_1_1gdb.html#acd2d02410bf8ecc8f86e6113f6d60ef5" class="m-doc">Coding</a> TChildCoder = <a href="structtasarch_1_1gdb_1_1IdCoder.html" class="m-doc">IdCoder</a>&lt;std::string&gt;, char Sep = &#x27;\0&#x27;&gt;</div>
-              struct <a href="structtasarch_1_1gdb_1_1StrCoder.html" class="m-doc">tasarch::gdb::StrCoder</a>
+              <div class="m-doc-template">template&lt;<a href="concepts_8h.html#a230ee3ea1bf2aebdba5ef816c4428863" class="m-doc">integral</a> T, size_t Base = 0&gt;</div>
+              struct <a href="structtasarch_1_1gdb_1_1NumCoder.html" class="m-doc">tasarch::gdb::NumCoder</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<a href="concepts_8h.html#a8d11fa065d402c77a775c042583d52fd" class="m-doc">MyContainer</a> TContainer&gt;</div>
+              struct <a href="structtasarch_1_1gdb_1_1BytesCoder.html" class="m-doc">tasarch::gdb::BytesCoder</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<a href="namespacetasarch_1_1gdb.html#acd2d02410bf8ecc8f86e6113f6d60ef5" class="m-doc">Coding</a> TChildCoder = <a href="structtasarch_1_1gdb_1_1IdCoder.html" class="m-doc">IdCoder</a>&lt;std::string&gt;, char Sep = &#x27;;&#x27;&gt;</div>
+              struct <a href="structtasarch_1_1gdb_1_1ArrayCoder.html" class="m-doc">tasarch::gdb::ArrayCoder</a>
             </dt>
             <dd><span></span></dd>
           </dl>

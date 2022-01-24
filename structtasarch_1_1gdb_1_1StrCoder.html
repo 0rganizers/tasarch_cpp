@@ -53,10 +53,29 @@
       <div class="m-col-l-10 m-push-l-1">
         <h1>
           <div class="m-doc-include m-code m-inverted m-right-m m-text-right"><span class="cp">#include</span> <a class="cpf" href="coding_8h.html">&lt;src/gdb/coding.h&gt;</a></div>
-          <div class="m-doc-template">template&lt;<a href="namespacetasarch_1_1gdb.html#acd2d02410bf8ecc8f86e6113f6d60ef5" class="m-doc">Coding</a> TChildCoder = <a href="structtasarch_1_1gdb_1_1IdCoder.html" class="m-doc">IdCoder</a>&lt;std::string&gt;, char Sep = &#x27;\0&#x27;&gt;</div>
+          <div class="m-doc-template">template&lt;<a href="namespacetasarch_1_1gdb.html#acd2d02410bf8ecc8f86e6113f6d60ef5" class="m-doc">Coding</a> TChildCoder = <a href="structtasarch_1_1gdb_1_1IdCoder.html" class="m-doc">IdCoder</a>&lt;std::string&gt;, char Sep = &#x27;\0&#x27;, bool SepReq = false&gt;</div>
           <span class="m-breadcrumb"><a href="namespacetasarch.html">tasarch</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespacetasarch_1_1gdb.html">gdb</a>::<wbr/></span>StrCoder <span class="m-thin">struct</span>
         </h1>
-        <p><span></span></p>
+        <p>Decodes the contents of buffer up until it can find the separator <code>Sep</code> or the end of the buffer is reached. If <code>SepReq</code> is true, an exception is thrown, if the end of string is reached before finding the separator. Once it has a string of characters, it calls upon the underlying child coder to decode the string into a useful value. This allows nicely nesting coders, to e.g. decode a hex number separated by a comma. If you need to have the full string returned, you can use the <code><a href="structtasarch_1_1gdb_1_1IdCoder.html" class="m-doc">IdCoder</a></code> as mentioned before.</p>
+        <table class="m-table m-fullwidth m-flat">
+          <thead>
+            <tr><th colspan="2">Template parameters</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="width: 1%">TChildCoder</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Sep</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>SepReq</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
         <nav class="m-block m-default">
           <h3>Contents</h3>
           <ul>
@@ -69,15 +88,16 @@
             </li>
           </ul>
         </nav>
+<aside class="m-note m-info"><h4>Note</h4><p>This alone does not help you implement optional arguments, but it can help.</p></aside>
         <section id="pub-types">
           <h2><a href="#pub-types">Public types</a></h2>
           <dl class="m-doc">
-            <dt id="af9236aafffd0c73457d331c7d78092e4">
-              using <a href="#af9236aafffd0c73457d331c7d78092e4" class="m-doc-self">value_type</a> = std::string
+            <dt id="a1e519779a736e06d4550fd5724938787">
+              using <a href="#a1e519779a736e06d4550fd5724938787" class="m-doc-self">value_type</a> = typename TChildCoder::value_type
             </dt>
             <dd><span></span></dd>
-            <dt id="ac18fdd541bcc5f4426a624399d5762e7">
-              using <a href="#ac18fdd541bcc5f4426a624399d5762e7" class="m-doc-self">loc_type</a> = <a href="classtasarch_1_1gdb_1_1buffer.html" class="m-doc">buffer</a>
+            <dt id="ac8c81c323c4d30adc001443589636d4d">
+              using <a href="#ac8c81c323c4d30adc001443589636d4d" class="m-doc-self">loc_type</a> = <a href="classtasarch_1_1gdb_1_1buffer.html" class="m-doc">buffer</a>
             </dt>
             <dd><span></span></dd>
           </dl>
@@ -85,16 +105,50 @@
         <section id="pub-static-methods">
           <h2><a href="#pub-static-methods">Public static functions</a></h2>
           <dl class="m-doc">
-            <dt id="ab96468ae7e21ce35a50289fbcf7c19e1">
-              <span class="m-doc-wrap-bumper">static auto <a href="#ab96468ae7e21ce35a50289fbcf7c19e1" class="m-doc-self">decode_from</a>(</span><span class="m-doc-wrap"><a href="structtasarch_1_1gdb_1_1StrCoder.html#ac18fdd541bcc5f4426a624399d5762e7" class="m-doc">loc_<wbr />type</a>&amp; buf) -&gt; value_type -&gt; auto</span>
+            <dt id="adbe046935bd295c49b4daa3f545abaf3">
+              <span class="m-doc-wrap-bumper">static auto <a href="#adbe046935bd295c49b4daa3f545abaf3" class="m-doc-self">decode_from</a>(</span><span class="m-doc-wrap"><a href="structtasarch_1_1gdb_1_1StrCoder.html#ac8c81c323c4d30adc001443589636d4d" class="m-doc">loc_<wbr />type</a>&amp; buf) -&gt; value_type -&gt; auto</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a7ae6b8e2aacb5b7661bc4145d28984a6">
-              <span class="m-doc-wrap-bumper">static auto <a href="#a7ae6b8e2aacb5b7661bc4145d28984a6" class="m-doc-self">encode_to</a>(</span><span class="m-doc-wrap"><a href="structtasarch_1_1gdb_1_1StrCoder.html#af9236aafffd0c73457d331c7d78092e4" class="m-doc">value_<wbr />type</a> val,
-              <a href="structtasarch_1_1gdb_1_1StrCoder.html#ac18fdd541bcc5f4426a624399d5762e7" class="m-doc">loc_<wbr />type</a>&amp; buf) -&gt; auto</span>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#aa78d36359d69383b4eae82112b16d786" class="m-doc">encode_to</a>(</span><span class="m-doc-wrap"><a href="structtasarch_1_1gdb_1_1StrCoder.html#a1e519779a736e06d4550fd5724938787" class="m-doc">value_<wbr />type</a>&amp; val,
+              <a href="structtasarch_1_1gdb_1_1StrCoder.html#ac8c81c323c4d30adc001443589636d4d" class="m-doc">loc_<wbr />type</a>&amp; buf) -&gt; auto</span>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
           </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="aa78d36359d69383b4eae82112b16d786"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<a href="namespacetasarch_1_1gdb.html#acd2d02410bf8ecc8f86e6113f6d60ef5" class="m-doc">Coding</a> TChildCoder, char Sep, bool SepReq&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static auto tasarch::<wbr />gdb::<wbr />StrCoder&lt;TChildCoder, Sep, SepReq&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#aa78d36359d69383b4eae82112b16d786" class="m-doc-self">encode_to</a>(</span><span class="m-doc-wrap"><a href="structtasarch_1_1gdb_1_1StrCoder.html#a1e519779a736e06d4550fd5724938787" class="m-doc">value_<wbr />type</a>&amp; val,
+              <a href="structtasarch_1_1gdb_1_1StrCoder.html#ac8c81c323c4d30adc001443589636d4d" class="m-doc">loc_<wbr />type</a>&amp; buf)</span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">val</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>buf</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>auto</td>
+                </tr>
+              </tfoot>
+            </table>
+<aside class="m-note m-dim"><h4><a href="todo.html#_todo000015" class="m-doc">Todo</a></h4><p>Make separator work here as well!</p></aside>
+          </div></section>
         </section>
       </div>
     </div>

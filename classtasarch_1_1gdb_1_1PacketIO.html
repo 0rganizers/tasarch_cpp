@@ -71,7 +71,7 @@
             </li>
           </ul>
         </nav>
-<p>Basically, you give it a socket and you can then send and receive packets, going through the encoding mentioned in the link above.</p><aside class="m-note m-info"><h4>Note</h4><p>Whenever we speak of request below, this means a communcation from gdb -&gt; gdbserver, a response goes from gdbserver -&gt; gdb (makes sense, right?).</p></aside><aside class="m-note m-dim"><h4><a href="todo.html#_todo000021" class="m-doc">Todo</a></h4><p>For extra swag, make it more generic, i.e. accept stuff like a serial port as well :)</p></aside>
+<p>Basically, you give it a socket and you can then send and receive packets, going through the encoding mentioned in the link above.</p><aside class="m-note m-info"><h4>Note</h4><p>Whenever we speak of request below, this means a communcation from gdb -&gt; gdbserver, a response goes from gdbserver -&gt; gdb (makes sense, right?).</p></aside><aside class="m-note m-dim"><h4><a href="todo.html#_todo000025" class="m-doc">Todo</a></h4><p>For extra swag, make it more generic, i.e. accept stuff like a serial port as well :)</p></aside>
         <section id="pub-types">
           <h2><a href="#pub-types">Public types</a></h2>
           <dl class="m-doc">
@@ -194,7 +194,7 @@
                   <td><a href="#a74b73a5bddce9ab494abfd9e56cb5219a932be00682fe4e07115c8d18ae791dee" class="m-doc-self" id="a74b73a5bddce9ab494abfd9e56cb5219a932be00682fe4e07115c8d18ae791dee">rle</a></td>
                   <td>
                   <p>Marks RLE bytes.</p>
-<aside class="m-note m-dim"><h4><a href="todo.html#_todo000023" class="m-doc">Todo</a></h4><p>Do we want to implement RLE for sending stuff?</p></aside>
+<aside class="m-note m-dim"><h4><a href="todo.html#_todo000027" class="m-doc">Todo</a></h4><p>Do we want to implement RLE for sending stuff?</p></aside>
                   </td>
                 </tr>
               </tbody>
@@ -306,7 +306,7 @@
                 </tr>
               </tbody>
             </table>
-<aside class="m-note m-danger"><h4>Warning</h4><p>The buffer needs to have preallocated storage, that also needs to be large enough! Furthermore, be sure to keep a backup, since the <code>size()</code> of the buffer will be changed to the packet size!</p></aside><aside class="m-note m-dim"><h4><a href="todo.html#_todo000016" class="m-doc">Todo</a></h4><p>make this work better. Not sure whether this is fully to spec! (the interrupt detection part)</p></aside><aside class="m-note m-dim"><h4><a href="todo.html#_todo000017" class="m-doc">Todo</a></h4><p>make it so that we dont have to create send buffer here!</p></aside>
+<aside class="m-note m-danger"><h4>Warning</h4><p>The buffer needs to have preallocated storage, that also needs to be large enough! Furthermore, be sure to keep a backup, since the <code>size()</code> of the buffer will be changed to the packet size!</p></aside><aside class="m-note m-dim"><h4><a href="todo.html#_todo000022" class="m-doc">Todo</a></h4><p>make this work better. Not sure whether this is fully to spec! (the interrupt detection part)</p></aside><aside class="m-note m-dim"><h4><a href="todo.html#_todo000023" class="m-doc">Todo</a></h4><p>make it so that we dont have to create send buffer here!</p></aside>
           </div></section>
           <section class="m-doc-details" id="acfa9f62057aa262de5d118d73f24931d"><div>
             <h3>
@@ -339,7 +339,7 @@
                 </tr>
               </tbody>
             </table>
-<aside class="m-note m-dim"><h4><a href="todo.html#_todo000018" class="m-doc">Todo</a></h4><p>Looking at gdbserver source, we should check for potential interrupt after current pkt buffer. Sometimes, interrupt is apparently sent / available with a previous packet. We dont need to do this, since our gdbstub runs on a separate thread and should be looking at the new command immediately!</p></aside>
+<aside class="m-note m-dim"><h4><a href="todo.html#_todo000024" class="m-doc">Todo</a></h4><p>Looking at gdbserver source, we should check for potential interrupt after current pkt buffer. Sometimes, interrupt is apparently sent / available with a previous packet. We dont need to do this, since our gdbstub runs on a separate thread and should be looking at the new command immediately!</p></aside>
           </div></section>
         </section>
         <section>

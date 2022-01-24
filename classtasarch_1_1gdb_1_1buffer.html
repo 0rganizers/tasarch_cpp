@@ -55,7 +55,7 @@
           <span class="m-breadcrumb"><a href="namespacetasarch.html">tasarch</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespacetasarch_1_1gdb.html">gdb</a>::<wbr/></span>buffer <span class="m-thin">class</span>
           <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="buffer_8h.html">&lt;src/gdb/buffer.h&gt;</a></div>
         </h1>
-        <p><span></span></p>
+        <p>Buffer with static storage, that allows both reading and writing to it, while keeping track of current read and write head.</p>
         <nav class="m-block m-default">
           <h3>Contents</h3>
           <ul>
@@ -63,84 +63,614 @@
               Reference
               <ul>
                 <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
-                <li><a href="#pub-methods">Public functions</a></li>
+                <li><a href="#simple-accessors">Simple Accessors</a></li>
+                <li><a href="#get-functions">Get Functions</a></li>
+                <li><a href="#put-functions">Put Functions</a></li>
+                <li><a href="#miscellaneous-functions">Miscellaneous Functions</a></li>
               </ul>
             </li>
           </ul>
         </nav>
+<p>In essence, it provides many convenience methods on top of an <code>std::vector</code>, while also keeping track of the current read and write head.</p><aside class="m-note m-dim"><h4><a href="todo.html#_todo000010" class="m-doc">Todo</a></h4><p>Not yet fully happy with this. I think maybe we can refactor it a bit / make it work better across the whole project?</p></aside>
         <section id="typeless-methods">
           <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
-            <dt id="a6c19e968f1525b7c681480cf04897095">
-              <span class="m-doc-wrap-bumper"><a href="#a6c19e968f1525b7c681480cf04897095" class="m-doc-self">buffer</a>(</span><span class="m-doc-wrap">const size_t size) <span class="m-label m-flat m-info">explicit</span> </span>
+            <dt>
+              <span class="m-doc-wrap-bumper"><a href="#a6c19e968f1525b7c681480cf04897095" class="m-doc">buffer</a>(</span><span class="m-doc-wrap">const size_t size) <span class="m-label m-flat m-info">explicit</span> </span>
             </dt>
-            <dd><span></span></dd>
+            <dd>Construct a new buffer object with the given size.</dd>
           </dl>
         </section>
-        <section id="pub-methods">
-          <h2><a href="#pub-methods">Public functions</a></h2>
+        <section id="simple-accessors">
+          <h2><a href="#simple-accessors">Simple Accessors</a></h2>
+<p>Simple accessors to the underlying storage and sizes. Should probably use more high level methods instead.</p>
           <dl class="m-doc">
-            <dt id="a6917f9d67918c73b825595a8f160eead">
-              <span class="m-doc-wrap-bumper">auto <a href="#a6917f9d67918c73b825595a8f160eead" class="m-doc-self">read_size</a>(</span><span class="m-doc-wrap">) const -&gt; size_t -&gt; auto</span>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a6917f9d67918c73b825595a8f160eead" class="m-doc">read_size</a>(</span><span class="m-doc-wrap">) const -&gt; size_t -&gt; auto</span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a4cccc90ccfe396fc3edd3e8be31d64b1">
-              <span class="m-doc-wrap-bumper">auto <a href="#a4cccc90ccfe396fc3edd3e8be31d64b1" class="m-doc-self">read_data</a>(</span><span class="m-doc-wrap">) -&gt; const u8 * -&gt; auto</span>
+            <dd>The current amount of data that can be read.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a4cccc90ccfe396fc3edd3e8be31d64b1" class="m-doc">read_data</a>(</span><span class="m-doc-wrap">) -&gt; const u8 * -&gt; auto</span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a58a93b97cb834d4334b3e474e9360960">
+            <dd>Pointer directly to the currently still unread data.</dd>
+            <dt>
               <div class="m-doc-template">template&lt;typename TBuffer&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a href="#a58a93b97cb834d4334b3e474e9360960" class="m-doc-self">read_buf</a>(</span><span class="m-doc-wrap">) -&gt; TBuffer requires Bufferable&lt; TBuffer &gt; -&gt; auto</span>
+              <span class="m-doc-wrap-bumper">auto <a href="#a58a93b97cb834d4334b3e474e9360960" class="m-doc">read_buf</a>(</span><span class="m-doc-wrap">) -&gt; TBuffer requires Bufferable&lt; TBuffer &gt; -&gt; auto</span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a10c2462742dad70cf80d22de8ee679c3">
-              <span class="m-doc-wrap-bumper">auto <a href="#a10c2462742dad70cf80d22de8ee679c3" class="m-doc-self">write_size</a>(</span><span class="m-doc-wrap">) const -&gt; size_t -&gt; auto</span>
+            <dd>Returns a newly created <code>TBuffer</code> object, containing all unread data.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a10c2462742dad70cf80d22de8ee679c3" class="m-doc">write_size</a>(</span><span class="m-doc-wrap">) const -&gt; size_t -&gt; auto</span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a1b9b20d692dadfdaf87f259a8cd525be">
-              <span class="m-doc-wrap-bumper">auto <a href="#a1b9b20d692dadfdaf87f259a8cd525be" class="m-doc-self">write_data</a>(</span><span class="m-doc-wrap">) -&gt; u8 * -&gt; auto</span>
+            <dd>The current free space we can write to.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a1b9b20d692dadfdaf87f259a8cd525be" class="m-doc">write_data</a>(</span><span class="m-doc-wrap">) -&gt; u8 * -&gt; auto</span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="af1fbce489f9bd8bb7c775e0ed1f01bb4">
+            <dd>Pointer directly to the next byte we should write to.</dd>
+            <dt>
               <div class="m-doc-template">template&lt;typename TBuffer&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a href="#af1fbce489f9bd8bb7c775e0ed1f01bb4" class="m-doc-self">write_buf</a>(</span><span class="m-doc-wrap">) -&gt; TBuffer requires Bufferable&lt; TBuffer &gt; -&gt; auto</span>
+              <span class="m-doc-wrap-bumper">auto <a href="#af1fbce489f9bd8bb7c775e0ed1f01bb4" class="m-doc">write_buf</a>(</span><span class="m-doc-wrap">) -&gt; TBuffer requires Bufferable&lt; TBuffer &gt; -&gt; auto</span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a9edd0bbf782c0e041437e51b4316d97a">
-              <span class="m-doc-wrap-bumper">auto <a href="#a9edd0bbf782c0e041437e51b4316d97a" class="m-doc-self">get_byte</a>(</span><span class="m-doc-wrap">) -&gt; u8 -&gt; auto</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a029c18d1c199f88607f9618d044ffd0e">
-              <div class="m-doc-template">template&lt;typename TBuffer&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a href="#a029c18d1c199f88607f9618d044ffd0e" class="m-doc-self">get_buf</a>(</span><span class="m-doc-wrap">size_t num) -&gt; TBuffer requires Bufferable&lt; TBuffer &gt; -&gt; auto</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="af6f6a36fb9830a6a826c331462495720">
-              <span class="m-doc-wrap-bumper">auto <a href="#af6f6a36fb9830a6a826c331462495720" class="m-doc-self">get_str</a>(</span><span class="m-doc-wrap">size_t num = 0) -&gt; std::string -&gt; auto</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a87e05df801faa1a0242e51147ef5bcfa">
-              <span class="m-doc-wrap-bumper">void <a href="#a87e05df801faa1a0242e51147ef5bcfa" class="m-doc-self">get_count</a>(</span><span class="m-doc-wrap">size_t num)</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a3982bd6b910c3334476630a56f96cb68">
-              <span class="m-doc-wrap-bumper">void <a href="#a3982bd6b910c3334476630a56f96cb68" class="m-doc-self">put_byte</a>(</span><span class="m-doc-wrap"><a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> val)</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a61aeebd0fc1e63f841d62a459e71c814">
-              <div class="m-doc-template">template&lt;typename TBuffer&gt;</div>
-              <span class="m-doc-wrap-bumper">void <a href="#a61aeebd0fc1e63f841d62a459e71c814" class="m-doc-self">append_buf</a>(</span><span class="m-doc-wrap">TBuffer&amp; buf) requires Bufferable&lt; TBuffer &gt;</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a20000c3c9d8ffadd1c8eb79dc8cd27f4">
-              <span class="m-doc-wrap-bumper">void <a href="#a20000c3c9d8ffadd1c8eb79dc8cd27f4" class="m-doc-self">put_count</a>(</span><span class="m-doc-wrap">size_t num)</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a4fd9f37ff23b2b5bc501d2e2bcc0f084">
-              <span class="m-doc-wrap-bumper">void <a href="#a4fd9f37ff23b2b5bc501d2e2bcc0f084" class="m-doc-self">reset</a>(</span><span class="m-doc-wrap">)</span>
-            </dt>
-            <dd><span></span></dd>
+            <dd>Returns a newly created <code>TBuffer</code> object, containing all not yet written data.</dd>
           </dl>
+        </section>
+        <section id="get-functions">
+          <h2><a href="#get-functions">Get Functions</a></h2>
+<p>Higher level functions for reading / getting data out of the buffer.</p>
+          <dl class="m-doc">
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a9edd0bbf782c0e041437e51b4316d97a" class="m-doc">get_byte</a>(</span><span class="m-doc-wrap">) -&gt; u8 -&gt; auto</span>
+            </dt>
+            <dd>Get one byte from the buffer and increment the current read head.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a0bf222f9ad82da1baf9d1e29aae638d2" class="m-doc">read_require</a>(</span><span class="m-doc-wrap">size_t num) const</span>
+            </dt>
+            <dd>Convenience function to ensure that at least <code>num</code> bytes are available to read.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a87e05df801faa1a0242e51147ef5bcfa" class="m-doc">get_count</a>(</span><span class="m-doc-wrap">size_t num)</span>
+            </dt>
+            <dd>Convenience function to advance the read head by <code>num</code> bytes. Used in tandem with the low level functions (e.g. <code><a href="classtasarch_1_1gdb_1_1buffer.html#a58a93b97cb834d4334b3e474e9360960" class="m-doc">read_<wbr />buf()</a></code>) that do not automatically increase the read head.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;typename TBuffer&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a href="#a029c18d1c199f88607f9618d044ffd0e" class="m-doc">get_buf</a>(</span><span class="m-doc-wrap">size_t num) -&gt; TBuffer requires Bufferable&lt; TBuffer &gt; -&gt; auto</span>
+            </dt>
+            <dd>Advance the read head by <code>num</code> bytes and return a new <code>TBuffer</code> object containing the bytes between old and new read head.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#af6f6a36fb9830a6a826c331462495720" class="m-doc">get_str</a>(</span><span class="m-doc-wrap">size_t num = 0) -&gt; std::string -&gt; auto</span>
+            </dt>
+            <dd>Convenience function for consuming and returning <code>num</code> bytes of the current read buffer as an <code>std::string</code>. If <code>num = 0</code>, then all of the current read buffer will be returned.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;typename T&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a href="#ad8713b4b4080333f46226d7f0831d8a1" class="m-doc">read_into</a>(</span><span class="m-doc-wrap">T* elem) -&gt; auto</span>
+            </dt>
+            <dd>Copy <code>sizeof(T)</code> bytes into <code>*elem</code> and consume them.</dd>
+          </dl>
+        </section>
+        <section id="put-functions">
+          <h2><a href="#put-functions">Put Functions</a></h2>
+<p>Higher level functions for writing / putting data into the buffer.</p>
+          <dl class="m-doc">
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#ab8025d24845ae3fe638d2698c311cd8f" class="m-doc">write_require</a>(</span><span class="m-doc-wrap">size_t num) const</span>
+            </dt>
+            <dd>Convenience function to ensure at least <code>num</code> bytes are available to write to.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a3982bd6b910c3334476630a56f96cb68" class="m-doc">put_byte</a>(</span><span class="m-doc-wrap"><a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> val)</span>
+            </dt>
+            <dd>Put one byte into the buffer and increment the current write head.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;typename TBuffer&gt;</div>
+              <span class="m-doc-wrap-bumper">void <a href="#a61aeebd0fc1e63f841d62a459e71c814" class="m-doc">append_buf</a>(</span><span class="m-doc-wrap">TBuffer&amp; buf) requires Bufferable&lt; TBuffer &gt;</span>
+            </dt>
+            <dd>Append the data inside <code>buf</code> to our buffer and increment the write head accordingly.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a20000c3c9d8ffadd1c8eb79dc8cd27f4" class="m-doc">put_count</a>(</span><span class="m-doc-wrap">size_t num)</span>
+            </dt>
+            <dd>Convenience function to advance the write head by <code>num</code> bytes. Used in tandem with the low level functions (e.g. <code><a href="classtasarch_1_1gdb_1_1buffer.html#af1fbce489f9bd8bb7c775e0ed1f01bb4" class="m-doc">write_<wbr />buf()</a></code>) that do not automatically increase the read head.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;typename T&gt;</div>
+              <span class="m-doc-wrap-bumper">void <a href="#a19b7ae1cc4f92eb14e8f8b15ee6f5c9a" class="m-doc">write_outof</a>(</span><span class="m-doc-wrap">T* elem)</span>
+            </dt>
+            <dd>Similarly to <code><a href="classtasarch_1_1gdb_1_1buffer.html#ad8713b4b4080333f46226d7f0831d8a1" class="m-doc">read_<wbr />into()</a></code>, this writes <code>sizeof(T)</code> from <code>*elem</code> into our buffer and advances the write head accordingly.</dd>
+          </dl>
+        </section>
+        <section id="miscellaneous-functions">
+          <h2><a href="#miscellaneous-functions">Miscellaneous Functions</a></h2>
+<p>Functions that have not found a good home anywhere else</p>
+          <dl class="m-doc">
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a4fd9f37ff23b2b5bc501d2e2bcc0f084" class="m-doc">reset</a>(</span><span class="m-doc-wrap">)</span>
+            </dt>
+            <dd>Resets the buffer to the initial state, i.e. <code><a href="classtasarch_1_1gdb_1_1buffer.html#a6917f9d67918c73b825595a8f160eead" class="m-doc">read_<wbr />size()</a> == 0 &amp;&amp; <a href="classtasarch_1_1gdb_1_1buffer.html#a10c2462742dad70cf80d22de8ee679c3" class="m-doc">write_<wbr />size()</a> == max_size</code>.</dd>
+          </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="a6c19e968f1525b7c681480cf04897095"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"> tasarch::<wbr />gdb::<wbr />buffer::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a6c19e968f1525b7c681480cf04897095" class="m-doc-self">buffer</a>(</span><span class="m-doc-wrap">const size_t size) <span class="m-label m-info">explicit</span> </span></span>
+            </h3>
+            <p>Construct a new buffer object with the given size.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">size</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a6917f9d67918c73b825595a8f160eead"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">auto tasarch::<wbr />gdb::<wbr />buffer::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a6917f9d67918c73b825595a8f160eead" class="m-doc-self">read_size</a>(</span><span class="m-doc-wrap">) const -&gt; size_t</span></span>
+            </h3>
+            <p>The current amount of data that can be read.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>size_t</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a4cccc90ccfe396fc3edd3e8be31d64b1"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">auto tasarch::<wbr />gdb::<wbr />buffer::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a4cccc90ccfe396fc3edd3e8be31d64b1" class="m-doc-self">read_data</a>(</span><span class="m-doc-wrap">) -&gt; const u8 *</span></span>
+            </h3>
+            <p>Pointer directly to the currently still unread data.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>const u8*</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a58a93b97cb834d4334b3e474e9360960"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename TBuffer&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">auto tasarch::<wbr />gdb::<wbr />buffer::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a58a93b97cb834d4334b3e474e9360960" class="m-doc-self">read_buf</a>(</span><span class="m-doc-wrap">) -&gt; TBuffer requires Bufferable&lt; TBuffer &gt;</span></span>
+            </h3>
+            <p>Returns a newly created <code>TBuffer</code> object, containing all unread data.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">TBuffer</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>TBuffer requires Bufferable&lt;TBuffer&gt;</td>
+                </tr>
+              </tfoot>
+            </table>
+<aside class="m-note m-danger"><h4>Warning</h4><p>Depending on <code>TBuffer</code>, this might be a copy of the data and not just transparently using the same pointer. For example, <code>std::string</code> will create a copy of the underlying data. Note that this may also be desirable, for example if you want to keep the data around for longer. In essence, this function is very dumb, it just calls <code>TBuffer(<a href="classtasarch_1_1gdb_1_1buffer.html#a4cccc90ccfe396fc3edd3e8be31d64b1" class="m-doc">read_<wbr />data()</a>, <a href="classtasarch_1_1gdb_1_1buffer.html#a6917f9d67918c73b825595a8f160eead" class="m-doc">read_<wbr />size()</a>)</code>.</p></aside><p>This function is mostly useful with <code>asio</code> functions, since a <code>asio::mutable_buffer</code> does no copies.</p>
+          </div></section>
+          <section class="m-doc-details" id="a10c2462742dad70cf80d22de8ee679c3"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">auto tasarch::<wbr />gdb::<wbr />buffer::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a10c2462742dad70cf80d22de8ee679c3" class="m-doc-self">write_size</a>(</span><span class="m-doc-wrap">) const -&gt; size_t</span></span>
+            </h3>
+            <p>The current free space we can write to.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>size_t</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a1b9b20d692dadfdaf87f259a8cd525be"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">auto tasarch::<wbr />gdb::<wbr />buffer::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a1b9b20d692dadfdaf87f259a8cd525be" class="m-doc-self">write_data</a>(</span><span class="m-doc-wrap">) -&gt; u8 *</span></span>
+            </h3>
+            <p>Pointer directly to the next byte we should write to.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>u8*</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="af1fbce489f9bd8bb7c775e0ed1f01bb4"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename TBuffer&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">auto tasarch::<wbr />gdb::<wbr />buffer::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#af1fbce489f9bd8bb7c775e0ed1f01bb4" class="m-doc-self">write_buf</a>(</span><span class="m-doc-wrap">) -&gt; TBuffer requires Bufferable&lt; TBuffer &gt;</span></span>
+            </h3>
+            <p>Returns a newly created <code>TBuffer</code> object, containing all not yet written data.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">TBuffer</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>TBuffer requires Bufferable&lt;TBuffer&gt;</td>
+                </tr>
+              </tfoot>
+            </table>
+<aside class="m-note m-danger"><h4>Warning</h4><p>See the warning mentioned for <code><a href="classtasarch_1_1gdb_1_1buffer.html#a58a93b97cb834d4334b3e474e9360960" class="m-doc">read_<wbr />buf()</a></code> it also applies here.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a9edd0bbf782c0e041437e51b4316d97a"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">auto tasarch::<wbr />gdb::<wbr />buffer::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a9edd0bbf782c0e041437e51b4316d97a" class="m-doc-self">get_byte</a>(</span><span class="m-doc-wrap">) -&gt; u8</span></span>
+            </h3>
+            <p>Get one byte from the buffer and increment the current read head.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>u8</td>
+                </tr>
+              </thead>
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>std::out_of_range</td>
+                  <td>when there are no bytes left to be read.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a0bf222f9ad82da1baf9d1e29aae638d2"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void tasarch::<wbr />gdb::<wbr />buffer::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a0bf222f9ad82da1baf9d1e29aae638d2" class="m-doc-self">read_require</a>(</span><span class="m-doc-wrap">size_t num) const</span></span>
+            </h3>
+            <p>Convenience function to ensure that at least <code>num</code> bytes are available to read.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">num</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>std::out_of_range</td>
+                  <td>if not enough bytes are available.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a87e05df801faa1a0242e51147ef5bcfa"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void tasarch::<wbr />gdb::<wbr />buffer::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a87e05df801faa1a0242e51147ef5bcfa" class="m-doc-self">get_count</a>(</span><span class="m-doc-wrap">size_t num)</span></span>
+            </h3>
+            <p>Convenience function to advance the read head by <code>num</code> bytes. Used in tandem with the low level functions (e.g. <code><a href="classtasarch_1_1gdb_1_1buffer.html#a58a93b97cb834d4334b3e474e9360960" class="m-doc">read_<wbr />buf()</a></code>) that do not automatically increase the read head.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">num</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>std::out_of_range</td>
+                  <td>if not enough bytes are available.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a029c18d1c199f88607f9618d044ffd0e"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename TBuffer&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">auto tasarch::<wbr />gdb::<wbr />buffer::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a029c18d1c199f88607f9618d044ffd0e" class="m-doc-self">get_buf</a>(</span><span class="m-doc-wrap">size_t num) -&gt; TBuffer requires Bufferable&lt; TBuffer &gt;</span></span>
+            </h3>
+            <p>Advance the read head by <code>num</code> bytes and return a new <code>TBuffer</code> object containing the bytes between old and new read head.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">TBuffer</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>num</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr>
+                  <th>Returns</th>
+                  <td>TBuffer requires Bufferable&lt;TBuffer&gt;</td>
+                </tr>
+              </thead>
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>std::out_of_range</td>
+                  <td>if not enough bytes are available.</td>
+                </tr>
+              </tbody>
+            </table>
+<aside class="m-note m-danger"><h4>Warning</h4><p>Again, the same limitation as for <code><a href="classtasarch_1_1gdb_1_1buffer.html#a58a93b97cb834d4334b3e474e9360960" class="m-doc">read_<wbr />buf()</a></code> apply.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="af6f6a36fb9830a6a826c331462495720"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">auto tasarch::<wbr />gdb::<wbr />buffer::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#af6f6a36fb9830a6a826c331462495720" class="m-doc-self">get_str</a>(</span><span class="m-doc-wrap">size_t num = 0) -&gt; std::string</span></span>
+            </h3>
+            <p>Convenience function for consuming and returning <code>num</code> bytes of the current read buffer as an <code>std::string</code>. If <code>num = 0</code>, then all of the current read buffer will be returned.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">num</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr>
+                  <th>Returns</th>
+                  <td>std::string</td>
+                </tr>
+              </thead>
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>std::out_of_range</td>
+                  <td>if not enough bytes are available.</td>
+                </tr>
+              </tbody>
+            </table>
+<aside class="m-note m-info"><h4>Note</h4><p>This is a convenience wrapper around <code><a href="classtasarch_1_1gdb_1_1buffer.html#a029c18d1c199f88607f9618d044ffd0e" class="m-doc">get_<wbr />buf()</a></code>, so the bytes will be consumed and not available for reading afterwards.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="ad8713b4b4080333f46226d7f0831d8a1"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename T&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">auto tasarch::<wbr />gdb::<wbr />buffer::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ad8713b4b4080333f46226d7f0831d8a1" class="m-doc-self">read_into</a>(</span><span class="m-doc-wrap">T* elem)</span></span>
+            </h3>
+            <p>Copy <code>sizeof(T)</code> bytes into <code>*elem</code> and consume them.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">T</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>elem</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr>
+                  <th>Returns</th>
+                  <td>auto</td>
+                </tr>
+              </thead>
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>std::out_of_range</td>
+                  <td>if not enough bytes are available.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ab8025d24845ae3fe638d2698c311cd8f"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void tasarch::<wbr />gdb::<wbr />buffer::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ab8025d24845ae3fe638d2698c311cd8f" class="m-doc-self">write_require</a>(</span><span class="m-doc-wrap">size_t num) const</span></span>
+            </h3>
+            <p>Convenience function to ensure at least <code>num</code> bytes are available to write to.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">num</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><a href="classtasarch_1_1gdb_1_1buffer__too__small.html" class="m-doc">buffer_<wbr />too_<wbr />small</a></td>
+                  <td>if there are not enough bytes left.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a3982bd6b910c3334476630a56f96cb68"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void tasarch::<wbr />gdb::<wbr />buffer::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a3982bd6b910c3334476630a56f96cb68" class="m-doc-self">put_byte</a>(</span><span class="m-doc-wrap"><a href="defines_8h.html#a987e4d6cf789cb59dbb390728271e4d6" class="m-doc">u8</a> val)</span></span>
+            </h3>
+            <p>Put one byte into the buffer and increment the current write head.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">val</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><a href="classtasarch_1_1gdb_1_1buffer__too__small.html" class="m-doc">buffer_<wbr />too_<wbr />small</a></td>
+                  <td>if there are no more bytes left to write.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a61aeebd0fc1e63f841d62a459e71c814"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename TBuffer&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">void tasarch::<wbr />gdb::<wbr />buffer::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a61aeebd0fc1e63f841d62a459e71c814" class="m-doc-self">append_buf</a>(</span><span class="m-doc-wrap">TBuffer&amp; buf) requires Bufferable&lt; TBuffer &gt;</span></span>
+            </h3>
+            <p>Append the data inside <code>buf</code> to our buffer and increment the write head accordingly.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">TBuffer</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>buf</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><a href="classtasarch_1_1gdb_1_1buffer__too__small.html" class="m-doc">buffer_<wbr />too_<wbr />small</a></td>
+                  <td>if there are not enough bytes left.</td>
+                </tr>
+              </tbody>
+            </table>
+<aside class="m-note m-info"><h4>Note</h4><p>In contrast to <code><a href="classtasarch_1_1gdb_1_1buffer.html#a58a93b97cb834d4334b3e474e9360960" class="m-doc">read_<wbr />buf()</a></code> etc., this does not make a copy of the buf object. It does however, copy the contents governed by <code>buf</code> into our underlying storage.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a20000c3c9d8ffadd1c8eb79dc8cd27f4"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void tasarch::<wbr />gdb::<wbr />buffer::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a20000c3c9d8ffadd1c8eb79dc8cd27f4" class="m-doc-self">put_count</a>(</span><span class="m-doc-wrap">size_t num)</span></span>
+            </h3>
+            <p>Convenience function to advance the write head by <code>num</code> bytes. Used in tandem with the low level functions (e.g. <code><a href="classtasarch_1_1gdb_1_1buffer.html#af1fbce489f9bd8bb7c775e0ed1f01bb4" class="m-doc">write_<wbr />buf()</a></code>) that do not automatically increase the read head.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">num</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><a href="classtasarch_1_1gdb_1_1buffer__too__small.html" class="m-doc">buffer_<wbr />too_<wbr />small</a></td>
+                  <td>if there are not enough bytes left.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a19b7ae1cc4f92eb14e8f8b15ee6f5c9a"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename T&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">void tasarch::<wbr />gdb::<wbr />buffer::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a19b7ae1cc4f92eb14e8f8b15ee6f5c9a" class="m-doc-self">write_outof</a>(</span><span class="m-doc-wrap">T* elem)</span></span>
+            </h3>
+            <p>Similarly to <code><a href="classtasarch_1_1gdb_1_1buffer.html#ad8713b4b4080333f46226d7f0831d8a1" class="m-doc">read_<wbr />into()</a></code>, this writes <code>sizeof(T)</code> from <code>*elem</code> into our buffer and advances the write head accordingly.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">T</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>elem</td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><a href="classtasarch_1_1gdb_1_1buffer__too__small.html" class="m-doc">buffer_<wbr />too_<wbr />small</a></td>
+                  <td>if there are not enough bytes left.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a4fd9f37ff23b2b5bc501d2e2bcc0f084"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void tasarch::<wbr />gdb::<wbr />buffer::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a4fd9f37ff23b2b5bc501d2e2bcc0f084" class="m-doc-self">reset</a>(</span><span class="m-doc-wrap">)</span></span>
+            </h3>
+            <p>Resets the buffer to the initial state, i.e. <code><a href="classtasarch_1_1gdb_1_1buffer.html#a6917f9d67918c73b825595a8f160eead" class="m-doc">read_<wbr />size()</a> == 0 &amp;&amp; <a href="classtasarch_1_1gdb_1_1buffer.html#a10c2462742dad70cf80d22de8ee679c3" class="m-doc">write_<wbr />size()</a> == max_size</code>.</p>
+<aside class="m-note m-info"><h4>Note</h4><p>Does not do any memsetting, so old data is still stored in the underlying storage.</p></aside>
+          </div></section>
         </section>
       </div>
     </div>

@@ -69,16 +69,32 @@
               <li class="m-doc-collapsible collapsed">
                 <a href="#" onclick="return toggle(this)">namespace</a> <a href="namespacetasarch_1_1gdb.html" class="m-doc">gdb</a> <span class="m-doc"><span></span></span>
                 <ul class="m-doc">
+                  <li>namespace <a href="namespacetasarch_1_1gdb_1_1coders.html" class="m-doc">coders</a> <span class="m-doc"><span></span></span></li>
+                  <li>struct <a href="structtasarch_1_1gdb_1_1ArrayCoder.html" class="m-doc">ArrayCoder</a> <span class="m-doc"><span></span></span></li>
                   <li>class <a href="classtasarch_1_1gdb_1_1bg__executor.html" class="m-doc">bg_executor</a> <span class="m-doc">Responsible for handling multiple threads, that will then run coroutines (mostly io, mostly for gdbstub). Normally using asio, you would just run the executor inside the main thread. However, here the main thread belongs to the GUI, so we create background thread(s) to run the executor.</span></li>
-                  <li>class <a href="classtasarch_1_1gdb_1_1buffer.html" class="m-doc">buffer</a> <span class="m-doc"><span></span></span></li>
+                  <li>class <a href="classtasarch_1_1gdb_1_1buffer.html" class="m-doc">buffer</a> <span class="m-doc">Buffer with static storage, that allows both reading and writing to it, while keeping track of current read and write head.</span></li>
                   <li>class <a href="classtasarch_1_1gdb_1_1buffer__too__small.html" class="m-doc">buffer_too_small</a> <span class="m-doc">Exception thrown when a buffer was too small to fit all recvd data.</span></li>
-                  <li>class <a href="classtasarch_1_1gdb_1_1connection.html" class="m-doc">connection</a> <span class="m-doc"><span></span></span></li>
+                  <li>struct <a href="structtasarch_1_1gdb_1_1BytesCoder.html" class="m-doc">BytesCoder</a> <span class="m-doc"><span></span></span></li>
+                  <li class="m-doc-collapsible collapsed">
+                    <a href="#" onclick="return toggle(this)">class</a> <a href="classtasarch_1_1gdb_1_1connection.html" class="m-doc">connection</a> <span class="m-doc"><span></span></span>
+                    <ul class="m-doc">
+                      <li>struct <a href="structtasarch_1_1gdb_1_1connection_1_1query__handler__builder.html" class="m-doc">query_handler_builder</a> <span class="m-doc"><span></span></span></li>
+                      <li>struct <a href="structtasarch_1_1gdb_1_1connection_1_1remote__io__reply.html" class="m-doc">remote_io_reply</a> <span class="m-doc"><span></span></span></li>
+                    </ul>
+                  </li>
                   <li>class <a href="classtasarch_1_1gdb_1_1Debugger.html" class="m-doc">Debugger</a> <span class="m-doc"><span></span></span></li>
+                  <li>struct <a href="structtasarch_1_1gdb_1_1feature.html" class="m-doc">feature</a> <span class="m-doc"><span></span></span></li>
+                  <li>struct <a href="structtasarch_1_1gdb_1_1FeatureCoder.html" class="m-doc">FeatureCoder</a> <span class="m-doc"><span></span></span></li>
                   <li>class <a href="classtasarch_1_1gdb_1_1gdb__error.html" class="m-doc">gdb_error</a> <span class="m-doc"><span></span></span></li>
-                  <li>struct <a href="structtasarch_1_1gdb_1_1IdCoder.html" class="m-doc">IdCoder</a> <span class="m-doc"><span></span></span></li>
+                  <li>struct <a href="structtasarch_1_1gdb_1_1IdCoder.html" class="m-doc">IdCoder</a> <span class="m-doc">Like id function, does nothing to its input. Useful as default cases for certain coders that have a &quot;child&quot;.</span></li>
+                  <li>struct <a href="structtasarch_1_1gdb_1_1internal__buf.html" class="m-doc">internal_buf</a> <span class="m-doc"><span></span></span></li>
+                  <li>struct <a href="structtasarch_1_1gdb_1_1internal__mem.html" class="m-doc">internal_mem</a> <span class="m-doc"><span></span></span></li>
+                  <li>struct <a href="structtasarch_1_1gdb_1_1NumCoder.html" class="m-doc">NumCoder</a> <span class="m-doc"><span></span></span></li>
+                  <li>struct <a href="structtasarch_1_1gdb_1_1OptCoder.html" class="m-doc">OptCoder</a> <span class="m-doc"><span></span></span></li>
                   <li>class <a href="classtasarch_1_1gdb_1_1PacketIO.html" class="m-doc">PacketIO</a> <span class="m-doc">Implements the low-level transport protocol as specified by GDB. For details see <a href="https://sourceware.org/gdb/onlinedocs/gdb/Overview.html#Overview">https:/<wbr />/<wbr />sourceware.org/<wbr />gdb/<wbr />onlinedocs/<wbr />gdb/<wbr />Overview.html#Overview</a>.</span></li>
+                  <li>struct <a href="structtasarch_1_1gdb_1_1query__handler.html" class="m-doc">query_handler</a> <span class="m-doc"><span></span></span></li>
                   <li>class <a href="classtasarch_1_1gdb_1_1server.html" class="m-doc">server</a> <span class="m-doc"><span></span></span></li>
-                  <li>struct <a href="structtasarch_1_1gdb_1_1StrCoder.html" class="m-doc">StrCoder</a> <span class="m-doc"><span></span></span></li>
+                  <li>struct <a href="structtasarch_1_1gdb_1_1StrCoder.html" class="m-doc">StrCoder</a> <span class="m-doc">Decodes the contents of buffer up until it can find the separator <code>Sep</code> or the end of the buffer is reached. If <code>SepReq</code> is true, an exception is thrown, if the end of string is reached before finding the separator. Once it has a string of characters, it calls upon the underlying child coder to decode the string into a useful value. This allows nicely nesting coders, to e.g. decode a hex number separated by a comma. If you need to have the full string returned, you can use the <code><a href="structtasarch_1_1gdb_1_1IdCoder.html" class="m-doc">IdCoder</a></code> as mentioned before.</span></li>
                   <li>class <a href="classtasarch_1_1gdb_1_1timed__out.html" class="m-doc">timed_out</a> <span class="m-doc">Exception thrown when a timeout was reached.</span></li>
                   <li>class <a href="classtasarch_1_1gdb_1_1unknown__request.html" class="m-doc">unknown_request</a> <span class="m-doc"><span></span></span></li>
                 </ul>
