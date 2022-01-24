@@ -57,7 +57,7 @@ namespace tasarch::gdb {
 
     auto bg_executor::idle() -> asio::awaitable<void>
     {
-        asio::basic_waitable_timer<std::chrono::system_clock> timer(this->io_context, 10000000000h);
+        asio::basic_waitable_timer<std::chrono::system_clock> timer(this->io_context, 100000h);
         while (this->running) {
             co_await timer.async_wait(asio::use_awaitable);
         }

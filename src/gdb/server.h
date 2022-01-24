@@ -1,11 +1,11 @@
 #ifndef __SERVER_H
 #define __SERVER_H
 
+#include "connection.h"
 #include <mutex>
 #include <utility>
 #include <vector>
 #include "log/logging.h"
-#include "connection.h"
 #include <asio.hpp>
 #include <asio/awaitable.hpp>
 #include <asio/execution_context.hpp>

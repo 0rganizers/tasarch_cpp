@@ -21,7 +21,7 @@
 #ifndef __GDB_ASIO_H
 #define __GDB_ASIO_H
 
-#if defined(__clang__) && __clangd_linux_fix__
+#if defined(__clang__) && defined(__clangd_linux_fix__) && __clangd_linux_fix__
 #include <type_traits>
 namespace std {
 	template <typename> struct result_of;

@@ -38,6 +38,7 @@ namespace tasarch::gdb {
 
     enum query_type
     {
+		none = 0 << 0,
         get_val = 1 << 0,
         set_val = 1 << 1
     };
@@ -46,6 +47,30 @@ namespace tasarch::gdb {
     {
         return static_cast<query_type>(static_cast<int>(a) | static_cast<int>(b));
     }
+
+	enum remote_io_errno
+	{
+		remio_EPERM           = 1,
+		remio_ENOENT          = 2,
+		remio_EINTR           = 4,
+		remio_EBADF           = 9,
+		remio_EACCES         = 13,
+		remio_EFAULT         = 14,
+		remio_EBUSY          = 16,
+		remio_EEXIST         = 17,
+		remio_ENODEV         = 19,
+		remio_ENOTDIR        = 20,
+		remio_EISDIR         = 21,
+		remio_EINVAL         = 22,
+		remio_ENFILE         = 23,
+		remio_EMFILE         = 24,
+		remio_EFBIG          = 27,
+		remio_ENOSPC         = 28,
+		remio_ESPIPE         = 29,
+		remio_EROFS          = 30,
+		remio_ENAMETOOLONG   = 91,
+		remio_EUNKNOWN       = 9999
+	};
 } // namespace tasarch::gdb
 
 #endif /* __GDB_PROTOCOL_H */
